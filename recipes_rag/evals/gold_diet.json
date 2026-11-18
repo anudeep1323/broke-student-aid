@@ -1,0 +1,28 @@
+{
+  "_how": "Hand-labelled 2026-11-18 from each card's ingredients + steps (+ referenced recipes). Safety rule: optional ingredients and additions COUNT (better an extra warning than a missed allergen). vegetarian: yes / no / option (meat only in optional, additions, variations or a pick-one group).",
+  "allergens": ["peanut", "tree_nut", "milk", "egg", "wheat", "soy", "fish", "shellfish", "sesame"],
+  "cards": [
+    {"title": "Peanut Sauce", "allergens": ["peanut", "soy", "wheat", "sesame"], "vegetarian": "yes", "trap": "coconut milk is not dairy; soy sauce has wheat"},
+    {"title": "Peanut Butter and Jelly Granola Bars", "allergens": ["peanut", "milk", "tree_nut"], "vegetarian": "yes", "trap": "peanut butter is peanut, not dairy; 'nuts' addition"},
+    {"title": "Dumplings", "allergens": ["wheat", "egg", "soy", "sesame"], "vegetarian": "option", "trap": "pork only in one pick-one filling"},
+    {"title": "Lightly Curried Butternut Squash Soup", "allergens": ["milk"], "vegetarian": "yes", "trap": "butternut is not a nut; coconut milk is not dairy"},
+    {"title": "Pasta with Eggplant and Tomato", "allergens": ["wheat", "milk"], "vegetarian": "yes", "trap": "eggplant is not egg"},
+    {"title": "Coconut Chocolate Cookies", "allergens": ["milk", "wheat", "egg"], "vegetarian": "yes", "trap": "coconut is not a tree nut here"},
+    {"title": "Shrimp and Grits", "allergens": ["shellfish", "milk"], "vegetarian": "no", "trap": "grits are corn, not wheat"},
+    {"title": "Chana Masala Wrap", "allergens": ["egg", "wheat"], "vegetarian": "yes", "trap": "no ingredient list: 'mayo' and 'wrap' only in the text"},
+    {"title": "Spicy Green Beans", "allergens": ["soy", "wheat"], "vegetarian": "yes", "trap": "soy sauce has wheat"},
+    {"title": "Pizza Dough", "allergens": ["wheat"], "vegetarian": "yes", "trap": ""},
+    {"title": "Avocado Milkshake", "allergens": ["milk", "tree_nut"], "vegetarian": "yes", "trap": "steps suggest almond milk"},
+    {"title": "Mango Lassi", "allergens": ["milk"], "vegetarian": "yes", "trap": "yogurt is dairy"},
+    {"title": "Tofu Hot Pot", "allergens": ["soy", "sesame", "wheat", "peanut"], "vegetarian": "option", "trap": "peanuts and meat only as additions"},
+    {"title": "Potato and Kale Rolls with Raita", "allergens": ["milk", "wheat"], "vegetarian": "yes", "trap": "raita (p. 164) = yogurt, roti (p. 138) = flour: hidden behind page references"},
+    {"title": "Deviled Eggs", "allergens": ["egg", "soy", "wheat", "milk"], "vegetarian": "option", "trap": "chorizo / bacon only in flavour variations"},
+    {"title": "Chocolate Zucchini Muffins", "allergens": ["wheat", "egg", "milk"], "vegetarian": "yes", "trap": "yogurt is dairy"},
+    {"title": "Caramelized Onions and Cheddar", "allergens": ["milk", "wheat"], "vegetarian": "yes", "trap": "toast only in the steps"},
+    {"title": "Spicy Broiled Tilapia with Lime", "allergens": ["fish"], "vegetarian": "no", "trap": ""},
+    {"title": "Filipino Chicken Adobo", "allergens": ["soy", "wheat"], "vegetarian": "no", "trap": "coconut milk variation is not dairy"},
+    {"title": "Kale Salad", "allergens": ["wheat", "milk", "egg", "fish"], "vegetarian": "option", "trap": "anchovy is optional; croutons = bread"},
+    {"title": "Cold (and Spicy?) Asian Noodles", "allergens": ["wheat", "soy", "peanut", "egg", "sesame"], "vegetarian": "yes", "trap": "peanut sauce (p. 161) hidden behind a page reference"},
+    {"title": "Roasted Vegetables", "book_page": 122, "allergens": ["milk"], "vegetarian": "yes", "trap": "'pair with roast chicken' is not an ingredient"}
+  ]
+}

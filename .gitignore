@@ -1,0 +1,7 @@
+.env
+__pycache__/
+.cache/
+# book-derived files (CC BY-NC-SA: use, don't redistribute), in every skill folder
+*/data/
+# eval runs hold book text
+*/evals/runs/

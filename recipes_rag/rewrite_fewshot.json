@@ -1,0 +1,47 @@
+{
+  "traces": [],
+  "train": [],
+  "demos": [
+    {
+      "augmented": true,
+      "question": "something cheesy and melty",
+      "search_text": "cheesy melty recipes, grilled cheese, cheese sauce, macaroni and cheese, quesadilla, budget cheese dishes"
+    },
+    {
+      "augmented": true,
+      "question": "fish or seafood",
+      "search_text": "fish seafood budget recipes affordable fish dishes shellfish"
+    },
+    {
+      "augmented": true,
+      "question": "make my own bread or pasta",
+      "search_text": "homemade bread recipe, basic yeast bread, homemade pasta recipe, fresh egg pasta, flour dough basics, budget baking"
+    },
+    {
+      "augmented": true,
+      "question": "pizza night",
+      "search_text": "budget pizza homemade dough easy pizza night recipes"
+    }
+  ],
+  "signature": {
+    "instructions": "Turn a student's food question into search words for a budget cookbook.",
+    "fields": [
+      {
+        "prefix": "Question:",
+        "description": "${question}"
+      },
+      {
+        "prefix": "Search Text:",
+        "description": "short keywords naming dishes, ingredients or a cookbook section"
+      }
+    ]
+  },
+  "lm": null,
+  "metadata": {
+    "dependency_versions": {
+      "python": "3.13",
+      "dspy": "3.5.0",
+      "cloudpickle": "3.1"
+    }
+  }
+}

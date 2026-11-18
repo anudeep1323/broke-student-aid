@@ -1,0 +1,25 @@
+{
+  "_how": "Signed off by Andy 2026-11-18. A result counts as right if its title matches one in 'titles' OR its category is in 'categories'.",
+  "questions": [
+    {"q": "something warm with tofu", "titles": ["Tofu Hot Pot"], "categories": []},
+    {"q": "cheap breakfast", "titles": [], "categories": ["breakfast"]},
+    {"q": "spicy vegetable dinner", "titles": ["Vegetable Jambalaya", "Spicy, Crunchy, Creamy Polenta", "Roasted Potatoes with Chilies", "Chana Masala"], "categories": []},
+    {"q": "comfort food for a cold day", "titles": ["French Onion Soup", "My Dad's Baked Beans", "Cauliflower Cheese", "Beef Stroganoff"], "categories": ["soup"]},
+    {"q": "what can I make with eggs", "titles": ["Tomato Scrambled Eggs", "Omelette", "Egg Sandwich with Mushroom Hash", "Deviled Eggs", "Vegetable Quiche, Hold the Crust", "Brussels Sprout Hash and Eggs"], "categories": []},
+    {"q": "a cold drink for summer", "titles": ["Fast Melon Sorbet", "Avocado Milkshake"], "categories": ["drink"]},
+    {"q": "sweet treat after dinner", "titles": [], "categories": ["dessert"]},
+    {"q": "I have a can of chickpeas", "titles": ["Chana Masala", "Beet and Chickpea Salad", "Spinach and Chickpea", "Chana Masala Wrap"], "categories": []},
+    {"q": "quick lunch I can eat with my hands", "titles": [], "categories": ["handheld"]},
+    {"q": "something with potatoes", "titles": ["Jacket Sweet Potatoes", "Poutine", "Ever-Popular Potato Salad", "Potato Leek Pizza", "Potato and Kale Rolls with Raita", "Roasted Potatoes with Chilies", "Perogies"], "categories": []},
+    {"q": "a fresh salad", "titles": [], "categories": ["salad"]},
+    {"q": "make my own bread or pasta", "titles": ["Flour Tortillas", "Pizza Dough", "Roti", "Fresh Pasta"], "categories": []},
+    {"q": "cook once, eat all week", "titles": ["Roasted Vegetables", "Best Tomato Sauce", "Chorizo and White Bean Ragu"], "categories": ["big_batch"]},
+    {"q": "a sauce or dip for my food", "titles": ["Best Tomato Sauce"], "categories": ["flavor"]},
+    {"q": "chicken dinner", "titles": ["Filipino Chicken Adobo", "Roast Chicken"], "categories": []},
+    {"q": "fish or seafood", "titles": ["Shrimp and Grits", "Spicy Broiled Tilapia with Lime", "Tilapia Taco"], "categories": []},
+    {"q": "oatmeal ideas", "titles": ["Oatmeal", "Oatmeal 6 Ways", "Coconut and Lime Oatmeal", "Berry Oatmeal", "Pumpkin Oatmeal", "Baklava Oatmeal", "Apple Cinnamon Oatmeal", "Savory Oatmeal"], "categories": []},
+    {"q": "something cheesy and melty", "titles": ["Green Chili and Cheddar Quesadillas", "Caramelized Onions and Cheddar", "Cauliflower Cheese", "French Onion Soup", "Broccoli Rabe and Mozzarella Calzones", "Potato Leek Pizza", "Poutine", "Cauliflower Cheese Sandwich"], "categories": []},
+    {"q": "pizza night", "titles": ["Potato Leek Pizza", "Pizza Dough", "Broccoli Rabe and Mozzarella Calzones"], "categories": []},
+    {"q": "something I can make ahead and freeze", "titles": ["Dumplings", "Perogies", "Spicy Pulled Pork", "Best Tomato Sauce"], "categories": []}
+  ]
+}

@@ -1,0 +1,405 @@
+# Broke Student Grocery Agent
+
+One section per build, newest at the bottom.
+
+## Build 0: full flow (DRAFT, before code)
+
+```mermaid
+flowchart LR
+    U["Student<br/>$60/wk, ZIP 45202, vegetarian,<br/>no oven, no mushrooms, 20 min"] --> AG
+
+    AG["Agent (Claude)<br/>parses constraints, picks recipes,<br/>explains choices<br/>framework: raw loop vs LangGraph (open)"]
+
+    AG -->|"find_store(zip)"| KR
+    AG -->|"search_products(term, store)"| KR
+    KR["Kroger API<br/>OAuth2 client-credentials<br/>regular + promo price, size"]
+    KR <-->|"weekly TTL cache<br/>(vs. live every call: rate limits)"| C[(price cache)]
+
+    AG -->|"get_nutrition(upc)"| OFF["Open Food Facts<br/>kcal, protein, allergens"]
+    AG -->|"price_baseline(item)"| BLS["BLS averages<br/>is this a good price?"]
+
+    KR --> N["Unit-price normalizer<br/>$/oz, $/100g protein<br/>(sizes are messy: '2 lb', '32 oz')"]
+    OFF --> N
+    N --> OPT["plan_meals: deterministic optimizer<br/>(LLM never does the math: no made-up totals)<br/>PuLP vs LLM+repair (open)"]
+    OPT --> AG
+    AG --> OUT["7-day plan + shopping list<br/>total vs budget, $/meal, protein/day,<br/>sales used, swaps"]
+    OUT -.->|"20 test profiles: <= budget,<br/>diet respected, protein floor"| EV[evals]
+    OUT -.->|"interface: CLI vs Discord (open)"| U
+```
+
+Piece 1 (next): token -> nearest store to 45202 -> search "rice" -> print 5 real prices.
+
+## Stage 1: Kroger token -> nearest store -> rice prices (BUILT, kroger/kroger_piece1.py)
+
+```mermaid
+flowchart LR
+    ENV[(.env<br/>client id + secret)] -->|"1. POST /connect/oauth2/token<br/>Basic auth, grant=client_credentials<br/>(app logs in as itself; no user login,<br/>so no redirect needed)"| TOK[access token<br/>expires in 1800s<br/>kroger/kroger_piece1.py:12-16]
+    TOK -->|"2. GET /locations<br/>filter.zipCode.near=45202, limit 1"| ST["Kroger On the Rhine<br/>locationId 01400513<br/>kroger/kroger_piece1.py:19-21"]
+    ST -->|"3. GET /products<br/>filter.term=rice + locationId<br/>(no locationId = no prices)"| PR["5 rice products, 2 on sale<br/>sizes: 32 oz, 14 onz, 2 lb, 5 lbr<br/>kroger/kroger_piece1.py:24-29"]
+```
+
+Decision: get a new token on every run (simple) vs. cache it until it expires (fewer calls).
+Piece 1 fetches a new one each time; caching comes in Stage 3.
+
+Real run (2026-11-17, ZIP 45202, 3 API calls, 2.2 s total):
+
+| Product | Size | Regular | Promo | $/lb (best price) |
+|---|---|---|---|---|
+| Kroger Long Grain White | 32 oz | $1.89 | - | **$0.95** |
+| Mahatma Jasmine | 5 lb | $7.49 | $6.99 | $1.40 |
+| Mahatma Extra Long White | 32 oz | $2.89 | - | $1.45 |
+| Kroger Jasmine | 2 lb | $3.99 | - | $2.00 |
+| Minute Instant White | 14 oz | $2.99 | $2.49 | $2.85 |
+
+Cheapest is $0.95/lb, 14% below the BLS national average for white rice ($1.101/lb, Oct 2026).
+Minute is on sale ($2.49) but is the most expensive per pound: 3x the Kroger rice. "On sale" is not the same as "cheap", which is why Stage 3 normalizes unit prices.
+Messy units seen: "oz", "onz", "lb", "lbr", so the unit parser has to handle variants.
+
+## Stage 2: cookbook PDF -> text -> one chunk per recipe (DRAFT, before code)
+
+```mermaid
+flowchart LR
+    SRC["Good and Cheap PDF<br/>Leanne Brown, CC BY-NC-SA 4.0<br/>(written for SNAP ~$4/day)"] -->|"1. download once, with Andy's OK<br/>untrusted file: own folder, python -I"| RAW[(recipes_rag/data/raw/good-and-cheap.pdf<br/>8,081,825 bytes, PDF 1.6, ~90 pages<br/>no JavaScript, gitignored)]
+    RAW -->|"2. extract text page by page<br/>(keep page numbers: needed for citations)<br/>library: open choice"| PAGES["recipes_rag/data/pages.json<br/>90 pages, 279,445 chars, 0.30 s<br/>PyMuPDF (picked over pdfplumber:<br/>installed + fast; lose word positions)<br/>recipes_rag/extract_pages.py"]
+    PAGES -->|"2b. add printed page numbers<br/>rule: PDF page n = book pages 2n-4, 2n-3<br/>(checked against printed numbers: 88/88 agree,<br/>2 cover pages unnumbered)<br/>recipes_rag/page_numbers.py"| PN["pages.json + printed<br/>PDF 30 -> book [56, 57]"]
+    RAW -->|"3. split on recipe titles = 36 pt text<br/>(picked font size over text patterns:<br/>only 43 serving lines exist)<br/>cut each spread into left/right book page;<br/>untitled facing page = continuation<br/>(rejected: fixed 500-token chunks,<br/>they cut ingredient lists in half)<br/>recipes_rag/split_recipes.py"| CH["recipes_rag/data/recipes.json<br/>107 titled chunks -> 75 recipes<br/>(>= 2 ingredient lines)<br/>{title, book_page, pdf_page, n_ingredients, text}"]
+    PN -.->|"same page rule 2n-4"| CH
+    CH -.->|"Stage 3"| RAG["recipe search<br/>BM25 + vectors"]
+```
+
+Source: author's original file (cookbooks.leannebrown.com/good-and-cheap.pdf) via the Wayback Machine snapshot of 2024-07-21,
+because her site no longer links to it. We picked it over obooko's re-upload, which we couldn't check against hers.
+Downloaded 2026-11-17, sha256 d23f8476...c6a6. Not committed (CC BY-NC-SA: we use it, we don't redistribute it).
+
+Piece 1 run (2026-11-17): 90 PDF pages -> 279,445 chars in 0.30 s, 0 empty pages.
+Surprise 1: each PDF page is a 2-page spread (PDF page 30 shows printed page 56). Citations must use the printed number, not the PDF index.
+Surprise 2: ingredient lines look like "\t4\tlarge sweet potatoes" (tab, quantity, tab, item): an easy signal for the recipe splitter.
+Surprise 3: titles break across lines ("Smoky / and Spicy / Roasted / Cauliflower") and serving size is letter-spaced ("f o r f o u r").
+
+Piece 2 run (2026-11-17): rule "PDF page n = book pages 2n-4 and 2n-3" matches the printed number on 88 of 88 numbered pages, 0 disagree; PDF pages 1-2 (cover) have no number.
+Decision: use the rule and check it against the text (rejected: reading numbers from text only, since 2 pages have none and some pages show a number twice).
+
+Piece 3 run (2026-11-17): 107 chunks with a 36 pt title -> 75 recipes (>= 2 ingredient lines like "\t4\tlarge sweet potatoes"); the other 32 are section pages (Breakfast, Soup, Index...).
+Fix 1: "Spicy Pulled Pork" (p.128) had 0 ingredients because they sit on the facing page 129 -> attach untitled facing pages: 72 -> 75 recipes.
+Fix 2: first version attached ANY untitled page, so "Egg Sandwich" swallowed 6 pages (42 ingredients) -> only the facing page of the same spread: back to 15.
+Known misses (~4): title fragments like "Cauliflower" (p.77), "And Mine" (p.101), "Deviled Eggs" (p.130). Bonus: the book prints "$1.40 / serving" -> a free check for Stage 4 pricing.
+
+## Project layout: one folder per skill (2026-11-17)
+
+```mermaid
+flowchart LR
+    ENV[(.env at root<br/>shared keys)] --> SET["setup/<br/>check_keys.py"]
+    ENV --> KR["kroger/<br/>kroger_piece1.py<br/>Steps 1, 4, 6"]
+    RAG["recipes_rag/<br/>extract_pages, page_numbers, split_recipes<br/>+ its own data/ (gitignored)<br/>Steps 2-3"]
+    RAG -->|"recipes.json"| AG["agent/ (Step 8, later)"]
+    KR -->|"prices"| AG
+```
+
+Decision: each skill keeps its own data/ (picked over one shared data/: change a skill = touch one folder; cost: the agent reads from several folders).
+Scripts find files relative to themselves (`Path(__file__)`), so they run from any folder. Rerun after the move: 90 pages, 88/88 page numbers, 75 recipes, rice $0.95/lb: same as before.
+
+## Stage 2 v2: recipe cards WITH photos, shown in the student's chat (DRAFT, before code)
+
+Why v2: the font-size splitter found max 1 recipe per book page, but pages hold several (small titles missed), plus 152 photos and idea/lunch pages.
+
+```mermaid
+flowchart LR
+    S["Student: '$40/wk, 45202,<br/>vegetarian, no peanuts'"] --> AG["Agent (Claude)<br/>understands + explains only"]
+    AG -->|"budget, ZIP"| KR["kroger/<br/>store + live prices<br/>(code does the math)"]
+    AG -->|"filters"| RC[("recipes_rag/data/cards<br/>{title, page, type, ingredients,<br/>steps, $/serving, photo path}")]
+    PDF[(cookbook PDF)] -->|"Claude reads each page -> JSON card<br/>(rejected: font-size scissors,<br/>missed small titles)"| RC
+    PDF -->|"PyMuPDF pulls photos<br/>152 images, e.g. 866x854 px"| IMG[(recipes_rag/data/images/)]
+    IMG -->|"photo linked to its recipe<br/>(how: open choice)"| RC
+    RC --> AG
+    KR --> AG
+    AG --> CHAT["Chat reply: photo + recipe<br/>+ $/serving at your Kroger<br/>(needs a UI that shows images:<br/>CLI can't, Streamlit/Discord can)"]
+```
+
+Test (2026-11-17): PDF pages 30-31 -> 4 photos extracted (Jacket Sweet Potatoes 866x854, Spicy Green Beans 402x854...).
+Bug seen: a photo spanning the spread's middle (x=602-1225, page width ~1224) was tagged to the wrong book page (56, not 57) -> position alone is fragile.
+
+### Stage 2 v2 test: Claude reads ONE spread (recipes_rag/read_page.py, 2026-11-17)
+
+Test spread: PDF page 37 = book pages 70-71, 4 toast recipes + 4 photos, 0 big titles (the font-size splitter found NOTHING here).
+
+```mermaid
+flowchart LR
+    PG["PDF page 37<br/>rendered 1568 px wide"] -->|"image + PyMuPDF text<br/>+ photo list with positions<br/>(read_page.py:64-73)"| CL["Claude, messages.parse<br/>output = Pydantic Spread<br/>(read_page.py:75-80)"]
+    PG -->|"PyMuPDF saves 4 photos<br/>side by photo CENTER, not left edge<br/>(fixes the p.56/57 bug)<br/>(read_page.py:38-54)"| IMG[(data/images/p70_4.png ...)]
+    CL --> CK["code checks: page on spread,<br/>recipe >= 2 ingredients,<br/>photo exists, no photo twice<br/>(read_page.py:87-98)"]
+    CK -->|"all passed"| CARDS[(data/cards/pdf037_haiku.json<br/>4 cards)]
+```
+
+| Model | Cards | Tokens in / out | Cost | Time | Recipes, prices, photos correct |
+|---|---|---|---|---|---|
+| Haiku 5.5 | 4 | 3,797 / 1,177 | $0.0010 | 5.2 s | 4/4, 4/4, 4/4 |
+| Opus 5.5 | 4 | 3,797 / 1,177 | $0.0387 | 9.1 s | 4/4, 4/4, 4/4 (same cards, different order) |
+
+Decision: Haiku is enough for this layout, at 1/39 of the Opus cost. Whole book on Haiku ~ 90 x $0.001 = ~$0.09.
+Not yet tested: spreads with idea boxes, section pages, and 7 photos (PDF 69).
+
+Two harder spreads on Haiku 5.5 (2026-11-17):
+
+| Spread | Right answer | Haiku got | Cost / time |
+|---|---|---|---|
+| PDF 18, p.32-33 | 1 idea page "Yogurt Smash!", no price, no ingredient list, 2 photos | 1 card, kind = idea, no price, big photo p32_1 | $0.0008 / 5.3 s |
+| PDF 69, p.134-135 | 1 recipe "Dumplings", 19 ingredients in 4 groups, steps run onto p.135, 1 main + 6 step photos, "$0.12 / dumpling, makes sixty" | 1 card, 19/19 ingredients, all steps incl. p.135 (2,644 chars), main photo p134_1 | $0.0014 / 7.4 s |
+
+Haiku read everything correctly. The 2 misses are in OUR card schema, not the model:
+1. Price unit: "$0.12 / dumpling" was saved as cost_per_serving = 0.12 (the card has no unit field).
+2. Ingredient groups lost: veggie filling OR pork filling became one flat list, so a vegetarian filter would wrongly drop Dumplings (or an allergen check would see pork).
+3 spreads total: 6/6 cards correct, $0.0032, 18 s.
+
+Card format v2 + retest (2026-11-17): Card now has makes, unit_cost + cost_unit, and ingredient_groups (name, items, pick_one_of).
+
+| Spread | v1 | v2 (after fix) |
+|---|---|---|
+| PDF 37 toast x4 | 4/4 correct | 4/4 correct, $X/serving unchanged |
+| PDF 18 yogurt idea | 1 idea card | 1st try: idea + a duplicate "section" card from the labelled photo -> prompt line "photo-only page = no extra card" + duplicate-title check -> 1 idea card |
+| PDF 69 Dumplings | "$0.12/serving", 1 flat list of 19 | "$0.12/dumpling", makes sixty, 4 groups: Dough 4, Veggie 7 + Pork 6 (pick one: filling), Additions 2 |
+
+3 spreads: 6/6 cards correct, $0.0033, 16.5 s, all code checks passed.
+Wobble seen: the yogurt idea card listed 11 foods from the photo (incl. peanut butter) on one run and 0 on the next. Idea cards are not reliable for allergens yet.
+
+### Decision: store recipe cards as JSON (2026-11-17)
+
+```mermaid
+flowchart LR
+    CARD["JSON card<br/>recipes_rag/data/cards/*.json"] -->|"build 1 sentence:<br/>title + ingredient groups + steps<br/>(embedded: meaning)"| VEC[("1 vector per card")]
+    CARD -->|"exact fields, NOT embedded<br/>(vectors can't tell $0.12 from $1.20)"| F["book_page, unit_cost, cost_unit,<br/>makes, photo_id"]
+    F -->|"photo_id = p134_1"| IMG[(data/images/p134_1.png<br/>shown in chat, never embedded)]
+```
+
+Picked JSON cards (A) over one Markdown file per recipe (B): the planner and Kroger pricing read numbers straight from fields; a Markdown preview can be generated later.
+
+### Full book run: Haiku 5.5 on all 90 spreads (recipes_rag/run_all.py, 2026-11-17)
+
+```mermaid
+flowchart LR
+    RA["run_all.py<br/>6 spreads at a time<br/>skip if card file exists<br/>(re-run = $0 for done spreads)"] -->|"87 new spreads<br/>97 s, $0.093"| RP["read_page.py per spread<br/>Haiku 5.5 + code checks"]
+    RP --> CARDS[("90 card files<br/>155 cards: 95 recipes,<br/>31 ideas, 29 sections")]
+    RP -->|"3 flagged: all false alarms<br/>(substring check: 'oatmeal' in 'Berry Oatmeal')"| LOOK[human look]
+```
+
+| | Old font-size splitter | Claude reads pages (Haiku) |
+|---|---|---|
+| Recipes found | 75 | **95** (+20, incl. Deviled Eggs and the 4 toast recipes on p.70-71) |
+| Idea pages kept apart | no | 31 idea cards |
+| Recipes with a photo | 0 | 92 / 95 |
+| Recipes with a printed price | 0 | 88 / 95 (units: serving 66, cup 7, muffin, scone, bar) |
+| Alternatives kept ("pick one") | no | 5 recipes (Dumplings, Rainbow Rice, Deviled Eggs...) |
+| Cost | $0 | $0.093 for the book (+ $0.006 of tests) |
+
+Same title twice (3 cases) = real "on toast" versions (p.72-73) of main recipes (p.43, p.95, p.122). Search must keep both and say which page.
+Check to improve: the duplicate-title rule flags variations ("Berry Oatmeal") as duplicates -> compare whole titles, not substrings.
+
+## Stage 3: recipe search (DRAFT, before code)
+
+```mermaid
+flowchart LR
+    Q["Student: 'vegetarian, no peanuts,<br/>under 20 min, something warm'"] --> SPLIT["Claude splits the ask<br/>hard rules -> filters<br/>soft wishes -> search text"]
+    SPLIT -->|"filters on exact fields<br/>(vegetarian, allergens, minutes:<br/>NOT on cards yet, next choice)"| F[("126 cards<br/>95 recipes + 31 ideas")]
+    F -->|"survivors"| S{"rank by meaning<br/>OPEN CHOICE:<br/>A hybrid BM25 + MiniLM vectors (local, free/query)<br/>B no vectors: Claude reads all survivors<br/>(126 cards = ~5,800 tokens title+ingredients)"}
+    S -->|"top 3 cards<br/>+ book page + photo_id"| OUT["Step 4 prices them at Kroger"]
+```
+
+### Stage 3 piece 1: hybrid search, no filters yet (recipes_rag/search.py, 2026-11-17)
+
+Picked A (hybrid BM25 + MiniLM vectors, fused by RRF k=60) over B (Claude reads all 126 cards): free per search, scales to thousands.
+126 cards (95 recipes + 31 ideas) embedded locally; 4 questions in 17 s total (mostly loading the model once).
+
+| Question | #1 result | Verdict |
+|---|---|---|
+| "something warm with tofu" | Tofu Hot Pot p.106 (words #4, meaning #1) | good; but #3 = Peanut Sauce -> allergen filter needed |
+| "cheap breakfast" | "Buy expensive eggs if you can" p.10 (a TIP), then Oatmeal $0.13 | tips leak in as "idea" cards |
+| "spicy vegetable dinner" | Spicy Green Beans p.59 | good |
+| "comfort food for a cold day" | freezer tip p.11, Cold Asian Noodles p.50 | FAIL: BM25 matched the word "cold"; vectors didn't map "cold day" to soup |
+
+Lessons: words and meaning disagree a lot (Popcorn: words #2, meaning #8). Fusion only helps if at least one side understands the ask.
+Fixes in order: 1) drop tip cards (ideas with 0 ingredients); 2) Claude rewrites the ask before search ("cold day" -> "warm soup or stew").
+
+### Stage 3 piece 2: Haiku labels each card with a category (Andy's design)
+
+```mermaid
+flowchart LR
+    PG["spread"] -->|"Haiku reads AND labels:<br/>category = book section it falls under<br/>breakfast, soup, salad, snack_side, handheld, dinner,<br/>big_batch, staple, drink, dessert, flavor, tip, about<br/>(rejected: dropping 0-ingredient ideas,<br/>it also dropped 11 leftover remixes)"| CARD["JSON card<br/>+ category field"]
+    CARD -->|"embedded text starts with '[Breakfast]'<br/>so search sees it"| VEC[(vectors)]
+    CARD -->|"exact field: food questions skip<br/>category = tip / about"| FIL[filters]
+```
+
+Result (2026-11-17): re-read all 90 spreads with category (95 s, $0.097). 187 cards: 95 recipes, 57 ideas, 35 sections.
+Categories: snack_side 30, tip 29, dinner 21, breakfast 20, handheld 20, about 16, salad 11, staple 9, soup 7, drink 7, dessert 6, flavor 6, big_batch 5.
+Two prompt rules added on the way: "list of named ideas = one card each" (the 11 leftover wraps had collapsed into 1 card).
+Search now skips tip/about/section cards: 125 food cards.
+
+| Question | Before categories | With categories |
+|---|---|---|
+| "cheap breakfast" | #1 = tip "Buy expensive eggs" | Oatmeal 6 Ways, Tomato Scrambled Eggs $1.80, Yogurt Smash! (all breakfast) ✅ |
+| "something warm with tofu" | Tofu Hot Pot | Tofu Hot Pot (unchanged) ✅ |
+| "spicy vegetable dinner" | Spicy Green Beans | Spicy Green Beans (unchanged) ✅ |
+| "comfort food for a cold day" | freezer tip, Cold Noodles | Empanadas, Cold Noodles (words #1), **Dal (meaning #1, words #74)** ⚠️ |
+
+"Cold day": vectors now find Dal (a warm soup) at #1, but BM25 still drags in "Cold" Noodles. Next fix: Claude rewrites the ask before search.
+
+## Extraction evals (DRAFT, before code)
+
+Code checks (page exists, >= 2 ingredients) prove a card is well-formed. Evals prove it is RIGHT, against hand-checked answers.
+
+```mermaid
+flowchart LR
+    GOLD[("gold/*.json<br/>10 spreads, ~40 cards<br/>written from the page image,<br/>Andy spot-checks<br/>(rejected: copying Haiku's output as gold,<br/>it would grade Haiku against itself)")] --> CMP
+    RUN["read_page.py on the same 10 spreads<br/>x 2 runs (stability)"] --> CMP["eval_extract.py<br/>match cards by title"]
+    CMP --> S1["found: recall = gold cards found / gold cards<br/>precision = real cards / cards returned"]
+    CMP --> S2["per field: category, kind, page, price, unit,<br/>photo, ingredient count (exact match, code only)"]
+    CMP --> S3["stability: run 1 vs run 2 agree?"]
+```
+
+### Extraction eval: built and run (recipes_rag/evals/, 2026-11-18)
+
+```mermaid
+flowchart LR
+    G[("gold_extraction.json<br/>10 spreads, 34 cards<br/>hand-written from page images")] --> E
+    R["read_page.py -> evals/runs/haiku_r1, r2<br/>(own folder: never overwrites real cards)<br/>20 calls, $0.0237"] --> E["eval_extract.py<br/>match by title (difflib >= 0.75)<br/>grade 8 fields by code"]
+    E --> OUT["recall 34/34, precision 34/34<br/>every field 100%, both runs<br/>stability 34/34"]
+```
+
+Grader tested first: 3 planted errors (unit dumpling -> serving, swapped photo, deleted Tilapia Taco) -> all 3 caught. Dry run on the production cards: 34/34 found, 1 EXTRA card ("Avocado Milkshake tip from John" on PDF 81) that did not come back in the 2 fresh runs = a rare wobble.
+
+Honest limits: 3 of the 10 spreads (18, 37, 69) were used to tune the prompt, so they flatter the score; 34 cards is small (one miss = -3 points); gold was written by Claude Opus from the images (a different model from Haiku), Andy to spot-check. Next: add 10 held-out spreads nobody tuned on.
+
+## Search evals (DRAFT, before code): the scoreboard DSPy will need
+
+```mermaid
+flowchart LR
+    G[("gold_search.json<br/>20 student questions<br/>right answers = titles OR categories")] --> E
+    S["search.py (as is: no rewrite)"] --> E["eval_search.py<br/>top 3 per question"]
+    E --> M["hit@3: any right recipe in top 3?<br/>precision@3: how many of the 3 are right?<br/>(20 questions: 1 question = 5 points)"]
+    M -.->|"later: score each rewrite prompt"| D["DSPy question rewrite"]
+```
+
+### Search eval baseline (recipes_rag/evals/eval_search.py, 2026-11-18, $0)
+
+**hit@3 15/20 = 75% | precision@3 29/60 = 48%** (search.py as is, no rewrite).
+One gold bug found and fixed first: "Calzone" vs the real title "Calzones" (pizza night went 2/3 -> 3/3).
+
+All 5 misses are vague, intent-style questions: the words don't name the food.
+
+| Missed question | What search did | What a rewrite would send |
+|---|---|---|
+| sweet treat after dinner | BM25 matched "sweet" -> Jacket **Sweet** Potatoes x2 | "dessert: cookies, cake, sorbet" |
+| quick lunch I can eat with my hands | Fresh Pasta, Roasted Vegetables | "handheld: wrap, taco, sandwich, calzone" |
+| cook once, eat all week | Spinach and Chickpea, Stroganoff | "big batch, freezes well, leftovers" |
+| something cheesy and melty | spice cards, Agua Fresca | "cheese, cheddar, mozzarella, melted" |
+| something I can make ahead and freeze | Quiche, Melon Sorbet ("frozen melon") | "big batch, dumplings, freeze" |
+
+This is the scoreboard DSPy will optimise the question rewrite against (target: lift hit@3 above 75%).
+
+## Stage 3 piece 3: question rewrite with DSPy (DRAFT, before code)
+
+```mermaid
+flowchart LR
+    Q["'sweet treat after dinner'"] -->|"dspy.Predict(Rewrite)<br/>Haiku 5.5 via LiteLLM<br/>question -> search_text"| RW["'dessert cookies cake sorbet'"]
+    RW --> S["search.py (unchanged)<br/>BM25 + vectors + RRF"]
+    S --> T["top 3 cards"]
+    T -->|"metric = precision@3 vs gold_search.json"| OPT["DSPy optimiser<br/>tries prompt / examples,<br/>keeps the best score<br/>(train on 10 questions, test on the other 10:<br/>otherwise it just memorises the answers)"]
+    OPT -.->|"better prompt"| RW
+```
+
+### Question rewrite, zero-shot (recipes_rag/rewrite.py, DSPy 3.5.0, 2026-11-18)
+
+Bug on the way: DSPy call -> HTTP 404. Cause: this app sets ANTHROPIC_BASE_URL = https://api.anthropic.com (no /v1).
+The Anthropic SDK appends /v1/messages (works); DSPy's lm15 engine appends only /messages -> api.anthropic.com/messages = 404.
+Fix: dspy.LM(..., api_base="https://api.anthropic.com/v1") in rewrite.py.
+
+| | Raw question (baseline) | Haiku rewrites first (no optimising yet) |
+|---|---|---|
+| hit@3 | 15/20 = 75% | **19/20 = 95%** |
+| precision@3 | 29/60 = 48% | **42/60 = 70%** |
+| cost | $0 | $0.0010 for 20 rewrites |
+
+Fixed: "sweet treat" (0/3 -> 2/3), "lunch with my hands" (0/3 -> 3/3), "cold day" (1/3 -> 3/3), "cheesy and melty" (0/3 -> 2/3).
+Still missed: "cook once, eat all week" (0/3) -> rewrite said "batch cooking, meal prep", search found Jambalaya/Quiche.
+Weakness: rewrites invent dishes the book doesn't have ("iced tea, lemonade, mac and cheese") -> noise in search.
+Two more gold typos found (Calzone/Calzones, Quesadilla/Quesadillas) -> eval_search.py now refuses to run if a gold title matches no card (tested with a planted "Rotii").
+
+### DSPy BootstrapFewShot (recipes_rag/evals/optimize_rewrite.py, 2026-11-18): REJECTED, made it worse
+
+Split (seed 7): train 10 questions, test 10 never seen in training. 24 Claude calls, $0.0015.
+
+| On the 10 TEST questions | zero-shot | few-shot (4 examples) |
+|---|---|---|
+| hit@3 | 9/10 | 7/10 |
+| precision@3 | 21/30 | 15/30 |
+
+Why: BootstrapFewShot kept the FIRST 4 train rewrites that scored >= 2/3, and all 4 were long lists of generic dish names
+("grilled cheese, macaroni and cheese, quesadilla, budget cheese dishes"). The prompt copied that style:
+- "lunch with my hands" 3/3 -> 0/3: wrote "hand-held ... quesadillas, burritos"; BM25 splits "hand-held" into hand + held, so it no longer matches [Handheld]; quesadillas pulled cheese dishes.
+- "sauce or dip" 2/3 -> 0/3: "hummus, pesto, gravy, cheese sauce" = dishes the book doesn't have.
+Lesson: examples teach STYLE, good or bad. A rewrite that passed on its own question can be a bad teacher.
+Decision: keep zero-shot as the default (rewrite.py does not load rewrite_fewshot.json). Test set of 10 = 1 question is 10 points, so treat the gap as a warning, not proof.
+
+Decision (Andy, 2026-11-18): stop tuning; keep the zero-shot rewrite (95% hit@3, 70% precision@3 on 20 questions).
+Overfitting guard rails for later: (1) always score on held-out questions; (2) only add instructions that are facts about the BOOK
+(its section names), never about specific test questions; (3) grow the question set from real student questions once the app runs;
+(4) safety net option: search the raw question AND the rewrite, merge with RRF, so one bad rewrite can't empty the results.
+
+## Stage 3 piece 4: diet + allergen fields (DRAFT, before code)
+
+No re-reading of the book: the ingredient lists are already in the JSON cards.
+
+```mermaid
+flowchart LR
+    CARD[("125 food cards<br/>ingredient_groups already saved")] -->|"code: keyword lists per allergen<br/>peanut, tree nut, milk, egg, wheat, soy,<br/>fish, shellfish, sesame + meat words<br/>($0, same answer every time)"| TAG["derived fields<br/>allergens: [peanut, milk]<br/>vegetarian: yes / no / option<br/>(option = a pick-one group is meat-free)"]
+    TAG -->|"computed when search.py loads<br/>(nothing new to store or go stale)"| F["filter BEFORE ranking<br/>'no peanuts' removes every peanut card"]
+    GOLD[("allergen gold: ~20 cards labelled by hand")] -.->|"safety metric: allergen RECALL must be 100%<br/>(a missed peanut is the failure that matters;<br/>an extra warning is fine)"| TAG
+    Q["student question"] -->|"rewrite (Haiku) also pulls out the rules:<br/>vegetarian, no peanuts"| F
+```
+
+### Diet + allergen fields: built (recipes_rag/diet.py + evals/eval_diet.py, 2026-11-18, $0)
+
+Picked code keyword lists (A) over Haiku tagging (B): same answer every time, checkable line by line, $0.
+How: lowercase -> swap "false friends" (peanut butter -> peanut, butternut -> squash, eggplant -> aubergine, coconut milk -> coconut,
+butter knife -> knife) -> whole-word match per allergen over title + ingredients + steps -> follow "(p. 164)" to the referenced recipe.
+Vegetarian: 'no' if a required ingredient is meat/fish; 'option' if meat only in optional items, additions, variations or one pick-one choice.
+
+Gold: 22 hand-labelled trap cards (recipes_rag/evals/gold_diet.json). Safety rule: optional ingredients count.
+
+| Metric | Result |
+|---|---|
+| allergen RECALL (safety) | **55/55 = 100%** (every trap caught: butternut, eggplant, coconut milk, raita via p.164, peanut sauce via p.161) |
+| allergen precision | 55/60 = 92% (extra warnings: "toast them" = verb; page refs pulling in optional extras) |
+| vegetarian | 21/22 (Roasted Vegetables "pair with roast chicken" -> 'option' instead of 'yes': harmless direction) |
+| all 125 food cards | milk 75, wheat 66, egg 37, soy 12, fish 7, tree_nut 6, sesame 6, peanut 5, shellfish 2; vegetarian yes 98, option 9, no 18 |
+
+Eval found and fixed: "butter knife" flagged Tilapia as dairy. Not yet wired into search (next: rewrite pulls rules from the question, search filters before ranking).
+
+### Wiring the filters into search (DRAFT, before code)
+
+```mermaid
+flowchart LR
+    Q["'something warm,<br/>I'm allergic to soy'"] -->|"Haiku (DSPy Rewrite, 2 new outputs)"| R["search_text: 'warm soup stew'<br/>avoid: [soy]<br/>vegetarian: false"]
+    Q -->|"code backstop: 'allergic to X', 'no X', 'X-free'<br/>(union with Claude's list: an LLM miss<br/>can't drop a stated allergy)"| R
+    R --> F["search.py: remove cards whose diet.py<br/>allergens hit 'avoid' (and idea cards with no<br/>ingredient list when any allergy is set)<br/>BEFORE BM25 + vectors rank"]
+    F --> T["top 3: Tofu Hot Pot can't appear"]
+    T -.->|"rules eval: allergen violations in top 3 must be 0"| E[eval_rules.py]
+```
+
+### Filters wired into search (rewrite.py + search.py + evals/eval_rules.py, 2026-11-18)
+
+Rewrite now returns 3 things: search_text, avoid (allergens), vegetarian. Code backstop ("allergic to X", "no X", "X-free")
+is UNIONED with Claude's list, so code can only add safety. search.py computes diet fields at load (diet.py) and removes
+disallowed cards before BM25 + vectors rank; with any allergy set, idea cards with no ingredient list are removed too (can't prove safe).
+
+Bug found by the search eval: Claude set avoid=[soy] for "something warm WITH tofu" and avoid=[wheat, egg] for "make my own bread or pasta"
+-> it listed allergens IN the dish, not the ones to AVOID -> Tofu Hot Pot was filtered out (95% -> 90%).
+Fix: field description now says "wanting or mentioning a food is NEVER a reason to avoid it".
+
+| Eval | Before filters | Filters v1 | Filters v2 (fixed instruction) |
+|---|---|---|---|
+| 20 normal questions, hit@3 | 19/20 (95%) | 18/20 (90%) | **19/20 (95%)** |
+| 20 normal questions, precision@3 | 42/60 | 38/60 | **42/60** |
+| 8 rule questions: rules read right | - | 8/8 | **8/8** |
+| 8 rule questions: violations in top 3 | - | 0 | **0** |
+
+Lesson: adding a safety feature can quietly break normal use; the old eval caught it. Run every eval after every change.
+Still missed: "cook once, eat all week" (0/3).

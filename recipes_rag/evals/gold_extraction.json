@@ -1,0 +1,57 @@
+{
+  "_how": "Written by hand from the page images (2026-11-18). null = don't grade that field. photo: list = any of these is right. Sections are optional: not counted for or against.",
+  "7": [
+    {"title": "Always buy eggs", "kind": "idea", "category": "tip", "book_page": 10, "unit_cost": null, "cost_unit": null, "photo": [null], "n_ingredients": null},
+    {"title": "Buy expensive eggs if you can", "kind": "idea", "category": "tip", "book_page": 10, "unit_cost": null, "cost_unit": null, "photo": [null], "n_ingredients": null},
+    {"title": "Be careful with undercooked eggs", "kind": "idea", "category": "tip", "book_page": 10, "unit_cost": null, "cost_unit": null, "photo": [null], "n_ingredients": null},
+    {"title": "Buy fresh bread", "kind": "idea", "category": "tip", "book_page": 10, "unit_cost": null, "cost_unit": null, "photo": [null], "n_ingredients": null},
+    {"title": "Don't buy drinks", "kind": "idea", "category": "tip", "book_page": 10, "unit_cost": null, "cost_unit": null, "photo": [null], "n_ingredients": null},
+    {"title": "Get creative with wilted vegetables", "kind": "idea", "category": "tip", "book_page": 11, "unit_cost": null, "cost_unit": null, "photo": [null], "n_ingredients": null},
+    {"title": "Make your own broth and stock", "kind": "idea", "category": "tip", "book_page": 11, "unit_cost": null, "cost_unit": null, "photo": [null], "n_ingredients": null},
+    {"title": "Treat your freezer with respect", "kind": "idea", "category": "tip", "book_page": 11, "unit_cost": null, "cost_unit": null, "photo": [null], "n_ingredients": null},
+    {"title": "Turn chicken skin into schmaltz", "kind": "idea", "category": "tip", "book_page": 11, "unit_cost": null, "cost_unit": null, "photo": [null], "n_ingredients": null},
+    {"title": "Buy a pepper grinder", "kind": "idea", "category": "tip", "book_page": 11, "unit_cost": null, "cost_unit": null, "photo": [null], "n_ingredients": null}
+  ],
+  "18": [
+    {"title": "Yogurt Smash!", "kind": "idea", "category": "breakfast", "book_page": 32, "unit_cost": null, "cost_unit": null, "photo": ["p32_1", "p33_2"], "n_ingredients": null}
+  ],
+  "30": [
+    {"title": "Jacket Sweet Potatoes", "kind": "recipe", "category": "snack_side", "book_page": 57, "unit_cost": 1.20, "cost_unit": "serving", "photo": ["p57_1"], "n_ingredients": 4}
+  ],
+  "31": [
+    {"title": "Smoky and Spicy Roasted Cauliflower", "kind": "recipe", "category": "snack_side", "book_page": 58, "unit_cost": 0.85, "cost_unit": "serving", "photo": ["p58_1"], "n_ingredients": 6},
+    {"title": "Spicy Green Beans", "kind": "recipe", "category": "snack_side", "book_page": 59, "unit_cost": 0.65, "cost_unit": "serving", "photo": ["p59_2"], "n_ingredients": 7}
+  ],
+  "37": [
+    {"title": "Peas and Lemon", "kind": "recipe", "category": "snack_side", "book_page": 70, "unit_cost": 1.00, "cost_unit": "serving", "photo": ["p70_4"], "n_ingredients": 6},
+    {"title": "Asian Greens Gra Prow", "kind": "recipe", "category": "snack_side", "book_page": 70, "unit_cost": 2.50, "cost_unit": "serving", "photo": ["p70_3"], "n_ingredients": 7},
+    {"title": "Caramelized Onions and Cheddar", "kind": "recipe", "category": "snack_side", "book_page": 71, "unit_cost": 1.00, "cost_unit": "serving", "photo": ["p71_2"], "n_ingredients": 4},
+    {"title": "Roasted Vegetables", "kind": "recipe", "category": "snack_side", "book_page": 71, "unit_cost": 1.00, "cost_unit": "serving", "photo": ["p71_1"], "n_ingredients": 3}
+  ],
+  "45": [
+    {"title": "Tomato Scrambled Eggs Wrap", "kind": "idea", "category": "handheld", "book_page": 87, "unit_cost": null, "cost_unit": null, "photo": [null], "n_ingredients": null},
+    {"title": "Jacket Sweet Potatoes Spread", "kind": "idea", "category": "handheld", "book_page": 87, "unit_cost": null, "cost_unit": null, "photo": [null], "n_ingredients": null},
+    {"title": "Toast Toppings on Anything", "kind": "idea", "category": "handheld", "book_page": 87, "unit_cost": null, "cost_unit": null, "photo": [null], "n_ingredients": null},
+    {"title": "Cauliflower Tacos", "kind": "idea", "category": "handheld", "book_page": 87, "unit_cost": null, "cost_unit": null, "photo": [null], "n_ingredients": null},
+    {"title": "Chana Masala Wrap", "kind": "idea", "category": "handheld", "book_page": 87, "unit_cost": null, "cost_unit": null, "photo": [null], "n_ingredients": null},
+    {"title": "Black-Eyed Peas and Collards Wrap", "kind": "idea", "category": "handheld", "book_page": 87, "unit_cost": null, "cost_unit": null, "photo": [null], "n_ingredients": null},
+    {"title": "Vegetable Jambalaya Burrito", "kind": "idea", "category": "handheld", "book_page": 87, "unit_cost": null, "cost_unit": null, "photo": [null], "n_ingredients": null},
+    {"title": "Cauliflower Cheese Sandwich", "kind": "idea", "category": "handheld", "book_page": 87, "unit_cost": null, "cost_unit": null, "photo": [null], "n_ingredients": null},
+    {"title": "Roasted Vegetables Sandwich", "kind": "idea", "category": "handheld", "book_page": 87, "unit_cost": null, "cost_unit": null, "photo": [null], "n_ingredients": null},
+    {"title": "Roasted Potatoes and Chilies", "kind": "idea", "category": "handheld", "book_page": 87, "unit_cost": null, "cost_unit": null, "photo": [null], "n_ingredients": null},
+    {"title": "Tilapia Taco", "kind": "idea", "category": "handheld", "book_page": 87, "unit_cost": null, "cost_unit": null, "photo": [null], "n_ingredients": null}
+  ],
+  "63": [
+    {"title": "Roasted Vegetables", "kind": "recipe", "category": "dinner", "book_page": 122, "unit_cost": null, "cost_unit": null, "photo": ["p123_1"], "n_ingredients": null}
+  ],
+  "69": [
+    {"title": "Dumplings", "kind": "recipe", "category": "big_batch", "book_page": 134, "unit_cost": 0.12, "cost_unit": "dumpling", "photo": ["p134_1"], "n_ingredients": 19, "n_pick_one_groups": 2}
+  ],
+  "76": [
+    {"title": "Agua Fresca", "kind": "recipe", "category": "drink", "book_page": 149, "unit_cost": null, "cost_unit": null, "photo": ["p149_1"], "n_ingredients": null}
+  ],
+  "81": [
+    {"title": "Fast Melon Sorbet", "kind": "recipe", "category": "dessert", "book_page": 158, "unit_cost": 0.60, "cost_unit": "serving", "photo": ["p158_2"], "n_ingredients": 4},
+    {"title": "Avocado Milkshake", "kind": "recipe", "category": "dessert", "book_page": 159, "unit_cost": 1.15, "cost_unit": "serving", "photo": ["p159_1"], "n_ingredients": 6}
+  ]
+}
