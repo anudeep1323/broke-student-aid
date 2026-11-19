@@ -403,3 +403,251 @@ Fix: field description now says "wanting or mentioning a food is NEVER a reason 
 
 Lesson: adding a safety feature can quietly break normal use; the old eval caught it. Run every eval after every change.
 Still missed: "cook once, eat all week" (0/3).
+
+## Grocery-first flow (Andy, 2026-11-18): basket first, recipes second
+
+```mermaid
+flowchart LR
+    S["Student: $40/week, ZIP, no peanuts"] --> K["grocery/: cheapest Kroger items<br/>near the student, allergens removed"]
+    K -->|"student ticks items"| B["basket"]
+    B --> M["match basket to recipe ingredients<br/>'frozen peas' = '1 cup peas, fresh or frozen'"]
+    M --> R["recipes ranked by % of ingredients covered<br/>'Dal: 5/6, missing cumin +$1.29'"]
+    I["piece 1: normalise all recipe ingredients<br/>(code, $0) -> most common ones<br/>= the starter list Kroger is searched for<br/>(every item unlocks recipes)"] -.-> K
+```
+
+### Grocery piece 1: normalise recipe ingredients (grocery/ingredients.py, $0)
+
+"2 cloves garlic, finely chopped" -> "garlic"; "2 large or 4 medium potatoes" -> "potato" (bug fixed: first version cut at " or " before removing numbers -> None).
+95 recipes -> 278 distinct grocery names. Top: garlic 39, butter 30, egg 19, olive oil 17, tomato 16, scallion 16, onion 16, flour 10, sharp cheddar 10.
+Open: same food under two names (sharp cheddar / cheese, lemon / lemon juice) -> merge before searching Kroger.
+Correction (Andy): the student browses REAL Kroger products as they come; the starter list was not asked for.
+ingredients.py stays, but only for the later step: matching the basket to recipe ingredients.
+
+### Kroger browse (DRAFT, before code): what the student sees first
+
+```mermaid
+flowchart LR
+    S["ZIP 45202 + 'rice, eggs, black beans'"] -->|"token (1 call, reused)"| ST["nearest store<br/>(1 call)"]
+    ST -->|"1 call per word, up to 10 products each<br/>(no locationId = no prices)"| P["real products: name, size, regular, promo"]
+    P -->|"code parses size: '32 oz' '5 lbr' '12 ct' '1 gal'<br/>best price = promo if any, else regular"| U["unit price: $/lb, $/each, $/fl oz"]
+    U -->|"sort cheapest per unit first<br/>(not cheapest sticker: Minute rice on sale was 3x per lb)"| OUT["list the student ticks into a basket"]
+```
+
+### Kroger browse: built (kroger/browse.py, 2026-11-18)
+
+Real run, ZIP 45202 -> Kroger On the Rhine (01400513): 3 searches (rice, eggs, black beans), 29 priced products, 4.6 s, 5 API calls, $0.
+Cheapest per unit: rice $0.76/lb (Kroger Long Grain 5 lb $3.79), eggs $0.14 each (30 ct $4.19), black beans $0.78/lb (4-can pack on sale $2.99).
+Bug found in the output: "4 ct / 15.25 oz" read as 4 items ($0.75/each) and sorted among $/lb prices.
+But eggs use the same shape ("12 ct / 24 oz") and must stay per egg.
+Fix: read every size both ways ({each, lb}), then use the unit MOST products in that search use (eggs -> each, beans -> lb).
+
+Decision (Andy, 2026-11-18): location is a dedicated input field (ZIP box), NOT asked through the chat.
+Why: always present before the first search, validated by code (5 digits, real store found), no LLM needed, can't be misread.
+Consequence for Step 11 (interface): needs a UI with form fields next to the chat, which points to a web UI over a plain CLI or Discord.
+Decision (Andy, 2026-11-18): interface = Streamlit (picked over Discord: needs real input fields + photos).
+
+### Streamlit screen 1: ZIP + budget -> search -> basket (app.py, 2026-11-18)
+
+```mermaid
+flowchart LR
+    Z["ZIP field (5 digits, checked by code)<br/>+ budget field"] -->|"st.cache_data 24 h"| ST["nearest Kroger"]
+    T["search box 'rice, eggs'"] -->|"st.cache_data 1 h per word<br/>token cached 25 min (st.cache_resource)"| P["kroger/browse.py rows<br/>cheapest per unit first"]
+    P -->|"tick checkboxes<br/>(st.session_state['basket'])"| B["basket total vs budget<br/>green 'left' / red 'over budget'"]
+```
+
+Tested in the browser: ZIP 45202 -> Kroger On the Rhine; "rice, eggs" -> 10 + 10 products; ticked rice $3.79 + eggs 30 ct $4.19
+-> "Basket: 2 items · $7.98 of $30.00", "$22.02 left" (matches hand math).
+Bug found in the browser: Streamlit reads text between two $ signs as a LaTeX math formula -> prices showed as green code, $ vanished. Fix: escape every $ ("\$").
+Run: python3 -m streamlit run app.py (launch config: .claude/launch.json, port 8502).
+
+### Basket -> recipes (DRAFT, before code)
+
+```mermaid
+flowchart LR
+    B["basket: 'Kroger® Long Grain Rice',<br/>'Kroger® Medium Grade A White Eggs'"] -->|"code: a recipe ingredient matches a product<br/>if all its words are in the product name<br/>('egg' in 'eggs', 'rice' in 'long grain rice')"| M["covered ingredients per recipe"]
+    C[("95 recipe cards<br/>ingredients.py names")] --> M
+    M -->|"rank: most basket items used, then % covered"| R["Tomato Scrambled Eggs p.15<br/>uses: egg · missing: tomato, butter<br/>+ photo from the card"]
+```
+
+### Basket -> recipes: built (grocery/match.py + app.py section 4, 2026-11-18, $0)
+
+Match rule (code): a recipe ingredient is covered if all its words are in a basket product's name (plurals folded: eggs -> egg).
+Rank: most basket products used, then highest share of the recipe's ingredients covered. Top 5, each with its book photo.
+Terminal test, basket rice + eggs: Fresh Pasta p.140 (egg; missing flour, olive oil), Tomato Scrambled Eggs p.15, Savory Oatmeal p.31, Rainbow Rice p.144, Omelette p.17.
+Basket beans + rice + onions: Salsa p.163, Cabbage Rolls p.109, Vegetable Jambalaya p.96 (2 basket items each).
+Browser test: ticked rice + eggs -> "Recipes you can make with your basket" shows photo + title + page + book price + have / still need.
+Rough edges: noisy names ("bay leave", "butter for the pan"); no diet filter in the UI yet; missing items not priced at Kroger yet.
+
+## Stage 8: the agent, LangGraph (DRAFT, before code). Natural language enters HERE.
+
+Decision (Andy, 2026-11-18): LangGraph (picked over a raw tool loop). Everything built so far becomes a tool.
+
+```mermaid
+flowchart LR
+    F["fields (code, no LLM):<br/>ZIP 45202, budget $25"] --> S
+    U["student sentence:<br/>'broke till Friday, no peanuts,<br/>tired of rice, something warm'"] --> S[("state: messages, zip, budget,<br/>store, avoid, vegetarian, basket")]
+    S --> A["agent node: Claude reads the sentence,<br/>decides which tools to call"]
+    A -->|"tool calls"| T["tools node (code = facts and prices)<br/>search_kroger(terms) -> browse.py<br/>find_recipes(text, avoid, veg) -> search.py + diet.py<br/>recipes_for_basket(items) -> match.py<br/>recipe_details(title) -> card steps (follow-ups)"]
+    T -->|"results"| A
+    A -->|"no more tool calls"| OUT["answer in plain English;<br/>every $ and page number came from a tool"]
+```
+
+### Agent piece 1: 4 tools (agent/tools.py, 2026-11-18, $0 - no Claude yet)
+
+| Tool | Wraps | Claude sees args | Direct test |
+|---|---|---|---|
+| search_kroger | kroger/browse.py | terms (store comes from state via InjectedState, hidden from Claude) | rice -> Kroger Long Grain Rice 5 lb $3.79 ($0.76/lb) |
+| find_recipes | recipes_rag/search.py + diet.py | text, avoid, vegetarian | "warm soup", avoid soy, veg -> French Onion Soup p.38, Dal p.35, Butternut Squash Soup p.40 |
+| recipes_for_basket | grocery/match.py | items | rice + eggs -> Fresh Pasta, Tomato Scrambled Eggs, Savory Oatmeal |
+| recipe_details | recipe cards | title | Dal -> p.35, $0.6/serving, steps; unknown title -> {"error": ...} (not a crash) |
+
+Decision: the store id is injected from state, not a tool argument, so Claude can't call the wrong store. Tool results are trimmed (5 products, short card fields) to keep tokens down.
+Load time 11 s (MiniLM model + 125 cards), once per process.
+
+### Agent piece 2: LangGraph loop, first real run (agent/graph.py, 2026-11-18)
+
+Added a 5th tool, check_budget(prices): code adds the prices and compares with the budget (state), so Claude never does math.
+Graph: START -> agent (Claude Opus 5.5 + 5 tools) -> tools_condition -> tools (ToolNode, injects state) -> agent ... -> END.
+
+Run: ZIP 45202, $25, "I'm broke till Friday, no peanuts, tired of rice, want something warm"
+
+| # | Claude's tool call |
+|---|---|
+| 1-2 | find_recipes("warm cheap soup or stew, no rice", avoid=[peanut]) then a 2nd search for bean/lentil/potato |
+| 3-4 | recipe_details(Corn Soup), recipe_details(Dal) |
+| 5 | search_kroger(11 items: lentils, frozen corn, onion, potatoes, ...) |
+| 6 | check_budget(11 prices) -> over budget |
+| 7 | check_budget(10 prices, celery dropped) -> $22.60, $2.40 left |
+
+Answer: Dal p.35 + Corn Soup p.36, 10 Kroger items with real prices, total $22.60 of $25 (hand check: correct),
+said it dropped celery to stay in budget and that spices weren't priced. Every number came from a tool.
+Cost: 6 Claude calls, 29,695 in / 1,577 out tokens = $0.15 per answer, 28.2 s. Too slow/expensive for a student app -> next: cost levers.
+
+### Agent piece 3: Opus orchestrates, Haiku answers + prompt caching (Andy's design, DRAFT)
+
+```mermaid
+flowchart LR
+    S[("state")] --> O["orchestrator: Opus 5.5 + tools<br/>(cache_control: re-reads earlier turns at $0.20/M)<br/>decides which tools to call"]
+    O -->|"tool calls"| T["tools (code)"]
+    T --> O
+    O -->|"says READY (no answer text)"| H["respond: Haiku 5.5, no tools<br/>writes the student answer from tool results<br/>($0.10 in / $0.50 out per M)"]
+    H --> E[END]
+```
+Expected: the answer is 1 of ~6 calls, so this split alone saves only its output tokens; caching is the bigger lever. Measured per model below.
+
+Run (same sentence, 2026-11-18): Opus orchestrates with caching, Haiku answers.
+
+| | Opus does everything (piece 2) | Opus + caching, Haiku answers (piece 3) |
+|---|---|---|
+| Opus | 6 calls, 29,695 in, 1,577 out = $0.1503 | 6 calls, 30,319 in (22,237 from cache), 920 out = $0.0552 |
+| Haiku | - | 1 call, 5,984 in, 1,888 out = $0.0015 |
+| total / time | **$0.1503** / 28.2 s | **$0.0567** (-62%) / 28.8 s |
+| answer quality | correct: items, total $22.60 matched | WORSE: listed prices that weren't the ones Opus totalled (frozen corn $1.29 vs $3.19, celery $2.49 vs $3.00) and said "I can't confirm which items are in the $24.30" |
+
+Most of the saving came from caching (22k of 30k Opus input tokens re-read at $0.20/M instead of $4/M); the Haiku split saved Opus's ~650 answer tokens.
+Quality bug: under investigation (Andy to guess the cause first).
+
+### Per-call trace: did we match tasks to models? (rerun, 2026-11-18, $0.0717)
+
+| # | Model | Job | In (cached) | Out | $ |
+|---|---|---|---|---|---|
+| 1 | Opus | find_recipes | 1,266 (0) | 87 | 0.0068 |
+| 2 | Opus | find_recipes + 2x recipe_details | 1,595 (1,262) | 211 | 0.0058 |
+| 3 | Opus | recipe_details | 3,922 (1,593) | 98 | 0.0116 |
+| 4 | Opus | search_kroger (14 words) | 4,664 (3,920) | 196 | 0.0077 |
+| 5 | Opus | READ 70 products, pick + check_budget | 9,747 (4,662) | 374 | **0.0288** |
+| 6 | Opus | check_budget again (trim) | 10,160 (9,745) | 145 | 0.0065 |
+| 7 | Opus | said "READY" (4 tokens) | 10,344 (10,158) | 4 | 0.0029 |
+| 8 | Haiku | wrote the answer from 70 products | 8,065 | 1,784 | 0.0017 |
+
+Verdict:
+- Opus 1-6 = judgment (which recipes, which products, what to drop): right model. Call 7 = a wasted round trip just to say READY.
+- Haiku 8 was meant to only WRITE, but the handoff gave it 70 products and only Opus's PRICE list, so it re-did Opus's job (picking products) and got it wrong:
+  it listed celery $2.49 / lentils $1.25 / ginger $2.49 (Opus used $3.00 / $1.49 / $1.99) and said total $23.80 (copied from check_budget),
+  but its own listed items add up to $22.06. The student would see a total that doesn't match the list.
+Root cause: the handoff carried raw facts, not Opus's DECISIONS.
+
+### Agent piece 4: re-match jobs to models (Andy, DRAFT)
+
+Calls 1-4 (search the cookbook, read recipes, search Kroger) are fetching, not judgment -> Haiku.
+Picking products + trimming to budget + writing the answer belong together (the handoff bug came from splitting them) -> Opus.
+
+```mermaid
+flowchart LR
+    S["student sentence"] --> G["gatherer: Haiku 5.5<br/>tools: find_recipes, recipe_details, search_kroger<br/>says DONE when it has the facts"]
+    G -->|"tool calls"| GT["gather tools (code)"] --> G
+    G -->|"DONE: bundle = sentence + every tool result"| P["planner: Opus 5.5<br/>tool: check_budget only<br/>picks products, trims to budget, WRITES the answer"]
+    P -->|"check_budget"| PT["code adds prices"] --> P
+    P --> E[END]
+```
+
+Run (same sentence, 2026-11-18): Haiku gathers, Opus decides + writes.
+
+| # | Model | Job | In (cached) | Out | $ |
+|---|---|---|---|---|---|
+| 1 | Haiku | 3x find_recipes (in parallel) | 949 (0) | 343 | 0.0003 |
+| 2 | Haiku | 3x recipe_details | 2,081 (945) | 355 | 0.0003 |
+| 3 | Haiku | search_kroger (11 words) | 4,786 (2,079) | 299 | 0.0004 |
+| 4 | Haiku | said DONE | 10,259 (4,784) | 5 | 0.0006 |
+| 5 | Opus | read the bundle, pick products, check_budget (over by $1.61) | 8,864 (0) | 1,337 | **0.0622** |
+| 6 | Opus | drop lemon, check_budget -> $23.62 | 10,240 (8,860) | 157 | 0.0104 |
+| 7 | Opus | wrote the answer | 10,436 (10,238) | 544 | 0.0137 |
+
+| Version | $ / answer | Time | Answer correct? |
+|---|---|---|---|
+| piece 2: Opus does everything | 0.150 | 28 s | yes |
+| piece 3: Opus gathers + decides, Haiku writes | 0.057-0.072 | 29-35 s | NO (list didn't match total) |
+| piece 4: Haiku gathers, Opus decides + writes | **0.088** | 38 s | **yes**: 10 items listed = the 10 prices totalled, $23.62 (hand check matches) |
+
+Gathering on Haiku cost $0.0016 for 4 calls. Opus is now 98% of the bill, mostly call 5: 8,864 uncached tokens of facts
+(5 products per word x 11 words + full recipe steps) and 1,337 output tokens of thinking.
+Next levers: trim the bundle (2 products per word, ingredients not steps) and lower Opus effort.
+
+### Shrink what Opus reads (agent/graph.py compact(), 2026-11-18)
+
+compact(): 2 cheapest products per search word (was 5), recipe ingredients without cooking steps, JSON without spaces.
+
+| | piece 4 | piece 4 + compact bundle |
+|---|---|---|
+| Opus call 5 input (uncached) | 8,864 | **4,284** (-52%) |
+| Opus calls 6-7 input | 10,240 / 10,436 | 5,549 / 5,706 |
+| Haiku (4 calls) | $0.0016 | $0.0015 |
+| total / time | $0.0880 / 38 s | **$0.0625** / 38 s |
+| answer correct? | yes ($23.62) | yes: 10 items = $24.67, hand check matches |
+
+Side effect seen (quality, not math): with only 2 options per word, Opus bought canned "Brown Sugar Hickory Baked Beans" to MAKE baked beans,
+and left cumin / turmeric / green chili unpriced ("Kroger only showed products that don't fit"). Fewer tokens = fewer choices.
+Opus still thinks for ~1,200 output tokens on call 5 ($0.025). We now need an agent eval to judge trade-offs like this (cheaper vs worse picks).
+
+## Agent eval (DRAFT, before code): judge cost vs quality on 10 student sentences
+
+```mermaid
+flowchart LR
+    C[("10 cases: sentence, budget,<br/>rules (avoid, vegetarian)<br/>ZIP 45202")] --> A["agent/graph.py<br/>(the version under test)"]
+    A --> K["code checks per answer (no LLM judge):<br/>1 within budget (last check_budget)<br/>2 answer total = check_budget total, every priced item listed<br/>3 every $ in the answer came from a tool result<br/>4 recommended recipes respect avoid / vegetarian (diet.py)<br/>5 every 'p. N' cited is the recipe's real page"]
+    A --> M["$ and seconds per answer"]
+    K --> S["pass rate per check + $ per answer<br/>-> compare versions (bundle 5 vs 2 products, effort, models)"]
+```
+
+### M6: run_evals.py + agent eval baseline (2026-11-18)
+
+run_evals.py = one command: 4 free component evals (~30 s) + `--agent` for the paid end-to-end eval.
+Component evals: extraction 34/34 | search hit@3 75% raw, 95% with rewrite | allergen recall 55/55 | rules 8/8, 0 violations.
+
+Agent baseline, first try: CRASHED. Kroger /products returned an error with no "data" field (3 cases at once x ~11 searches
+= too many requests) -> KeyError killed all 10 cases.
+Fixes: browse.py retries 429/5xx (1, 2, 4 s or Retry-After); search_kroger returns {"error"} to Claude instead of crashing;
+the eval records a crashed case as FAIL and continues; 2 cases at a time.
+
+Agent baseline, second try ($0.571 for 10 cases):
+
+| Check | Score |
+|---|---|
+| 1 within budget | 10/10 |
+| 2 total + items match | 10/10 |
+| 3 every $ from a tool | 9/10 -> 10/10 after fixing an EVAL bug: "$1.38 over" came from check_budget's "left": -1.38; the check ignored minus signs |
+| 4 diet respected | 10/10 |
+| 5 pages real | 10/10 |
+| cost / time per answer | **$0.057** (range $0.045-0.070), ~35 s (27-44 s) |
+
+Charter targets: quality met (10/10); cost $0.057 vs target $0.05; time ~35 s vs target 30 s -> M7.

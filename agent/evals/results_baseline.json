@@ -1,0 +1,122 @@
+[
+ {
+  "case": "I'm broke till Friday, no peanuts, tired of rice, want something warm",
+  "answer": "I picked two warm, peanut-free meals with no rice, for **$22.37**, leaving **$2.63** of your $25.\n\n**Recipes**\n- Corn Soup, p. 36 (serves 4\u20136)\n- My Dad's Baked Beans, p. 100 (serves 2)\n\n**Shopping list**\n- Smart Way\u2122 Whole Kernel Sweet Golden Corn, 15.25 oz, $0.69 each \u00d73\n- Kroger\u00ae Salted Butter Sticks, 16 oz, $3.29\n- Jumbo Yellow Onions, 1 lb, $1.19\n- Fresh Large Green Bell Pepper, 1 ct, $0.89\n- Kroger\u00ae Russet Potatoes Bag, 5 lb, $2.79 (on sale)\n- Kroger\u00ae Peeled Garlic, 6 oz, $2.99\n- Kroger\u00ae Fat Free Vegetable Broth, 32 oz, $1.49 each \u00d72 (on sale)\n- Kroger\u00ae Brown Sugar Hickory Baked Beans, 28 oz, $2.59 each \u00d72\n- Kroger Original Yellow Mustard, 8 oz, $0.99\n\n**Not priced:**\n- I dropped celery ($3.00) to stay under budget.\n- Use pantry flour, salt and pepper.\n- The store search found no molasses, brown sugar or chipotle en adobo. Use any chili sauce for the chipotle.\n\nBoth recipes list egg and wheat, and the soup also lists milk.",
+  "checks": {
+   "1 within budget": true,
+   "2 total + items match": true,
+   "3 every $ from a tool": true,
+   "4 diet respected": true,
+   "5 pages real": true
+  },
+  "cost": 0.06960755
+ },
+ {
+  "case": "vegetarian, $20 for the week, I like spicy food",
+  "answer": "Here's a vegetarian week with heat, and it comes in under $20.\n\n**Recipes**\n- Dal, p.35 (serves 4)\n- Rainbow Rice, red version, p.144 (serves 2)\n- Spicy Green Beans, p.59 (serves 2)\n\n**Kroger list**\n- La Preferida Dry Lentils, 16 oz: $1.49\n- Kroger Salted Butter, 16 oz: $3.29\n- Jumbo Yellow Onions, 1 lb: $1.19\n- Kroger Peeled Garlic, 6 oz: $2.99 (used in both the dal and the beans)\n- Kroger Enriched Long Grain White Rice, 32 oz: $1.89\n- Kroger Crushed Tomatoes in Puree, 28 oz: $1.89\n- Kroger Cut Green Beans, 14.5 oz: $0.89\n- Kroger Less Sodium Soy Sauce, 15 fl oz: $2.19\n- Huy Fong Sambal Oelek, 8 oz: $2.49 (adds heat to the beans and can spice up the dal)\n\n**Total: $18.31. Left: $1.69.**\n\n**Not priced:** Kroger had no usable cumin seeds, black mustard seeds, turmeric or fresh green chili. Salt and pepper weren't priced. I skipped the ginger ($3.49) and the vegetable oil ($3.99) because they would have put you over budget. You could cook the beans in butter instead of oil.",
+  "checks": {
+   "1 within budget": true,
+   "2 total + items match": true,
+   "3 every $ from a tool": true,
+   "4 diet respected": true,
+   "5 pages real": true
+  },
+  "cost": 0.0660096
+ },
+ {
+  "case": "dairy-free, cheap breakfasts and dinners",
+  "answer": "I've planned a dairy-free week that costs **$24.33** out of your $30.00.\n\n**Recipes**\n- Berry Oatmeal, p. 29 (breakfast)\n- Coconut and Lime Oatmeal, p. 29 (breakfast)\n- My Dad's Baked Beans, p. 100 (dinner). The book lists egg and wheat as allergens for this recipe, but no dairy.\n\n**What to buy at Kroger**\n- Oats: Simple Truth Organic Rolled 1 Minute Oats, 18 oz, $3.69. The recipes don't list oats, but you need them for oatmeal.\n- Frozen berries: Cape Cod Select Frozen Cranberries, 16 oz, $3.99 (on sale)\n- Coconut: Kroger Sweetened Coconut Flakes, 14 oz, $3.59 (on sale)\n- Lime: ReaLime 100% Lime Juice, 15 oz, $2.50 (on sale), in place of a fresh lime\n- Baked beans: Kroger Brown Sugar Hickory Baked Beans, 28 oz, $2.59 each, buy 2\n- Mustard: Kroger Yellow Mustard, 20 oz, $1.99\n- Chili sauce: La Costena Chipotle Sauce, 7.76 oz, $1.39\n- Sweetener: Kroger Light Brown Sugar, 32 oz, $2.00 (on sale). It works for the beans and as the sugar in both oatmeals.\n\n**Total:** $24.33. **Left over:** $5.67.\n\n**Unpriced:** nothing. Every ingredient has a price.",
+  "checks": {
+   "1 within budget": true,
+   "2 total + items match": true,
+   "3 every $ from a tool": true,
+   "4 diet respected": true,
+   "5 pages real": true
+  },
+  "cost": 0.04587494
+ },
+ {
+  "case": "I have a nut allergy, need lunches I can carry to class",
+  "answer": "**Recipes** (none list nuts as an allergen)\n- **Taco Salad, p. 52**: makes 2 servings, and salads pack well for class. Contains milk and wheat.\n- **Black-Eyed Peas and Collards, p. 94**: contains milk and wheat.\n\n**What to buy at Kroger**\n- Kroger Romaine Lettuce Hearts, 18 oz: $4.79\n- Kroger No Salt Added Black Beans, 15.25 oz: $1.00\n- Fresh Roma Tomato, 1 lb: $1.49\n- Smart Way Whole Kernel Corn, 15.25 oz: $0.69\n- Cal Fresco Green Onions, 12 oz: $1.99\n- Kroger White Corn Tortilla Chips, 13 oz: $2.39\n- Kroger Sharp Cheddar Block, 16 oz: $3.69\n- Kroger Original Sour Cream, 16 oz: $1.67\n- ReaLime Lime Juice, 15 oz: $2.50\n- KRO Black Eyed Peas, 15.5 oz: $1.39\n- Margaret Holmes Seasoned Collard Greens, 27 oz: $2.79\n\n**Total: $24.39. Left: $0.61.** My first list was $1.38 over, so I swapped the 4-pack of beans for one can.\n\n**Not priced:** salt, pepper and anything else page 94 calls for, since I didn't have its full ingredient list. Check the collards label for nuts.",
+  "checks": {
+   "1 within budget": true,
+   "2 total + items match": true,
+   "3 every $ from a tool": false,
+   "4 diet respected": true,
+   "5 pages real": true
+  },
+  "cost": 0.054145179999999994
+ },
+ {
+  "case": "gluten free please, something filling",
+  "answer": "**Your gluten-free week: 2 filling recipes for $28.45 ($1.55 left of $30)**\n\n**Recipes**\n- **And Mine** (beans), p.101\n- **Vegetable Quiche, Hold the Crust**, p.114. It's crustless, so it has no flour.\n\nI skipped Shrimp and Grits because the store had no grits. The search only found wheat flour and corn starch.\n\n**What to buy at Kroger**\n- Kroger\u00ae Black Beans BIG DEAL!, 4 ct / 15.25 oz cans: $2.99 (cooked beans instead of dried)\n- Kroger Petite Diced Tomatoes, 28 oz: $1.89\n- Kroger\u00ae Yellow Onion 3 lb Bag: $2.99 (for both recipes)\n- Smart Way\u2122 Original Yellow Mustard, 8 oz: $0.75\n- Kroger\u00ae Light Brown Sugar, 32 oz: $2.00 (no molasses was listed)\n- Kroger\u00ae Gluten Free Whole Chipotle Peppers in Adobo Sauce, 7 oz: $1.39\n- Kroger\u00ae Salted Butter Sticks, 16 oz: $3.29\n- Kroger\u00ae Medium Grade A White Eggs, 30 ct: $4.19\n- Kroger\u00ae 2% Reduced Fat Milk Gallon: $3.29\n- Kroger\u00ae Sharp Cheddar Block Cheese, 16 oz: $3.69\n- Sweet Potato, 2 \u00d7 1 lb: $0.99 each\n\n**Not priced:** salt, black pepper and optional toppings. Check the mustard label to make sure it's gluten-free.",
+  "checks": {
+   "1 within budget": true,
+   "2 total + items match": true,
+   "3 every $ from a tool": true,
+   "4 diet respected": true,
+   "5 pages real": true
+  },
+  "cost": 0.055557869999999995
+ },
+ {
+  "case": "cheapest possible week of dinners, I eat anything",
+  "answer": "I picked 2 recipes that both use lentils. Together they give about 12 servings.\n\n**Recipes**\n- Half-Veggie Burgers (p. 102), makes 8\n- Dal (p. 35), makes 4\n\n**What to buy**\n- La Preferida\u00ae Lentils (Dry), 16 oz, $1.49 \u00d72 (one bag per recipe; this is the only dry option)\n- Kroger\u00ae 73/27 Ground Beef Roll, 1 lb, $5.99\n- Fresh Large Green Bell Pepper, 1 ct, $0.89\n- Kroger\u00ae White Hamburger Buns, 8 ct, $1.99\n- Jumbo Yellow Onions, 1 lb, $1.19\n\n**Total: $13.04, with $1.96 left.**\n\n**Not bought**\n- **Too expensive for the budget:** butter ($3.29), garlic ($2.99), black mustard seeds ($2.49) and ginger ($3.49) for the Dal. You can make a simpler dal with oil or without these.\n- **No price found:** Kroger had no food results for cumin seeds, turmeric or green chili. It only listed conditioner, supplement capsules, burritos and ROTEL.\n- **Skipped:** the egg for the burgers is optional.\n- **Not priced:** salt and pepper.\n\nI skipped Chicken Adobo because buying all its ingredients would cost more than your budget.",
+  "checks": {
+   "1 within budget": true,
+   "2 total + items match": true,
+   "3 every $ from a tool": true,
+   "4 diet respected": true,
+   "5 pages real": true
+  },
+  "cost": 0.06150715
+ },
+ {
+  "case": "I can't eat shellfish or eggs, want some comfort food",
+  "answer": "Here are two comfort dinners with no shellfish or eggs, and they fit your $25 budget.\n\n**Recipes**\n- Deconstructed Cabbage Rolls, p. 109 (makes 6 servings)\n- And Mine, p. 101: saucy, smoky beans (makes 2 servings)\n\n**What to buy at Kroger**\n- Kroger Salted Butter Sticks, 16 oz: $3.29\n- Jimmy Dean Turkey Sausage Roll, 16 oz: $2.99\n- Jumbo Yellow Onions, 1 lb: $1.19\n- Kroger Peeled Garlic, 6 oz: $2.99\n- Green Cabbage, 1 lb: $0.89\n- Kroger Enriched Long Grain White Rice, 32 oz: $1.89\n- La Preferida Dry Lentils, 16 oz: $1.49\n- Kroger Crushed Tomatoes in Puree, 28 oz, 2 cans: $1.89 each\n- Kroger Black Beans 4-pack, 15.25 oz cans: $2.99\n- Kroger Original Yellow Mustard, 8 oz: $0.99\n- La Costena Chipotle Sauce, 7.76 oz: $1.39\n\n**Total: $23.88, leaving $1.12.** My first list came to $28.58, so I switched to smaller rice, onions and mustard to get under $25.\n\n**Not priced:** Kroger had no molasses or brown sugar, only big bags of white sugar. You also need salt and pepper.",
+  "checks": {
+   "1 within budget": true,
+   "2 total + items match": true,
+   "3 every $ from a tool": true,
+   "4 diet respected": true,
+   "5 pages real": true
+  },
+  "cost": 0.060344249999999995
+ },
+ {
+  "case": "I want to meal prep on Sunday for the whole week",
+  "answer": "**Sunday meal prep plan (no allergies or diet given)**\n\n**Recipes**\n- Vegetable Jambalaya, p.96 (makes 6 servings)\n- My Dad's Baked Beans, p.100 (2 meals, or 4 sides)\n- Rainbow Rice, p.144 (red and green versions)\n\n**What to buy at Kroger**\n- Kroger Long Grain Rice, 5 lb: $3.79\n- Kroger Crushed Tomatoes in Puree, 28 oz: $1.89 (1 cup for red rice, the rest replaces the jambalaya's fresh tomatoes)\n- Jumbo Yellow Onions, 1 lb: $1.19\n- Fresh Large Green Bell Pepper: $0.89\n- Private Selection Long Celery Sticks, 16 oz: $3.00\n- Kroger Peeled Garlic, 6 oz: $2.99\n- Kroger Fat Free Vegetable Broth, 32 oz: $1.49\n- Kroger Brown Sugar Hickory Baked Beans, 28 oz \u00d72: $2.59 each\n- Kroger Frozen Spinach Chopped, 12 oz: $1.50\n- La Costena Chipotle Sauce, 7.76 oz: $1.39\n- Kroger Light Brown Sugar, 32 oz: $2.00\n- Smart Way Yellow Mustard, 8 oz: $0.75\n\n**Total: $26.06, with $8.94 left of your $35.00.**\n\n**Not priced:** oil, salt, pepper, green chili, bay leaves, paprika, garlic powder, cayenne, thyme, oregano, and Worcestershire or soy sauce.",
+  "checks": {
+   "1 within budget": true,
+   "2 total + items match": true,
+   "3 every $ from a tool": true,
+   "4 diet respected": true,
+   "5 pages real": true
+  },
+  "cost": 0.050084420000000004
+ },
+ {
+  "case": "vegetarian, no soy, I need protein",
+  "answer": "I picked three vegetarian recipes with protein from lentils, beans and eggs. None of them list soy as an allergen.\n\n**Recipes**\n- Dal, p. 35 (lentils, serves 4)\n- My Dad's Baked Beans, p. 100 (serves 2)\n- Omelette, p. 17 (eggs, serves 2)\n\n**What to buy at Kroger**\n- La Preferida\u00ae Lentils (Dry), 16 oz: $1.49. These are dry like the recipe needs; the cheaper canned ones are less than 2 cups.\n- Kroger\u00ae Salted Butter Sticks, 16 oz: $3.29\n- Jumbo Yellow Onions, 1 lb: $1.19\n- Kroger\u00ae Peeled Garlic, 6 oz: $2.99\n- Kroger\u00ae Brown Sugar Hickory Baked Beans, 28 oz \u00d72: $2.59 each\n- Kroger\u00ae Yellow Mustard, 20 oz: $1.99\n- Kroger\u00ae Light Brown Sugar, 32 oz: $2.00\n- La Costena\u00ae Chipotle Sauce, 7.76 oz: $1.39\n- Kroger\u00ae Medium Grade A White Eggs, 30 ct: $4.19\n\n**Total: $23.71, leaving $1.29.**\n\nMy first list came to $35.18. To get under $25, I took out cheese, ginger and mustard seeds and bought one onion instead of a 3 lb bag.\n\n**Not priced:** cumin seeds, turmeric, green chili and dill. The store results for these were things like conditioner, supplement capsules, beef burritos and pickles. I also didn't price shallot (use your onion), salt or pepper.",
+  "checks": {
+   "1 within budget": true,
+   "2 total + items match": true,
+   "3 every $ from a tool": true,
+   "4 diet respected": true,
+   "5 pages real": true
+  },
+  "cost": 0.06330254999999999
+ },
+ {
+  "case": "sweet breakfast ideas, I hate oatmeal",
+  "answer": "Here's a sweet breakfast plan with no oatmeal.\n\n**Recipes**\n- **Banana Pancakes** (p. 18). Makes 10\u201314 pancakes. This is the one you can shop for.\n- **Yogurt Smash!** (p. 32) and **Toast 8 Ways** (p. 69) are other ideas, but the cookbook doesn't list their ingredients, so I couldn't price them.\n\n**Shopping list (Kroger)**\n- Kroger\u00ae Bleached All Purpose Flour, 5 lb: $2.00 (on sale)\n- Kroger\u00ae Light Brown Sugar, 32 oz: $2.00 (on sale)\n- ARM & HAMMER\u2122 Baking Soda Box, 2 lb: $2.39\n- Fresh Bunch of Bananas (5\u20137), 1 lb: $0.55\n- Kroger\u00ae Medium Grade A White Eggs, 30 ct: $4.19\n- Kroger\u00ae 2% Reduced Fat Milk Gallon: $3.29\n- Kroger\u00ae Clear Imitation Vanilla Extract, 2 fl oz: $1.99. I chose this over the $10 pure vanilla, which would have put you over budget.\n- Kroger\u00ae Salted Butter Sticks, 16 oz: $3.29\n\n**Total: $19.70, leaving $0.30** of your $20.\n\n**Not priced:** baking powder (the search didn't return any) and salt. With only $0.30 left, you'll need these at home already, or you could swap the 30-count eggs for the 18-count ($2.65) to free up money.",
+  "checks": {
+   "1 within budget": true,
+   "2 total + items match": true,
+   "3 every $ from a tool": true,
+   "4 diet respected": true,
+   "5 pages real": true
+  },
+  "cost": 0.044992519999999994
+ }
+]

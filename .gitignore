@@ -5,3 +5,5 @@ __pycache__/
 */data/
 # eval runs hold book text
 */evals/runs/
+# local tooling (absolute paths to this Mac)
+.claude/
