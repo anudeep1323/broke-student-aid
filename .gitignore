@@ -7,3 +7,4 @@ __pycache__/
 */evals/runs/
 # local tooling (absolute paths to this Mac)
 .claude/
+.coverage

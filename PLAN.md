@@ -61,7 +61,7 @@ adds them up and checks allergens, because those must never be guessed.
 
 **UI decision (Andy, 2026-11-19):** stay on Streamlit until every feature is done; switch to FastAPI + React only when UI is the last pending work. Keep all logic in agent/ and tools, never in app.py, so the switch is a new screen only.
 
-**Next up (2026-11-19):** unit tests for nutrition code, then M12 (UI polish), M10 (needs the question), M9 (README + commit).
+**Next up (2026-11-19):** unit tests DONE (27 pass). Then M12 (UI polish), M10 (needs the question), M9 (README + commit).
 Nutrition moved from "after the MVP" into the MVP.
 
 ## After the MVP (backlog)

@@ -831,3 +831,14 @@ Agent eval m14_fixes: 10/10 on all 5 checks, $0.0334 per answer, ~27 s.
 | m11c_nutrition | 9/10 (menu card with same title) | $0.032 |
 | m11d_cookable | 9/10 (unit price missing for qty 2) | $0.032 |
 | m14_fixes | 10/10 | $0.033 |
+
+### Unit tests for the plain code (2026-11-19)
+tests/test_nutrition.py: 27 tests, 0 LLM calls, $0, ~9 s (reads the saved USDA cache; USDA tests skip if it's missing).
+Covers: parse (ranges, "or", no amount), grams (1 cup lentils 192 g, 1 medium onion 110 g, 4 eggs 176 g),
+food match (eggs -> "Egg, whole, raw" not bagels), servings text, Kroger label x servings, check_budget math
+(1.09 x 2 = 2.18, protein 294 g = 42 g/day, goal short 38 g), cookable cards.
+run_evals.py runs them first. Rule: evals for the AI parts (scores), unit tests for code (pass/fail).
+Added 12 more (39 total, ~10 s, still 0 API calls): recipe totals / servings, Kroger size parsing, browse() sorting on a fake
+Kroger response, search_kroger protein-per-$ + error result, recipe_details on duplicate titles, find_recipes cookable-only.
+Coverage before -> after: tools.py 66% -> 95%, browse.py 34% -> 67%, nutrition.py 57% -> 74%.
+What's left uncovered is network code (token, nearest store, USDA/Kroger fetch) and the __main__ scripts.

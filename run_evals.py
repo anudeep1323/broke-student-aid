@@ -12,6 +12,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent
 PY = sys.executable
 SECTIONS = [  # (name, what it tests, command, regex for the score line(s) to show)
+    ("unit tests", "plain code: parsing, grams, USDA matching, label + budget math", ["-m", "pytest", "tests/", "-q",
+     "-p", "no:warnings"], r"passed|failed|error"),
     ("extraction", "Haiku reading cookbook pages into cards", ["recipes_rag/evals/eval_extract.py", "haiku", "2", "--score-only"],
      r"^run \d: recall|^stability"),
     ("search (raw)", "hybrid search on 20 questions", ["recipes_rag/evals/eval_search.py"], r"^hit@3"),
