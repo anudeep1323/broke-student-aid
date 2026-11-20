@@ -52,7 +52,7 @@ adds them up and checks allergens, because those must never be guessed.
 | M6 | Agent eval (10 cases, 5 code checks) merged into one `run_evals.py` | ✅ | 10/10 cases pass all 5 checks; $0.057 and ~35 s per answer | Component vs end-to-end evals |
 | M7 | Cost/quality tuning with the agent eval | ✅ | Sonnet planner + check_budget quantities: 10/10, $0.029, ~28 s (was Opus $0.057, ~35 s) | Measured trade-offs; fix the tool, not the prompt |
 | M8 | Streamlit: agent chat wired in beside ZIP + budget, photos | ✅ | sidebar fields + Ask tab + Browse tab; live test $0.031, 30 s, total correct | Shipping it |
-| M9 | README + commit + push | ⬜ (all work pushed, last 2a9b602; README missing) | - | Presenting the work |
+| M9 | README + commit + push | ✅ | README.md + requirements.txt (6823373) | Presenting the work |
 | M10 | Answers show 2-3 recipes, not 1 | ✅ (closed by M16) | the plan is JSON now: 12/12 eval plans have 1-3 recipes laid out over the week; the prose answer that showed 1 is gone | Debugging from a real user report |
 | M11 | Nutrition per recipe (USDA, code) + per grocery (Kroger labels) | ✅ | 87-food hand list, 393 lines; 77/95 recipes per serving/piece/cup | Hand list beats fuzzy search |
 | M12 | Streamlit UI: tiles, recipe cards + pop-up, shopping table, grouped Browse, quick picks | ✅ | checked in the browser; Streamlit AppTest renders the real app.py | Product polish |
@@ -66,7 +66,7 @@ adds them up and checks allergens, because those must never be guessed.
 **UI decision (Andy, 2026-11-19, confirmed 2026-11-20):** finish features on Streamlit, then switch to FastAPI + React.
 Logic stays in agent/ and tools, never in app.py, so the switch is a new screen only.
 
-**Next up (2026-11-20):** M9 README. Then the switch to FastAPI + React (UI is the last pending work).
+**Next up (2026-11-20):** README done. Next: switch the UI to FastAPI + React (UI is the last pending work).
 Open questions: kcal/day still ~900 (a "for four" serving counts as a meal even when light); vegetarian protein goal 59 of 80 g.
 
 ## After the MVP (backlog)
