@@ -55,7 +55,8 @@ with every diagram and number. Highlights: cost $0.15 → $0.03 per answer by sp
 
 ## Run it
 
-Needs Python 3.12+, and free keys in a `.env` file (never committed):
+Needs Python 3.12+. Keys can go in a `.env` file (never committed), or each user can enter their own in the app's
+🔑 API keys panel (sent per request, never stored on the server):
 
 ```
 ANTHROPIC_API_KEY=...       # console.anthropic.com

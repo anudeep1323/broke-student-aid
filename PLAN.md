@@ -64,6 +64,7 @@ adds them up and checks allergens, because those must never be guessed.
 | M18 | Tests | ✅ | 81 unit tests, no API calls; 12-case agent eval with week/goal measures | Unit tests for code, evals for the AI |
 | M19 | FastAPI + React (replaces Streamlit as the main screen) | ✅ | /api/plan streams steps over SSE; 6 API tests with a fake agent | API + SPA, streaming |
 | M20 | Premium "Fresh market" UI | ✅ | animated timeline, rings, colour-coded week, tick-off list; 375 px phone OK (6014dc8) | Product polish |
+| M21 | Users bring their own API keys (side panel) | ✅ | keys in request headers -> LangGraph config, never stored; Test keys ✓/✗; 95 tests (99e194c) | Secrets handling in an AI app |
 
 **UI decision (Andy, 2026-11-19, confirmed 2026-11-20):** finish features on Streamlit, then switch to FastAPI + React.
 Logic stays in agent/ and tools, never in app.py, so the switch is a new screen only.
