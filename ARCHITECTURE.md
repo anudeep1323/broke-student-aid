@@ -1013,3 +1013,27 @@ Mon-Sun chips (click = recipe); photo cards with hover lift; checklist "2 of 9 i
 Bug the new calendar exposed: a breakfast-category recipe (Tomato Scrambled Eggs x2) picked "for a few dinners" never
 appeared in a dinner-only week. Fix in tools.calendar(): with no breakfast slots, every recipe is a main. +1 test (88).
 Phone 375 px: no sideways scroll, rings in one row.
+
+### M21 design: users bring their own API keys (2026-11-20)
+
+```mermaid
+flowchart LR
+    P["🔑 side panel<br/>Anthropic key, Kroger id + secret<br/>memory by default; 'Remember on this device' -> browser storage"] -->|"headers on every call:<br/>X-Anthropic-Key, X-Kroger-Id, X-Kroger-Secret"| A["FastAPI"]
+    A -->|"LangGraph config (not state, not logs)<br/>WHY: secrets never enter the graph state or the prompt;<br/>rejected: keys in state (printed by traces)"| G["nodes: ChatAnthropic(api_key) per key<br/>tools: Kroger token per client id"]
+    A -->|"no keys sent -> server .env keys (local dev)"| G
+    P -->|"Test keys"| C["/api/keys/check: Anthropic models list (free),<br/>Kroger token: ✓ / ✗ per key, key never echoed"]
+```
+USDA key not needed at runtime: recipe nutrition was computed once (nutrition.py) and saved.
+
+### M21 built: users bring their own API keys (2026-11-20)
+Andy picked: memory by default + "Remember on this device" switch (browser storage) over memory-only.
+- web: 🔑 API keys button (dot: grey none / saffron set / green works / red failed) opens a slide-in panel:
+  Anthropic key, Kroger id + secret, masked with show/hide, "Get a key" links, Save & test, Clear.
+- api: X-Anthropic-Key / X-Kroger-Id / X-Kroger-Secret headers -> LangGraph config (not state). Empty -> server .env.
+  /api/keys/check: free calls (Anthropic models list, Kroger token) -> ✓ yours / ✓ server's / ✗ rejected; never echoes a key.
+  Bad Kroger keys -> "Kroger rejected the client ID / secret" (401) instead of a stack trace.
+- agent: models(api_key) cached per key; kroger_headers(creds) caches one token per Kroger app (bob never gets alice's token).
+Browser check: empty -> "✓ using the server's key" x2; fake Anthropic key -> "✗ rejected: check the key", red dot;
+remember on -> saved, off -> wiped. Live plan through the changed graph: accepted, $19.92, $0.030.
+Bug found: the first test click hit the API while it was still loading the search model -> Vite proxy 500 and the panel
+showed nothing. Now it says "couldn't reach the app's server". Tests 88 -> 95.

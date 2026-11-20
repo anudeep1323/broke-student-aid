@@ -1,7 +1,26 @@
 import type { FullRecipe, Plan, Product, Step } from "./types";
 
+export type Keys = { anthropic: string; krogerId: string; krogerSecret: string };
+export type KeyStatus = { ok: boolean; source?: "yours" | "server"; message?: string };
+
+let keys: Keys = { anthropic: "", krogerId: "", krogerSecret: "" };
+/** The student's keys ride along as headers on every call; the server uses them for that request only. */
+export const setKeys = (k: Keys) => { keys = k; };
+const keyHeaders = (): Record<string, string> => {
+  const h: Record<string, string> = {};
+  if (keys.anthropic) h["X-Anthropic-Key"] = keys.anthropic;
+  if (keys.krogerId && keys.krogerSecret) { h["X-Kroger-Id"] = keys.krogerId; h["X-Kroger-Secret"] = keys.krogerSecret; }
+  return h;
+};
+
+export async function checkKeys(): Promise<{ anthropic: KeyStatus; kroger: KeyStatus }> {
+  const r = await fetch("/api/keys/check", { method: "POST", headers: keyHeaders() });
+  if (!r.ok) throw new Error(`HTTP ${r.status}`);   // e.g. the API is still starting: say so, don't fail silently
+  return r.json();
+}
+
 async function getJson<T>(url: string): Promise<T> {
-  const r = await fetch(url);
+  const r = await fetch(url, { headers: keyHeaders() });
   if (!r.ok) throw new Error((await r.json().catch(() => ({}))).detail ?? `HTTP ${r.status}`);
   return r.json();
 }
@@ -19,7 +38,7 @@ export async function streamPlan(
   body: { sentence: string; zip: string; budget: number; protein_goal: number },
   h: Handlers,
 ): Promise<void> {
-  const r = await fetch("/api/plan", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+  const r = await fetch("/api/plan", { method: "POST", headers: { "Content-Type": "application/json", ...keyHeaders() }, body: JSON.stringify(body) });
   if (!r.ok || !r.body) {
     h.onError(r.status === 422 ? "Please check the ZIP code, budget and request." : `HTTP ${r.status}`);
     return;

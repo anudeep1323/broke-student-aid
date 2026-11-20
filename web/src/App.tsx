@@ -1,11 +1,18 @@
 import { useEffect, useRef, useState } from "react";
-import { getStore, streamPlan } from "./api";
+import { getStore, setKeys as sendKeys, streamPlan, type KeyStatus, type Keys } from "./api";
+import { KeysPanel } from "./KeysPanel";
 import { Browse } from "./Browse";
 import { PlanView } from "./PlanView";
 import { Timeline } from "./Timeline";
 import type { Plan, Step } from "./types";
 
 type Turn = { question: string; steps: Step[]; plan?: Plan; error?: string; running: boolean };
+
+const KEY_STORE = "bsa-keys";   // only written when the student turns "Remember on this device" on
+const NO_KEYS: Keys = { anthropic: "", krogerId: "", krogerSecret: "" };
+function savedKeys(): Keys | null {
+  try { const s = localStorage.getItem(KEY_STORE); return s ? { ...NO_KEYS, ...JSON.parse(s) } : null; } catch { return null; }
+}
 
 const EXAMPLES = [
   "I'm broke till Friday, no peanuts, tired of rice, want something warm",
@@ -15,6 +22,10 @@ const EXAMPLES = [
 ];
 
 export default function App() {
+  const [keys, setKeysState] = useState<Keys>(() => { const k = savedKeys() ?? NO_KEYS; sendKeys(k); return k; });
+  const [remember, setRemember] = useState(() => savedKeys() !== null);
+  const [keysOpen, setKeysOpen] = useState(false);
+  const [keyStatus, setKeyStatus] = useState<{ anthropic?: KeyStatus; kroger?: KeyStatus }>({});
   const [zip, setZip] = useState("");
   const [budget, setBudget] = useState(25);
   const [goal, setGoal] = useState(0);
@@ -27,11 +38,23 @@ export default function App() {
   const zipInput = useRef<HTMLInputElement>(null);
   const running = turns.some((t) => t.running);
 
-  useEffect(() => {   // ZIP -> nearest Kroger, once 5 digits are typed
+  useEffect(() => {   // ZIP -> nearest Kroger, once 5 digits are typed (again when the keys change)
     setStore(null);
     setStoreError("");
     if (/^\d{5}$/.test(zip)) getStore(zip).then(setStore).catch((e) => setStoreError(e.message));
-  }, [zip]);
+  }, [zip, keys]);
+
+  useEffect(() => {   // "Remember on this device": browser storage only while the switch is on; off = wiped
+    try {
+      if (remember && (keys.anthropic || keys.krogerId)) localStorage.setItem(KEY_STORE, JSON.stringify(keys));
+      else localStorage.removeItem(KEY_STORE);
+    } catch { /* storage blocked: keys still work for this visit */ }
+  }, [remember, keys]);
+
+  const saveKeys = (k: Keys) => { sendKeys(k); setKeysState(k); };
+  const keyDot = keyStatus.anthropic && keyStatus.kroger
+    ? (keyStatus.anthropic.ok && keyStatus.kroger.ok ? "ok" : "bad")
+    : keys.anthropic || keys.krogerId ? "set" : "none";
 
   useEffect(() => {   // braces: return nothing (scrollIntoView returns a Promise in new browsers)
     bottom.current?.scrollIntoView({ behavior: "smooth", block: "end" });
@@ -58,6 +81,10 @@ export default function App() {
       <header>
         <div className="brand"><span className="logo">🥑</span><div><b>Broke Student Aid</b><small>a week of meals on a student budget</small></div></div>
         <div className="controls">
+          <button type="button" className={`keys-btn ${keyDot}`} onClick={() => setKeysOpen(true)}
+                  title={keyDot === "ok" ? "Your keys work" : keyDot === "bad" ? "A key failed: open to fix" : "Add your API keys"}>
+            <span className="dot" />🔑 API keys
+          </button>
           <label className={`field ${store ? "ok" : ""}`}>
             <span>📍 ZIP</span>
             <input ref={zipInput} value={zip} maxLength={5} inputMode="numeric" placeholder="45202"
@@ -78,7 +105,7 @@ export default function App() {
         </div>
         <div className="store-line">
           {store ? <span className="good">✓ {store.name}</span>
-            : storeError ? <span className="bad">{storeError}</span>
+            : storeError ? <span className="bad">{storeError}{/keys/i.test(storeError) && <> · <button className="linkish" onClick={() => setKeysOpen(true)}>open 🔑 API keys</button></>}</span>
             : <span className="muted">Enter your ZIP to use your nearest Kroger's prices</span>}
         </div>
       </header>
@@ -122,6 +149,8 @@ export default function App() {
           </>
         )}
       </main>
+      <KeysPanel open={keysOpen} onClose={() => setKeysOpen(false)} keys={keys} onSave={saveKeys}
+                 remember={remember} setRemember={setRemember} status={keyStatus} setStatus={setKeyStatus} />
       <footer className="muted">Recipes and photos: <i>Good and Cheap</i> by Leanne Brown (CC BY-NC-SA). Prices: Kroger. Nutrition: USDA.</footer>
     </div>
   );

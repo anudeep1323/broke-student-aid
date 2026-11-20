@@ -200,3 +200,45 @@ footer { text-align: center; font-size: .75rem; padding: 0 16px 100px; }
   .modal { padding: 20px; } .modal-top, .modal-body { grid-template-columns: 1fr; }
   .shop { padding: 4px 16px 14px; }
 }
+
+/* API keys: header button + slide-in drawer */
+.keys-btn { display: flex; align-items: center; gap: 8px; align-self: stretch; background: var(--ink); color: #fff; border: none; border-radius: 14px;
+            padding: 0 16px; font-weight: 600; box-shadow: var(--shadow); transition: transform .15s; }
+.keys-btn:hover { transform: translateY(-1px); }
+.keys-btn .dot { width: 9px; height: 9px; border-radius: 50%; background: #9aa39c; box-shadow: 0 0 0 3px #ffffff22; }
+.keys-btn.ok .dot { background: #7ed957; } .keys-btn.bad .dot { background: var(--tomato); animation: pulse 1.2s infinite; }
+.keys-btn.set .dot { background: var(--saffron); }
+.linkish { border: none; background: none; padding: 0; color: var(--tomato); text-decoration: underline; font-weight: 600; }
+.scrim { position: fixed; inset: 0; background: #1f2a2466; backdrop-filter: blur(3px); opacity: 0; pointer-events: none; transition: opacity .25s; z-index: 20; }
+.scrim.show { opacity: 1; pointer-events: auto; }
+.drawer { position: fixed; top: 0; right: 0; height: 100%; width: min(440px, 100%); background: var(--cream); z-index: 21; padding: 24px 26px;
+          overflow-y: auto; transform: translateX(105%); transition: transform .32s cubic-bezier(.2,.8,.2,1); box-shadow: -20px 0 50px #3a2a1022;
+          display: flex; flex-direction: column; gap: 14px; }
+.drawer.open { transform: none; }
+.drawer-head { display: flex; justify-content: space-between; align-items: flex-start; }
+.drawer-head h2 { margin: 2px 0 0; font-size: 1.6rem; }
+.drawer .close { position: static; }
+.kfield { background: var(--paper); border: 1px solid var(--line); border-radius: 16px; padding: 12px 14px; display: flex; flex-direction: column; gap: 8px; box-shadow: var(--shadow); }
+.kfield-top { display: flex; justify-content: space-between; align-items: baseline; }
+.kfield-top label { font-weight: 700; font-size: .92rem; } .kfield-top a { color: var(--tomato); font-size: .8rem; font-weight: 600; text-decoration: none; }
+.kinput { display: flex; align-items: center; background: var(--soft); border-radius: 10px; border: 1px solid transparent; transition: border-color .2s; }
+.kinput:focus-within { border-color: var(--saffron); background: #fff; }
+.kinput input { flex: 1; min-width: 0; border: none; outline: none; background: none; padding: 10px 12px; font-family: ui-monospace, Menlo, monospace; font-size: .88rem; }
+.kinput button { border: none; background: none; padding: 0 10px; font-size: 1rem; }
+.kfield-foot { display: flex; justify-content: space-between; gap: 8px; align-items: center; flex-wrap: wrap; }
+.tiny { font-size: .74rem; }
+.kbadge { font-size: .74rem; font-weight: 700; padding: 3px 9px; border-radius: 999px; animation: pop .3s ease; }
+.kbadge.ok { background: var(--avocado-soft); color: var(--avocado); } .kbadge.bad { background: var(--tomato-soft); color: var(--tomato); }
+.remember { display: flex; align-items: center; gap: 12px; background: var(--paper); border: 1px solid var(--line); border-radius: 16px; padding: 12px 14px; cursor: pointer; }
+.remember input { position: absolute; opacity: 0; }
+.remember small { display: block; color: var(--muted); font-size: .74rem; font-weight: 400; }
+.remember > span:last-child { font-weight: 600; font-size: .92rem; }
+.switch { width: 42px; height: 24px; border-radius: 99px; background: var(--line); position: relative; flex: none; transition: background .2s; }
+.switch::after { content: ""; position: absolute; top: 3px; left: 3px; width: 18px; height: 18px; border-radius: 50%; background: #fff; box-shadow: 0 1px 3px #0003; transition: transform .2s; }
+.remember input:checked + .switch { background: var(--avocado); } .remember input:checked + .switch::after { transform: translateX(18px); }
+.remember input:focus-visible + .switch { outline: 2px solid var(--saffron); outline-offset: 2px; }
+.drawer-actions { display: flex; gap: 10px; }
+.drawer-actions .primary { flex: 1; background: var(--tomato); color: #fff; border: none; border-radius: 999px; padding: 12px; font-weight: 700; }
+.drawer-actions .primary:disabled { opacity: .6; }
+.drawer-actions .ghost { background: none; border: 1px solid var(--line); border-radius: 999px; padding: 12px 18px; font-weight: 600; }
+@media (max-width: 760px) { .keys-btn { padding: 10px 14px; } .drawer { padding: 20px 18px; } }

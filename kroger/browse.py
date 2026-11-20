@@ -21,10 +21,11 @@ UNITS = {"oz": ("lb", 1 / 16), "onz": ("lb", 1 / 16), "lb": ("lb", 1), "lbr": ("
          "l": ("fl oz", 33.81), "ml": ("fl oz", 0.03381), "ct": ("each", 1), "each": ("each", 1), "dozen": ("each", 12)}
 
 
-def token():
-    """Get a Kroger app token (client credentials, no user login). Valid 30 min."""
+def token(client_id=None, client_secret=None):
+    """Get a Kroger app token (client credentials, no user login). Valid 30 min.
+    Uses the student's own Kroger app if given, else the server's .env keys."""
     r = requests.post(f"{API}/connect/oauth2/token", timeout=10,
-                      auth=(os.environ["KROGER_CLIENT_ID"], os.environ["KROGER_CLIENT_SECRET"]),
+                      auth=(client_id or os.environ["KROGER_CLIENT_ID"], client_secret or os.environ["KROGER_CLIENT_SECRET"]),
                       data={"grant_type": "client_credentials", "scope": "product.compact"})
     r.raise_for_status()
     return {"Authorization": f"Bearer {r.json()['access_token']}"}

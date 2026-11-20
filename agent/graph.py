@@ -8,12 +8,14 @@ import operator
 import os
 import sys
 import time
+from functools import lru_cache
 from pathlib import Path
 from typing import Annotated, TypedDict
 
 from dotenv import load_dotenv
 from langchain_anthropic import ChatAnthropic
 from langchain_core.messages import AnyMessage, HumanMessage, SystemMessage, ToolMessage
+from langchain_core.runnables import RunnableConfig
 from langgraph.graph import END, START, StateGraph
 from langgraph.graph.message import add_messages
 from langgraph.prebuilt import ToolNode
@@ -70,13 +72,22 @@ class State(TypedDict):
     tool_calls: Annotated[list[str], operator.add]             # trace for printing
 
 
-gather_llm = ChatAnthropic(model=GATHER_MODEL, max_tokens=4000).bind_tools(GATHER_TOOLS)
-plan_llm = ChatAnthropic(model=PLAN_MODEL, max_tokens=4000).bind_tools(PLAN_TOOLS)
+@lru_cache(maxsize=32)
+def models(api_key=None):
+    """(Haiku with gather tools, Sonnet with plan tools) for one Anthropic key: the student's own, or the server's (.env)."""
+    extra = {"api_key": api_key} if api_key else {}
+    return (ChatAnthropic(model=GATHER_MODEL, max_tokens=4000, **extra).bind_tools(GATHER_TOOLS),
+            ChatAnthropic(model=PLAN_MODEL, max_tokens=4000, **extra).bind_tools(PLAN_TOOLS))
 
 
-def gatherer(state: State):
+def anthropic_key(config):
+    """The student's Anthropic key from the run's config (never from state or a prompt), or None = server key."""
+    return (config or {}).get("configurable", {}).get("anthropic_key")
+
+
+def gatherer(state: State, config: RunnableConfig):
     """Haiku: decide which fetching tool to call next, or say DONE."""
-    reply = gather_llm.invoke([SystemMessage(GATHER_SYSTEM)] + state["messages"], cache_control=CACHE)
+    reply = models(anthropic_key(config))[0].invoke([SystemMessage(GATHER_SYSTEM)] + state["messages"], cache_control=CACHE)
     return {"messages": [reply], "tool_calls": [f"[haiku] {c['name']}({c['args']})" for c in reply.tool_calls]}
 
 
@@ -93,7 +104,7 @@ def compact(m):
     return f"{m.name}: {json.dumps(data, separators=(',', ':'), ensure_ascii=False)}"
 
 
-def planner(state: State):
+def planner(state: State, config: RunnableConfig):
     """Opus: on its first turn gets a plain-text bundle of everything Haiku fetched; picks, checks budget, writes."""
     new = []
     if not state.get("plan_messages"):
@@ -102,13 +113,13 @@ def planner(state: State):
                             "Facts:\n" + "\n".join(results))]
     goal = state.get("protein_goal") or 0
     system = PLAN_SYSTEM + (PROTEIN_GOAL.format(goal=goal) if goal else "")
-    reply = plan_llm.invoke([SystemMessage(system)] + state.get("plan_messages", []) + new, cache_control=CACHE)
+    reply = models(anthropic_key(config))[1].invoke([SystemMessage(system)] + state.get("plan_messages", []) + new, cache_control=CACHE)
     return {"plan_messages": new + [reply], "tool_calls": [f"[opus] {c['name']}({c['args']})" for c in reply.tool_calls]}
 
 
-def run_plan_tools(state: State):
-    """Run check_budget for Opus (ToolNode reads the last message of plan_messages)."""
-    out = ToolNode(PLAN_TOOLS, messages_key="plan_messages").invoke(state)
+def run_plan_tools(state: State, config: RunnableConfig):
+    """Run check_budget / submit_plan for the planner (ToolNode reads the last message of plan_messages)."""
+    out = ToolNode(PLAN_TOOLS, messages_key="plan_messages").invoke(state, config)
     return {"plan_messages": out["plan_messages"]}
 
 

@@ -218,7 +218,7 @@ def test_search_kroger(tools, monkeypatch):
                 {"product_id": "P2", "name": "Mystery Can", "size": "15 oz", "best": 1.00, "promo": None, "unit_price": None, "unit": "lb",
                  "nutrition": None}]
     monkeypatch.setattr(tools, "browse", fake_browse)
-    monkeypatch.setattr(tools, "kroger_headers", lambda: {})
+    monkeypatch.setattr(tools, "kroger_headers", lambda creds=None: {})
     out = tools.search_kroger.func(["lentils", "broken"], {"location_id": "x"})
     assert out["lentils"][0]["protein_per_dollar"] == 84.0               # 126 g / $1.50
     assert out["lentils"][1]["protein_g"] is None and out["lentils"][1]["protein_per_dollar"] is None
@@ -361,3 +361,39 @@ def test_calendar_breakfast_recipe_at_dinner_when_no_breakfast():
                {"title": "Eggs", "category": "breakfast", "batches": 2, "nutrition": {"per": "serving", "servings": 2}}]
     cal = t.calendar(recipes, ["dinner"])
     assert [cal[d]["dinner"] for d in ["Mon", "Tue", "Wed"]] == ["Dal", "Eggs", "Dal"]
+
+
+# 17. Students' own keys: carried in LangGraph config, one Kroger token per Kroger app
+def test_kroger_creds_from_config(tools):
+    assert tools.kroger_creds(None) is None and tools.kroger_creds({"configurable": {}}) is None
+    assert tools.kroger_creds({"configurable": {"kroger_id": "id1", "kroger_secret": ""}}) is None   # half a key = server keys
+    assert tools.kroger_creds({"configurable": {"kroger_id": "id1", "kroger_secret": "s1"}}) == ("id1", "s1")
+
+
+def test_one_token_per_kroger_app(tools, monkeypatch):
+    calls = []
+    monkeypatch.setattr(tools, "token", lambda *c: calls.append(c) or {"Authorization": f"Bearer {c[0] if c else 'server'}"})
+    tools._headers.clear()
+    assert tools.kroger_headers(("alice", "a")) == {"Authorization": "Bearer alice"}
+    assert tools.kroger_headers(("bob", "b")) == {"Authorization": "Bearer bob"}       # bob never gets alice's token
+    assert tools.kroger_headers() == {"Authorization": "Bearer server"}
+    assert tools.kroger_headers(("alice", "a")) == {"Authorization": "Bearer alice"}   # cached: no new call
+    assert calls == [("alice", "a"), ("bob", "b"), ()]
+    tools._headers.clear()
+
+
+def test_search_kroger_uses_the_students_kroger_app(tools, monkeypatch):
+    seen = []
+    monkeypatch.setattr(tools, "kroger_headers", lambda creds=None: seen.append(creds) or {})
+    monkeypatch.setattr(tools, "browse", lambda h, loc, term: [])
+    tools.search_kroger.func(["rice"], {"location_id": "x"}, config={"configurable": {"kroger_id": "me", "kroger_secret": "s"}})
+    assert seen == [("me", "s")]
+
+
+def test_anthropic_key_from_config():
+    pytest.importorskip("langgraph")
+    import graph
+    assert graph.anthropic_key(None) is None
+    assert graph.anthropic_key({"configurable": {"anthropic_key": "sk-test"}}) == "sk-test"
+    assert graph.models("sk-test") is graph.models("sk-test")               # one pair of clients per key, reused
+    assert graph.models("sk-test") is not graph.models()                    # the server's key is a different pair

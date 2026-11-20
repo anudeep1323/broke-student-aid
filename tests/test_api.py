@@ -21,8 +21,10 @@ PLAN = {"accepted": True, "note": "Dal twice.", "total": 8.95, "recipes": [], "l
 
 class FakeApp:
     """Streams 3 states like LangGraph does: tool calls pile up, the last state holds the plan."""
-    def stream(self, state, stream_mode):
+    def stream(self, state, config, stream_mode):
         assert stream_mode == "values" and state["budget"] == 25.0 and state["protein_goal"] == 80
+        assert "key" not in json.dumps(state, default=str).lower()          # keys never in the graph state
+        FakeApp.config = config
         base = {"messages": [], "plan_messages": [AIMessage(content="")]}
         yield base | {"tool_calls": ["[haiku] find_recipes({'text': 'dal'})"]}
         yield base | {"tool_calls": ["[haiku] find_recipes({'text': 'dal'})", "[haiku] search_kroger({'terms': ['lentils']})"]}
@@ -31,9 +33,9 @@ class FakeApp:
 
 @pytest.fixture
 def client(monkeypatch):
-    m.store_for.cache_clear()
+    m._stores.clear()
     monkeypatch.setattr(m, "nearest_store", lambda h, z: ("STORE1", "Test Kroger") if z == "45202" else ([][0], None))
-    monkeypatch.setattr(m, "kroger_headers", lambda: {})
+    monkeypatch.setattr(m, "kroger_headers", lambda creds=None: {})
     monkeypatch.setattr(m, "agent", lambda: (FakeApp(), {}, lambda s: PLAN if s.get("done") else None))
     return TestClient(m.api)
 
@@ -91,3 +93,33 @@ def test_recipe_and_health(client):
     assert r["book_page"] == 35 and r["ingredient_groups"] and r["nutrition"]["per_serving"]["protein_g"] > 0
     assert client.get("/api/recipe", params={"title": "Black-Eyed Peas and Collards", "page": 73}).status_code == 404  # menu card
     assert client.get("/api/health").json()["recipes"] > 90
+
+
+KEYS = {"X-Anthropic-Key": "sk-ant-student", "X-Kroger-Id": "kid", "X-Kroger-Secret": "ksecret"}
+
+
+def test_students_keys_reach_the_agent_config(client):
+    events(client.post("/api/plan", headers=KEYS, json={"sentence": "cheap dal", "zip": "45202", "budget": 25, "protein_goal": 80}))
+    assert FakeApp.config == {"configurable": {"anthropic_key": "sk-ant-student", "kroger_id": "kid", "kroger_secret": "ksecret"}}
+    events(client.post("/api/plan", json={"sentence": "cheap dal", "zip": "45202", "budget": 25, "protein_goal": 80}))
+    assert FakeApp.config == {"configurable": {"anthropic_key": None, "kroger_id": None, "kroger_secret": None}}   # server keys
+
+
+def test_bad_kroger_keys_say_so(client, monkeypatch):
+    import requests
+    resp = requests.Response(); resp.status_code = 401
+    def reject(h, z): raise requests.HTTPError("401 Client Error", response=resp)
+    monkeypatch.setattr(m, "nearest_store", reject)
+    r = client.get("/api/store?zip=45202", headers=KEYS)
+    assert r.status_code == 401 and "Kroger rejected" in r.json()["detail"] and "ksecret" not in r.text
+
+
+def test_keys_check_never_echoes_keys(client, monkeypatch):
+    import anthropic
+    class Models:
+        def list(self, limit): raise anthropic.AuthenticationError("bad", response=__import__("httpx").Response(401, request=__import__("httpx").Request("GET", "https://x")), body=None)
+    monkeypatch.setattr(m.anthropic, "Anthropic", lambda **kw: type("C", (), {"models": Models()})())
+    monkeypatch.setattr(m, "token", lambda *c: {"Authorization": "Bearer t"})
+    r = client.post("/api/keys/check", headers=KEYS)
+    assert r.json() == {"anthropic": {"ok": False, "message": "rejected: check the key"}, "kroger": {"ok": True, "source": "yours"}}
+    assert "sk-ant-student" not in r.text and "ksecret" not in r.text

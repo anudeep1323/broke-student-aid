@@ -8,6 +8,7 @@ import time
 from pathlib import Path
 from typing import Annotated, Literal
 
+from langchain_core.runnables import RunnableConfig
 from langchain_core.tools import tool
 from langgraph.prebuilt import InjectedState
 from pydantic import BaseModel, Field
@@ -25,11 +26,20 @@ _products = {}  # (store, Kroger productId) -> name, size, price, label. Filled 
 _recipes = load_recipes()
 
 
-def kroger_headers():
-    """A Kroger token, renewed after 25 min: tokens die at 30 min, and the app runs for hours (that was the HTTP 401)."""
-    if "h" not in _headers or time.time() - _headers["at"] > 25 * 60:
-        _headers["h"], _headers["at"] = token(), time.time()
-    return _headers["h"]
+def kroger_headers(creds=None):
+    """A Kroger token per Kroger app (the student's own, or the server's), renewed after 25 min:
+    tokens die at 30 min, and the app runs for hours (that was the HTTP 401)."""
+    who = creds[0] if creds else "server"
+    if who not in _headers or time.time() - _headers[who][1] > 25 * 60:
+        _headers[who] = (token(*creds) if creds else token(), time.time())
+    return _headers[who][0]
+
+
+def kroger_creds(config):
+    """The student's Kroger app (id, secret) from the run's config, or None = use the server's keys.
+    Keys ride in config, never in the graph state or a prompt."""
+    c = (config or {}).get("configurable", {})
+    return (c["kroger_id"], c["kroger_secret"]) if c.get("kroger_id") and c.get("kroger_secret") else None
 
 
 def cookable(c):
@@ -48,14 +58,14 @@ def card_summary(c):
 
 
 @tool
-def search_kroger(terms: list[str], state: Annotated[dict, InjectedState]) -> dict:
+def search_kroger(terms: list[str], state: Annotated[dict, InjectedState], config: RunnableConfig = None) -> dict:
     """Search the student's nearest Kroger for grocery items. Returns the 5 cheapest per unit for each term,
     each with an id (pass it to check_budget), real price, and protein per package from its label (null if none).
     Use plain grocery words like ["rice", "black beans", "eggs"]."""
     out = {}
     for t in terms:
         try:
-            rows = browse(kroger_headers(), state["location_id"], t)[:5]
+            rows = browse(kroger_headers(kroger_creds(config)), state["location_id"], t)[:5]
         except RuntimeError as e:          # Kroger down / rate-limited after retries: tell Claude, don't crash
             out[t] = {"error": str(e)}
             continue
