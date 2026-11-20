@@ -1,0 +1,122 @@
+[
+ {
+  "case": "I'm broke till Friday, no peanuts, tired of rice, want something warm",
+  "answer": "**Recipes (both warm, no rice, no peanuts)**\n- Dal, p. 35 (serves 4)\n- Corn Soup, p. 36 (serves 4\u20136)\n\n**Buy at Kroger**\n- Simple Truth Organic Low Sodium Lentils, 15 oz: $1.25\n- Kroger Salted Butter Sticks, 16 oz: $3.29\n- Jumbo Yellow Onions, 1 lb: $1.19\n- Kroger Mustard Seed Shaker, 2.62 oz: $2.49\n- Kroger Peeled Garlic, 6 oz: $2.99\n- Organic Ginger Root, 1 lb: $3.49\n- Smart Way Whole Kernel Corn, 15.25 oz, 2 cans: $0.69 each, $1.38 total\n- Private Selection Celery Sticks, 16 oz: $3.00\n- Fresh Large Green Bell Pepper: $0.89\n- Kroger Russet Potatoes, 5 lb: $2.79\n- Kroger Fat Free Vegetable Broth, 32 oz: $1.49\n\n**Total: $24.25. Budget: $25.00. Left: $0.75.**\n\n**Not priced**\n- Cumin seeds and turmeric powder: Kroger only showed hair and skin products and supplement capsules, so I left them out.\n- Green chili: the only match was frozen burritos, so I skipped it.\n- Flour or cornmeal for the soup: the only flour was $4.49, which would break the budget. The soup works without it.\n- Salt and pepper: you'll need to supply these.\n- Corn Soup's \"Alternate Broth\" in the recipe is what the vegetable broth covers.",
+  "checks": {
+   "1 within budget": true,
+   "2 total + items match": true,
+   "3 every $ from a tool": false,
+   "4 diet respected": true,
+   "5 pages real": true
+  },
+  "cost": 0.03470971
+ },
+ {
+  "case": "vegetarian, $20 for the week, I like spicy food",
+  "answer": "**Recipes**\n- Dal, p. 35 (serves 4)\n- Spicy Green Beans, p. 59 (serves 2)\n\n**What to buy (Kroger)**\n- La Preferida Dry Lentils, 16 oz: $1.49\n- Kroger Salted Butter, 16 oz: $3.29\n- Jumbo Yellow Onions, 1 lb: $1.19\n- Kroger Peeled Garlic, 6 oz: $2.99\n- Kroger Cut Green Beans, 14.5 oz: $0.89\n- Kroger Pure Canola Oil, 48 fl oz: $3.99. This stands in for vegetable oil, because the gallon of vegetable oil is $10.\n- Kroger Less Sodium Soy Sauce, 15 fl oz: $2.19\n- Huy Fong Sambal Oelek, 8 oz: $2.49. This is your main source of heat.\n\n**Total: $18.52. Left: $1.48.**\n\n**Not priced**\n- Cumin seeds, black mustard seeds and turmeric powder: Kroger only showed hair products and supplements for these.\n- Green chili: the only results were frozen burritos and Rotel.\n- Ginger: it would put you over budget.\n- Salt and pepper, plus the optional lemon juice.\n\nIf you already have any of these, the Dal will taste better.\n\nI left out Rainbow Rice (p. 144). The 5 lb bag of rice is $3.79, which would put you over $20.",
+  "checks": {
+   "1 within budget": true,
+   "2 total + items match": true,
+   "3 every $ from a tool": true,
+   "4 diet respected": true,
+   "5 pages real": true
+  },
+  "cost": 0.03670515
+ },
+ {
+  "case": "dairy-free, cheap breakfasts and dinners",
+  "answer": "**Recipes (both dairy-free)**\n- Berry Oatmeal, p. 29, for breakfasts.\n- My Dad's Baked Beans, p. 100, for dinners. It contains egg and wheat allergens but no dairy.\n\n**What to buy**\n- Simple Truth Organic Rolled 1 Minute Oats, 18 oz: $3.69\n- Cape Cod Select Frozen Cranberries, 16 oz (on sale): $3.99. This was the cheapest frozen fruit per unit. Cranberries are tart, so you may want more sugar.\n- Kroger Original Baked Beans, 28 oz, 2 cans at $2.59 each: $5.18\n- Smart Way Yellow Mustard, 8 oz: $0.75\n- Kroger Light Brown Sugar, 32 oz (on sale): $2.00. It covers the sugar in the oatmeal and replaces the molasses in the beans, since no molasses was listed.\n\n**Total: $15.61. Left: $14.39** (budget $30.00).\n\n**Not priced:** the chipotle in adobo or chili sauce for the beans wasn't in the Kroger results. The oats also aren't listed in the recipe, so I added them for the oatmeal.",
+  "checks": {
+   "1 within budget": true,
+   "2 total + items match": true,
+   "3 every $ from a tool": false,
+   "4 diet respected": true,
+   "5 pages real": true
+  },
+  "cost": 0.01963576
+ },
+ {
+  "case": "I have a nut allergy, need lunches I can carry to class",
+  "answer": "**Recipes (nut-free, both packable):**\n- Taco Salad, p. 52. It makes 2 servings, so pack it as 2 lunches.\n- Corn Soup, p. 36. It makes 4\u20136 servings, so carry it in a thermos.\n\n**Buy at Kroger:**\n- Romaine Lettuce Hearts, 18 oz: $4.79\n- Pinto Beans, 15.5 oz: $1.00\n- Roma Tomatoes, 1 lb: $1.49\n- Smart Way Corn, 15.25 oz, 2 cans: $0.69 each\n- Green Onions Bag, 12 oz: $1.99\n- White Corn Tortilla Chips, 13 oz: $2.39\n- Original Sour Cream, 16 oz: $1.67\n- Yellow Onion, 3 lb bag: $2.99\n- Green Bell Pepper, 1 ct: $0.89\n- Russet Potatoes, 5 lb: $2.79\n- Fat Free Vegetable Broth, 32 oz: $1.49\n\n**Total: $22.87. Left: $2.13.**\n\nTo fit the $25 budget I cut the cheddar, lime, garlic, celery and butter. The full list came to $38.34, which was $13.34 over.\n\n**Not priced:** salt, pepper, and flour or cornmeal to thicken the soup. The chili pepper is optional. Please check labels for nut warnings, since the facts don't cover packaged-food labels.",
+  "checks": {
+   "1 within budget": true,
+   "2 total + items match": true,
+   "3 every $ from a tool": true,
+   "4 diet respected": true,
+   "5 pages real": true
+  },
+  "cost": 0.039812810000000004
+ },
+ {
+  "case": "gluten free please, something filling",
+  "answer": "**Recipes (both gluten-free)**\n- Rainbow Rice, p. 144. Use the red version, made with tomatoes.\n- Dal, p. 35. It's a filling lentil soup. It contains milk (butter).\n\n**What to buy at Kroger**\n- Kroger Long Grain Rice, 5 lb: $3.79\n- Kroger Crushed Tomatoes in Puree, 28 oz: $1.89\n- La Preferida Lentils (Dry), 16 oz: $1.49\n- Kroger Salted Butter Sticks, 16 oz: $3.29\n- Kroger Yellow Onion, 3 lb bag: $2.99\n- Kroger Peeled Garlic, 6 oz: $2.99\n\n**Total: $16.44. Left: $13.56 of your $30.00.**\n\n**Not priced**\n- Cumin seeds: the Kroger search only returned hair and skin products, so I left them out.\n- Black mustard seeds\n- Turmeric\n- Green chili\n- Ginger root: it's only sold as a 1 lb bag at $3.49, so I skipped it.\n- Salt and pepper\n\nYou can pick up the spices separately. You have room in the budget for them.",
+  "checks": {
+   "1 within budget": true,
+   "2 total + items match": true,
+   "3 every $ from a tool": true,
+   "4 diet respected": true,
+   "5 pages real": true
+  },
+  "cost": 0.01848501
+ },
+ {
+  "case": "cheapest possible week of dinners, I eat anything",
+  "answer": "**Recipes**\n- Dal, p. 35 (serves 4)\n- Vegetable Jambalaya, p. 96 (serves 6)\n\n**What to buy at Kroger**\n- La Preferida Lentils (dry), 16 oz: $1.49\n- Kroger Yellow Onion, 3 lb bag: $2.99\n- ROTEL Diced Tomatoes & Green Chilies, 10 oz: $1.33 (for the green chili)\n- Fresh Large Green Bell Pepper: $0.89\n- Fresh Roma Tomato, 1 lb: $1.49\n- Kroger Long Grain Rice, 5 lb: $3.79\n- Kroger Fat Free Vegetable Broth, 32 oz: $1.49\n\n**Total: $13.47. Left: $1.53.**\n\n**Not bought:** To stay in budget, I left out butter, garlic, ginger, celery, and the vegetable oil. The cumin seeds only showed up as hair and face products, so they have no usable price. The other spices, the mustard seeds, and the salt and pepper are also unpriced. You'll need to use what you already have for those. The broth is only 32 oz and the jambalaya needs 3 cups (24 oz), so there's nothing left over for the dal.",
+  "checks": {
+   "1 within budget": true,
+   "2 total + items match": true,
+   "3 every $ from a tool": true,
+   "4 diet respected": true,
+   "5 pages real": true
+  },
+  "cost": 0.028996289999999997
+ },
+ {
+  "case": "I can't eat shellfish or eggs, want some comfort food",
+  "answer": "**Recipes**\n- Deconstructed Cabbage Rolls (p. 109). It contains milk and wheat but no egg or shellfish.\n- And Mine (p. 101). It's a bean dish with no listed allergens.\n\nI skipped Black-Eyed Peas and Collards. Its details were listed under a different page and showed egg as an allergen.\n\n**What to buy (Kroger)**\n- Kroger Salted Butter Sticks, 16 oz: $3.29\n- Jimmy Dean Turkey Sausage, 16 oz: $2.99\n- Kroger Yellow Onion, 3 lb: $2.99\n- Kroger Peeled Garlic, 6 oz: $2.99\n- Green Cabbage, 1 lb: $0.89\n- Kroger Long Grain White Rice, 32 oz: $1.89\n- La Preferida Dry Lentils, 16 oz: $1.49\n- Kroger Crushed Tomatoes, 28 oz: $1.89\n- Pinto Beans, 15.5 oz, 2 cans: $1.00 each\n- Kroger Yellow Mustard, 8 oz: $0.99\n- La Costena Chipotle Sauce, 7.76 oz: $1.39\n\n**Total:** $22.80\n**Left:** $2.20 of your $25.00\n\n**Not priced:**\n- Salt and pepper.\n- Molasses or brown sugar. Kroger only returned white sugar, so I left it out.",
+  "checks": {
+   "1 within budget": true,
+   "2 total + items match": true,
+   "3 every $ from a tool": true,
+   "4 diet respected": false,
+   "5 pages real": true
+  },
+  "cost": 0.02829784
+ },
+ {
+  "case": "I want to meal prep on Sunday for the whole week",
+  "answer": "**Recipes**\n- Dal, p. 35 (serves 4, vegetarian, contains milk)\n- Vegetable Jambalaya, p. 96 (serves 6)\n\nI skipped Perogies. Its yogurt only comes as flavored cups here, and that doesn't suit the dough.\n\n**What to buy**\n- Simple Truth Organic Low Sodium Lentils, 15 oz: $1.25\n- Kroger Yellow Onion, 3 lb bag: $2.99 (used in both recipes)\n- Kroger Peeled Garlic, 6 oz: $2.99\n- Fresh Large Green Bell Pepper, 1 ct: $0.89\n- Private Selection Long Celery Sticks, 16 oz: $3.00\n- Fresh Roma Tomato, 1 lb: $1.49\n- Kroger Fat Free Vegetable Broth, 32 oz: $1.49\n- Kroger Long Grain Rice, 10 lb: $6.99. This is the cheapest per pound. The 5 lb bag at $3.79 would also work and costs less today.\n\n**Total:** $21.09 of your $35.00 budget, which leaves **$13.91**.\n\n**Not priced** (no Kroger prices in the facts, so check your pantry): butter, vegetable oil, cumin and mustard seeds, turmeric, paprika, garlic powder, cayenne, thyme, oregano, bay leaves, salt, pepper, green chili, ginger, and Worcestershire or soy sauce.\n\nThe Jambalaya has an egg/shellfish/soy/wheat allergen warning. Soy and wheat come from the Worcestershire or soy sauce, which you can skip if needed.",
+  "checks": {
+   "1 within budget": true,
+   "2 total + items match": true,
+   "3 every $ from a tool": true,
+   "4 diet respected": true,
+   "5 pages real": true
+  },
+  "cost": 0.025874559999999998
+ },
+ {
+  "case": "vegetarian, no soy, I need protein",
+  "answer": "**Recipes**\n- Dal, p. 35. It has lentils for protein. It contains milk from the butter.\n- My Dad's Baked Beans, p. 100.\n- Rainbow Rice, p. 144. Make it plain rice, and serve it with the dal for a fuller protein.\n\nNone of the three recipes has soy, and all are vegetarian.\n\n**Buy at Kroger**\n- Simple Truth Organic Low Sodium Lentils, 15 oz: $1.25\n- Kroger Salted Butter Sticks, 16 oz: $3.29\n- Jumbo Yellow Onions, 1 lb: $1.19\n- Kroger Peeled Garlic, 6 oz: $2.99\n- ROTEL Diced Tomatoes and Green Chilies, 10 oz: $1.33\n- Kroger Brown Sugar Hickory Baked Beans, 28 oz, 2 cans at $2.59 each: $5.18\n- Kroger Original Yellow Mustard, 8 oz: $0.99\n- Kroger Long Grain Rice, 5 lb: $3.79\n\n**Total: $20.01. Left: $4.99.**\n\n**Not priced**\n- Cumin seeds, black mustard seeds, turmeric and chipotle en adobo: Kroger had no usable product. The cumin and turmeric results were hair and skin products and supplements.\n- Molasses or brown sugar: Kroger only had granulated sugar.\n- Ginger: I left it out to stay within budget.\n- Salt and pepper: not priced.",
+  "checks": {
+   "1 within budget": true,
+   "2 total + items match": true,
+   "3 every $ from a tool": false,
+   "4 diet respected": true,
+   "5 pages real": true
+  },
+  "cost": 0.02818461
+ },
+ {
+  "case": "sweet breakfast ideas, I hate oatmeal",
+  "answer": "**Recipe:** Banana Pancakes, p. 18. It makes 10\u201314 pancakes and is a sweet, oat-free breakfast.\n\nI left out the oatmeal recipes because you hate oatmeal. I also skipped Chocolate Zucchini Muffins (p. 21) because they use 1\u00bd cups of oats, and the Kroger results had no cocoa powder. Toast 8 Ways (p. 69) had no ingredient list or prices, so I didn't use it.\n\n**Buy at Kroger:**\n- Kroger Bleached All Purpose Flour, 5 lb: $2.00\n- Kroger Light Brown Sugar, 32 oz: $2.00\n- ARM & HAMMER Pure Baking Soda, 1 lb: $1.33\n- Fresh Bananas, 1 lb bunch: $0.55\n- Kroger Grade A Large White Eggs, 18 ct: $2.65\n- Kroger 2% Milk, 1 gal: $3.29\n\n**Total:** $11.82. **Left:** $8.18 of your $20.\n\n**Not priced:** The search found no baking powder, so you'll need to buy it separately. Salt, vanilla and butter also had no prices. Check whether you already have them.",
+  "checks": {
+   "1 within budget": true,
+   "2 total + items match": true,
+   "3 every $ from a tool": true,
+   "4 diet respected": true,
+   "5 pages real": true
+  },
+  "cost": 0.02070578
+ }
+]

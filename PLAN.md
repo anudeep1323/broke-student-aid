@@ -1,6 +1,6 @@
 # Broke Student Aid: charter and plan
 
-Status updated: 2026-11-18. Update this file at every pivot or finished piece; ARCHITECTURE.md is the build log, this is the map.
+Status updated: 2026-11-19. Update this file at every pivot or finished piece; ARCHITECTURE.md is the build log, this is the map.
 
 ## Mission (read this first)
 
@@ -32,10 +32,10 @@ adds them up and checks allergens, because those must never be guessed.
 **MVP is done when:**
 1. A student types ZIP + budget in fields and one sentence in a chat box (Streamlit), and gets the plan with recipe photos.
 2. The agent eval passes all 5 checks on 10/10 cases (within budget, total matches items, no made-up prices, diet respected, real pages).
-3. Cost is at or under **$0.05 per answer** (now $0.057) and time under **30 s** (now ~35 s).
+3. Cost is at or under **$0.05 per answer** (now $0.029 ✅) and time under **30 s** (now ~28 s ✅).
 4. Code, evals and diagrams are pushed to github.com/anudeep1323/broke-student-aid with a README.
 
-**Out of scope for the MVP** (next version): nutrition + protein target, ready-made / frozen meals, a weekly price cache, deployment, the 20-profile eval.
+**Out of scope for the MVP** (next version): ready-made / frozen meals, a weekly price cache, deployment, the 20-profile eval.
 
 **Targets I'll quote in interviews:** extraction 34/34 cards, allergen recall 100%, search hit@3 75% -> 95% with the rewrite, agent $0.15 -> target $0.05 per answer.
 
@@ -48,19 +48,26 @@ adds them up and checks allergens, because those must never be guessed.
 | M2 | Recipe search + question rewrite (DSPy) | ✅ | hit@3 75% -> 95%; few-shot rejected (worse on held-out) | Hybrid RAG, held-out evals |
 | M3 | Allergen + vegetarian filters (code) | ✅ | recall 55/55, rules 8/8, 0 violations | Safety by code, not by LLM |
 | M4 | Grocery-first flow: browse, basket, basket -> recipes | ✅ | basket $7.98 of $30; rice + eggs -> 5 recipes | Unit-price parsing, ingredient matching |
-| M5 | Agent: Haiku gathers, Opus decides + writes (LangGraph) | 🔶 works | $0.0625, 38 s, total matches items | Matching jobs to models; handoffs carry decisions |
+| M5 | Agent: Haiku gathers, Sonnet decides + writes (LangGraph) | ✅ | $0.0625, 38 s, total matches items | Matching jobs to models; handoffs carry decisions |
 | M6 | Agent eval (10 cases, 5 code checks) merged into one `run_evals.py` | ✅ | 10/10 cases pass all 5 checks; $0.057 and ~35 s per answer | Component vs end-to-end evals |
-| M7 | Cost/quality tuning with the agent eval (2 vs 5 options, Opus effort) | ⬜ | target <= $0.05, 10/10 | Measured trade-offs |
-| M8 | Streamlit: agent chat wired in beside ZIP + budget, photos | ⬜ (screen 1 exists, UI will change) | - | Shipping it |
+| M7 | Cost/quality tuning with the agent eval | ✅ | Sonnet planner + check_budget quantities: 10/10, $0.029, ~28 s (was Opus $0.057, ~35 s) | Measured trade-offs; fix the tool, not the prompt |
+| M8 | Streamlit: agent chat wired in beside ZIP + budget, photos | ✅ | sidebar fields + Ask tab + Browse tab; live test $0.031, 30 s, total correct | Shipping it |
 | M9 | README + commit + push | ⬜ (first commit pushed; much since uncommitted) | - | Presenting the work |
 
-**Next up:** M7 (cut $0.057 -> $0.05 and ~35 s -> 30 s without dropping below 10/10), then M8.
+| M10 | Answers show 2-3 recipes, not 1 (Andy saw only one recipe per answer) | ⬜ | need the question that showed it | Debugging from a real user report |
+| M11 | Nutrition: kcal, protein, carbs, fiber, sugar per recipe (USDA, code) + per grocery week (Kroger labels), high-protein toggle | ✅ | 392 lines counted by a hand-checked 87-food USDA list; Dal 381 kcal / 24 g protein per serving; agent eval 9/10, $0.032 | Hand list beats fuzzy search; only cookable cards |
+| M12 | UI redesign: appealing, shows recipes, photos, nutrition, budget at a glance | ⬜ | after M11 (it must show nutrition) | Product polish |
+| M13 | Protein goal slider (g/day) replaces the on/off toggle; check_budget reports goal_met | ✅ | 40 -> 83 g/day on the same question, $24.60 of $25 | State from UI, checked by code |
+
+**UI decision (Andy, 2026-11-19):** stay on Streamlit until every feature is done; switch to FastAPI + React only when UI is the last pending work. Keep all logic in agent/ and tools, never in app.py, so the switch is a new screen only.
+
+**Next up (2026-11-19):** unit tests for nutrition code, then M12 (UI polish), M10 (needs the question), M9 (README + commit).
+Nutrition moved from "after the MVP" into the MVP.
 
 ## After the MVP (backlog)
 
 | Item | Why later |
 |---|---|
-| Nutrition per product (Open Food Facts) + protein target | Not needed to buy within budget; adds a data source |
 | Ready-made / frozen meals | Same pricing pipeline, second product type |
 | Weekly price cache | Streamlit caches 1 h today; only matters with real users |
 | 20-profile agent eval | Grow from 10 once real student sentences exist |

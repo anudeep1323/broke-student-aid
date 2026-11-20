@@ -1,0 +1,122 @@
+[
+ {
+  "case": "I'm broke till Friday, no peanuts, tired of rice, want something warm",
+  "answer": "**Recipes (both warm, no rice, no peanuts)**\n- Dal, p. 35 (serves 4)\n- My Dad's Baked Beans, p. 100 (serves 2)\n\n**Shopping list**\n- Simple Truth Low Sodium Lentils, 15 oz: $1.25 \u00d7 1 = $1.25\n- Kroger Yellow Onion, 3 lb bag: $2.99 \u00d7 1 = $2.99\n- Kroger Salted Butter, 16 oz: $3.29 \u00d7 1 = $3.29\n- Kroger Mustard Seed Shaker, 2.62 oz: $2.49 \u00d7 1 = $2.49\n- Kroger Peeled Garlic, 6 oz: $2.99 \u00d7 1 = $2.99\n- Kroger Brown Sugar Hickory Baked Beans, 28 oz: $2.59 \u00d7 2 = $5.18\n- Kroger Light Brown Sugar, 32 oz: $2.00 \u00d7 1 = $2.00\n- La Costena Chipotle Sauce, 7.76 oz: $1.39 \u00d7 1 = $1.39\n\n**Total: $21.58. Left: $3.42.**\n\n**Not priced**\n- Cumin seeds and turmeric powder: Kroger only showed a hair conditioner, a face oil and supplement capsules.\n- Green chili, mustard (for the beans) and fresh ginger.\n- Salt and pepper.\n\nI left out ginger ($3.49 for a 1 lb root) because it would push the total over $25. Your leftover $3.42 could cover a few of the unpriced spices.",
+  "checks": {
+   "1 within budget": true,
+   "2 total + items match": true,
+   "3 every $ from a tool": true,
+   "4 diet respected": true,
+   "5 pages real": true
+  },
+  "cost": 0.03150335
+ },
+ {
+  "case": "vegetarian, $20 for the week, I like spicy food",
+  "answer": "**Recipes**\n- Dal (p. 35), serves 4\n- Spicy Green Beans (p. 59), serves 2\n\n**Shopping list**\n- La Preferida Lentils (dry), 16 oz: $1.49\n- Jumbo Yellow Onions, 1 lb: $1.19\n- Kroger Mustard Seed Shaker, 2.62 oz: $2.49\n- Kroger Peeled Garlic, 6 oz: $2.99\n- Kroger Cut Green Beans, 14.5 oz: $0.89\n- Kroger Canola Oil, 48 fl oz: $3.99\n- Kroger Less Sodium Soy Sauce, 15 fl oz: $2.19\n- Huy Fong Sambal Oelek, 8 oz: $2.49\n\nEach item is quantity 1, so each line total equals its price.\n\n**Total: $17.72. Left: $2.28.**\n\n**Not priced or left out**\n- **Cumin seeds and turmeric powder:** Kroger only returned hair and skin products and supplements for these, so I couldn't price real spices.\n- **Fresh green chili and ginger:** I left these out. The only green chili result was Rotel, which didn't match the recipe, and ginger didn't fit the budget.\n- **Butter:** I dropped it to stay under $20. The Dal needs 1 tbsp, so skip it or use a little oil.\n- **Salt and pepper:** Not priced.\n- **Lemon juice:** I skipped this optional addition for the green beans.",
+  "checks": {
+   "1 within budget": true,
+   "2 total + items match": true,
+   "3 every $ from a tool": true,
+   "4 diet respected": true,
+   "5 pages real": true
+  },
+  "cost": 0.035765080000000005
+ },
+ {
+  "case": "dairy-free, cheap breakfasts and dinners",
+  "answer": "**Recipes (all dairy-free)**\n- Coconut and Lime Oatmeal, p. 29 (breakfast)\n- My Dad's Baked Beans, p. 100 (dinner, serves 2). It contains egg and wheat allergens, but no dairy.\n\n**Shopping list**\n- Simple Truth Organic Rolled Oats, 18 oz: $3.69\n- Kroger Coconut Flakes, 14 oz: $3.59\n- ReaLime Lime Juice, 15 oz: $2.50\n- Smart Way Granulated Sugar, 10 lb: $6.79\n- Kroger Original Baked Beans, 28 oz: $2.59 \u00d7 2 = $5.18\n- Smart Way Yellow Mustard, 8 oz: $0.75\n- Kroger Light Brown Sugar, 32 oz: $2.00\n- Kroger Chipotle Peppers in Adobo, 7 oz: $1.39\n\n**Total: $25.89. Left: $4.11.**\n\n**Notes**\n- I skipped Berry Oatmeal because the only frozen fruit listed was cherries or a mango blend, at $12.99 or more.\n- I used bottled lime juice instead of fresh limes because it's cheaper.\n- The facts had no price for the oats serving amounts, so I didn't price those separately. The oats are priced as one bag.\n- Nothing else is unpriced.",
+  "checks": {
+   "1 within budget": true,
+   "2 total + items match": true,
+   "3 every $ from a tool": true,
+   "4 diet respected": true,
+   "5 pages real": true
+  },
+  "cost": 0.02314408
+ },
+ {
+  "case": "I have a nut allergy, need lunches I can carry to class",
+  "answer": "**Recipes (neither contains nuts):**\n- Taco Salad, p. 52. It packs well for class.\n- Corn Soup, p. 36. Carry it in a thermos. I'm using the vegetable broth option.\n\n**Shopping list (Kroger):**\n- Romaine Lettuce Hearts, 18 oz: $4.79\n- Roma Tomatoes, 1 lb: $1.49\n- Sweet Golden Corn, 15.25 oz, 3 \u00d7 $0.89: $2.67\n- No Salt Added Black Beans, 15.25 oz: $1.00\n- Green Onions, 12 oz: $1.99\n- White Corn Tortilla Chips, 13 oz: $2.39\n- Sharp Cheddar Block, 16 oz: $3.69\n- Original Sour Cream, 16 oz: $1.67\n- ReaLime Lime Juice, 15 oz: $2.50\n- Fat Free Vegetable Broth, 32 oz: $1.49\n- Green Bell Pepper: $0.89\n\n**Total: $24.57. Left: $0.43.**\n\n**Not priced (over budget or pantry items):** onion, celery, potato, garlic, butter, cornmeal or flour, salt and pepper. The soup will be simpler without the onion, celery, potato and garlic, unless you already have them.",
+  "checks": {
+   "1 within budget": true,
+   "2 total + items match": true,
+   "3 every $ from a tool": true,
+   "4 diet respected": true,
+   "5 pages real": true
+  },
+  "cost": 0.03494772
+ },
+ {
+  "case": "gluten free please, something filling",
+  "answer": "**Recipes (both gluten-free in the cookbook):**\n- Rainbow Rice (red rice version), p. 144. Rice cooked with pur\u00e9ed tomatoes.\n- Ever-Popular Potato Salad, p. 47.\n\n**Shopping list:**\n- Kroger Long Grain Rice, 5 lb: $3.79\n- Kroger Crushed Tomatoes in Puree, 28 oz: $1.89\n- Kroger Russet Potatoes, 10 lb: $5.00\n- Kroger Extra Virgin Olive Oil, 25.4 fl oz: $8.99\n- Kroger 100% Lemon Juice, 32 fl oz: $3.49\n- Kroger Dijon Mustard, 12 oz: $1.99\n- Cal Fresco Green Onions, 12 oz: $1.99\n\nEach item is quantity 1, so each line total equals its price.\n\n**Total: $27.14. Left: $2.86.**\n\n**Not priced:** salt and pepper. Assume you already have them.\n\nI skipped the Chorizo and White Bean Ragu because the only chorizo listed costs $13.99 and is deli-sliced. Check the labels on the mustard and the other packaged items to confirm they say gluten-free.",
+  "checks": {
+   "1 within budget": true,
+   "2 total + items match": true,
+   "3 every $ from a tool": true,
+   "4 diet respected": true,
+   "5 pages real": true
+  },
+  "cost": 0.023908230000000003
+ },
+ {
+  "case": "cheapest possible week of dinners, I eat anything",
+  "answer": "**Recipes**\n- Dal, p. 35 (serves 4)\n- Roasted Potatoes with Chilies, p. 125 (serves 4)\n\n**Shopping list (Kroger)**\n- Simple Truth Organic Low Sodium Lentils, 15 oz: $1.25\n- Jumbo Yellow Onions, 1 lb: $1.19\n- Kroger Salted Butter Sticks, 16 oz: $3.29 (used in both recipes)\n- Kroger Peeled Garlic, 6 oz: $2.99 (used in both recipes)\n- Kroger Russet Potatoes, 5 lb: $2.79\n- Mezzetta Hot Chili Peppers, 16 oz: $3.29\n\nEach item is quantity 1, so each line total equals its price.\n\n**Total: $14.80. Left: $0.20.**\n\n**Not priced:**\n- Salt and pepper, which you probably already have.\n- Cumin seeds: Kroger only showed hair and skin products.\n- Turmeric powder: Kroger only showed capsules.\n- Black mustard seeds ($2.49), fresh ginger ($3.49) and a fresh green chili: I left these out to stay under budget.\n\nWithout those spices the dal will be plainer, so use whatever spices you already have.",
+  "checks": {
+   "1 within budget": true,
+   "2 total + items match": true,
+   "3 every $ from a tool": true,
+   "4 diet respected": true,
+   "5 pages real": true
+  },
+  "cost": 0.030582909999999998
+ },
+ {
+  "case": "I can't eat shellfish or eggs, want some comfort food",
+  "answer": "**Recipes (both avoid egg and shellfish)**\n- Black-Eyed Peas and Collards, p. 94. This is the comfort-food dish. Skip the optional jalape\u00f1o-cheddar scones, because they likely contain egg.\n- Spicy Broiled Tilapia with Lime, p. 126. It's fish, not shellfish, and serves two.\n\n**Buy at Kroger**\n- KRO Black Eyed Peas, 15.5 oz, $1.39 \u00d7 2 = $2.78\n- Margaret Holmes Seasoned Collard Greens, 27 oz, $2.79 \u00d7 1 = $2.79\n- Fresh Tilapia Fillet, 1 lb, $6.99 \u00d7 1 = $6.99\n- ReaLime Lime Juice, 15 fl oz, $2.50 \u00d7 1 = $2.50\n\n**Total: $15.06. Budget: $25.00. Left: $9.94.**\n\n**Not priced or verified**\n- The tilapia spices (salt, pepper, cayenne, cumin, garlic powder, oregano) have no prices in the facts. You may already have them.\n- The ingredient list for p. 94 wasn't available. I priced only peas and collards, so you may need other items.\n- The p. 94 recipe contains milk and wheat. That's fine for your allergies, but check it if you avoid those too.",
+  "checks": {
+   "1 within budget": true,
+   "2 total + items match": true,
+   "3 every $ from a tool": true,
+   "4 diet respected": true,
+   "5 pages real": true
+  },
+  "cost": 0.02002885
+ },
+ {
+  "case": "I want to meal prep on Sunday for the whole week",
+  "answer": "**Sunday meal prep plan (3 recipes)**\n- Vegetable Jambalaya (p. 96), serves 6\n- Corn Soup (p. 36), serves 4\u20136\n- Rainbow Rice, green version (p. 144), serves 2\n\n**Shopping list (Kroger)**\n- Long Grain Rice, 5 lb: $3.79\n- Frozen Spinach, 12 oz: $1.50\n- Yellow Onion bag, 3 lb: $2.99\n- Green Bell Pepper, 2 \u00d7 $0.89: $1.78\n- Celery Sticks, 16 oz: $3.00\n- Peeled Garlic, 6 oz: $2.99\n- Roma Tomatoes, 1 lb: $1.49\n- Vegetable Broth, 32 oz, 2 \u00d7 $1.49: $2.98\n- Whole Kernel Corn, 15.25 oz, 2 \u00d7 $0.69: $1.38\n- Salted Butter, 16 oz: $3.29\n- Russet Potatoes, 5 lb: $2.79\n- All Purpose Flour, 5 lb: $4.49\n\n**Total: $32.47. Left: $2.53.**\n\n**Not priced (no Kroger prices in the facts):**\n- Vegetable oil\n- Spices: bay leaves, paprika, garlic powder, cayenne, thyme, oregano, salt and pepper\n- Worcestershire or soy sauce\n- Green chili or chili pepper\n\nJambalaya and Corn Soup contain egg, milk, wheat and other allergens, according to the recipe data.",
+  "checks": {
+   "1 within budget": true,
+   "2 total + items match": true,
+   "3 every $ from a tool": true,
+   "4 diet respected": true,
+   "5 pages real": true
+  },
+  "cost": 0.03211156
+ },
+ {
+  "case": "vegetarian, no soy, I need protein",
+  "answer": "**Recipes (both vegetarian, soy-free, high in protein)**\n- Dal, p. 35 (serves 4)\n- My Dad's Baked Beans, p. 100 (serves 2, or 4 as a side)\n\n**Shopping list (Kroger)**\n- Simple Truth Organic Low Sodium Lentils, 15 oz: 1 \u00d7 $1.25 = $1.25\n- Kroger Salted Butter, 16 oz: $3.29\n- Kroger Yellow Onion, 3 lb bag: $2.99\n- Kroger Mustard Seed Shaker, 2.62 oz: $2.49\n- Kroger Peeled Garlic, 6 oz: $2.99\n- ROTEL Diced Tomatoes and Green Chilies, 10 oz: $1.33\n- Organic Ginger Root, 1 lb: $3.49\n- Kroger Brown Sugar Hickory Baked Beans, 28 oz: 2 \u00d7 $2.59 = $5.18\n- Kroger Original Yellow Mustard, 8 oz: $0.99\n\n**Total: $24.00. Left: $1.00.**\n\n**Not priced**\n- Cumin seeds and turmeric powder: Kroger only returned hair-care products and supplements for these, so I left them out.\n- Molasses or brown sugar: Kroger only returned granulated sugar, so I left it out.\n- Chipotle or chili sauce: it would have put you over budget.\n- Salt and pepper: assumed you already have them.",
+  "checks": {
+   "1 within budget": true,
+   "2 total + items match": true,
+   "3 every $ from a tool": true,
+   "4 diet respected": true,
+   "5 pages real": true
+  },
+  "cost": 0.03495392
+ },
+ {
+  "case": "sweet breakfast ideas, I hate oatmeal",
+  "answer": "**Recipe:** Banana Pancakes (p. 18). It's sweet, makes 10\u201314 pancakes, and has no oatmeal. It contains egg, milk and wheat.\n\n**Buy at Kroger:**\n- Bleached All Purpose Flour, 5 lb: $2.00\n- Light Brown Sugar, 32 oz: $2.00\n- ARM & HAMMER Pure Baking Soda, 1 lb: $1.33\n- Bananas, 1 lb bunch: $0.55\n- Large White Eggs, 18 ct: $2.65\n- 2% Milk, 1 gal: $3.29\n- Imitation Vanilla Extract, 2 fl oz: $1.99\n- Salted Butter, 16 oz: $3.29\n\nEach item is quantity 1, so each line total equals its price.\n\n**Total: $17.10. Left: $2.90** of your $20.00.\n\n**Not priced:** I found no baking powder or salt in the Kroger results, so those aren't in the total. Check your pantry or buy them with the $2.90 left.\n\n**Skipped:**\n- Coconut and Lime Oatmeal and the other oatmeal recipes, because you hate oatmeal.\n- Yogurt Smash! (p. 32), because its ingredients weren't listed, so I couldn't price it.",
+  "checks": {
+   "1 within budget": true,
+   "2 total + items match": true,
+   "3 every $ from a tool": true,
+   "4 diet respected": true,
+   "5 pages real": true
+  },
+  "cost": 0.02165964
+ }
+]

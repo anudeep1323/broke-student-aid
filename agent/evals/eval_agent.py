@@ -56,15 +56,19 @@ def check(case, out):
     budgets = [json.loads(m.content) for m in tool_msgs if m.name == "check_budget"]
     last = budgets[-1] if budgets else None
     picked = [m for m in out["plan_messages"] if getattr(m, "tool_calls", None)]
-    prices = picked[-1].tool_calls[-1]["args"]["prices"] if picked else []
+    prices = [i["price"] for i in picked[-1].tool_calls[-1]["args"]["items"]] if picked else []
     said = [float(x) for x in MONEY.findall(answer)]
     tool_text = " ".join(m.content for m in tool_msgs)
-    tool_numbers = re.findall(r'"(?:price|total|left|budget)":\s*(-?\d+(?:\.\d+)?)', tool_text)
+    tool_numbers = re.findall(r'"(?:price|line_total|total|left|budget)":\s*(-?\d+(?:\.\d+)?)', tool_text)
     known = ({float(x) for x in MONEY.findall(tool_text)} | {float(budget)}
              | {abs(float(x)) for x in tool_numbers})   # abs: "left": -1.38 is said as "$1.38 over"
     shown = {c["title"] for m in tool_msgs if m.name in ("find_recipes", "recipe_details")
              for c in (json.loads(m.content) if m.content.startswith("[") else [json.loads(m.content)]) if "title" in c}
-    recs = [c for c in cards if c["title"] in shown and norm(c["title"]) in norm(answer)]
+    cited = {int(p) for p in re.findall(r"p(?:age|\.)?\s*(\d{1,3})", answer)}
+    # recommended = title named AND its page cited ("I skipped X" names X but cites no page for it)
+    lines = [norm(l) + " " for l in answer.splitlines()]
+    recs = [c for c in cards if c["title"] in shown and any(
+        norm(c["title"]) in l and re.search(rf"p(?:age)?\s*{c['book_page']}\b", l) for l in lines)]   # title + its own page, same line
     r = {}
     r["1 within budget"] = (bool(last) and last["within_budget"], f"total {last and last['total']} of ${budget}")
     r["2 total + items match"] = (bool(last) and last["total"] in said and all(p in said for p in prices),

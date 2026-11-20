@@ -1,0 +1,122 @@
+[
+ {
+  "case": "I'm broke till Friday, no peanuts, tired of rice, want something warm",
+  "answer": "**Warm, rice-free, no peanuts.** Both recipes are soups.\n\n**Recipes**\n- **Dal (p.35):** per serving (4 servings), 381 kcal, 24 g protein, 65 g carbs, 11 g fiber, 4 g sugar.\n- **Corn Soup (p.36):** per serving (4 servings), 277 kcal, 10 g protein, 54 g carbs, 6 g fiber, 18 g sugar.\n\n**Buy**\n- La Preferida Lentils, 16 oz: $1.49\n- Kroger Yellow Onion, 3 lb: $2.99\n- Kroger Salted Butter, 16 oz: $3.29\n- Kroger Peeled Garlic, 6 oz: $2.99\n- Smart Way Corn, 15.25 oz, 2 \u00d7 $0.69: $1.38\n- Private Selection Celery, 16 oz: $3.00\n- Green Bell Pepper, 1: $0.89\n- Kroger Russet Potatoes, 5 lb: $2.79\n- Kroger Vegetable Broth, 32 oz, 2 \u00d7 $1.49: $2.98\n\n**Total: $21.80. Left: $3.20.**\n\n**Protein:** the week's total is 193 g, which is 28 g per day. Butter, garlic, celery, bell pepper and broth had no protein label.\n\n**Not priced:** cumin seeds (the search only returned hair and skin products), mustard seeds, turmeric, green chili, ginger, cornmeal, salt and pepper.",
+  "checks": {
+   "1 within budget": true,
+   "2 total + items match": true,
+   "3 every $ from a tool": true,
+   "4 diet respected": true,
+   "5 pages real": true
+  },
+  "cost": 0.03273999
+ },
+ {
+  "case": "vegetarian, $20 for the week, I like spicy food",
+  "answer": "**Recipes**\n- **Dal** (p. 35): 381 kcal, 24 g protein, 65 g carbs, 11 g fiber and 4 g sugar per serving. It makes 4 servings.\n- **Spicy Green Beans** (p. 59): 62 kcal, 3 g protein, 9 g carbs, 3 g fiber and 4 g sugar per serving. It makes 2 servings.\n\n**Shopping list**\n- La Preferida Lentils (dry), 16 oz: $1.49\n- Jumbo Yellow Onions, 1 lb: $1.19\n- Kroger Salted Butter, 16 oz: $3.29\n- Kroger Peeled Garlic, 6 oz: $2.99\n- Organic Ginger Root, 1 lb: $3.49\n- Rotel Diced Tomatoes and Green Chilies, 10 oz: $1.33 (stands in for the green chili)\n- Kroger Cut Green Beans, 14.5 oz: $0.89\n- Kroger Less Sodium Soy Sauce, 15 oz: $2.19\n- Huy Fong Sambal Oelek, 8 oz: $2.49\n\nEach item is quantity 1, so each line total equals its price.\n\n**Total: $19.35. Left: $0.65.**\n\n**Protein:** 160 g for the week, which is 23 g per day. Six items had no protein label: the onions, butter, garlic, ginger, Rotel and sambal.\n\n**Not priced:** cumin seeds, black mustard seeds, turmeric, vegetable oil, salt and pepper. The Kroger search turned up no suitable cumin or turmeric, and no mustard seeds. The oil would have gone over budget. The optional lemon juice for the green beans is also left out.",
+  "checks": {
+   "1 within budget": true,
+   "2 total + items match": true,
+   "3 every $ from a tool": true,
+   "4 diet respected": true,
+   "5 pages real": true
+  },
+  "cost": 0.03229485
+ },
+ {
+  "case": "dairy-free, cheap breakfasts and dinners",
+  "answer": "**Recipes (both dairy-free)**\n- **Apple Cinnamon Oatmeal, p. 31:** whole recipe (servings unknown) is 323 kcal, 1 g protein, 81 g carbs, 5 g fiber, 67 g sugar.\n- **My Dad's Baked Beans, p. 100:** per serving (2 servings) is 67 kcal, 1 g protein, 16 g carbs, 1 g fiber, 15 g sugar. It contains egg and wheat but no dairy. Two ingredients weren't counted in its nutrition.\n\n**Buy (Kroger)**\n- Old Fashioned Oats, 42 oz: $4.49\n- Apple Juice, 64 fl oz: $2.50\n- Gala Apples, 3 lb bag: $3.19\n- Ground Cinnamon, 1.94 oz: $1.25\n\nEach is quantity 1, so each line total equals its price.\n\n**Total: $11.43. Left: $18.57** of the $30.00 budget.\n\n**Not priced:** I had no Kroger prices for the baked-bean ingredients. These are baked beans (2 cans, 27 oz), mustard, molasses or brown sugar, and chipotle or chili sauce. The $18.57 left should cover them.\n\n**Protein:** the week's protein is 150 g, which is 21 g per day. All of it comes from the oats. The apple juice, apples and cinnamon have no protein label.",
+  "checks": {
+   "1 within budget": true,
+   "2 total + items match": true,
+   "3 every $ from a tool": true,
+   "4 diet respected": true,
+   "5 pages real": true
+  },
+  "cost": 0.02382509
+ },
+ {
+  "case": "I have a nut allergy, need lunches I can carry to class",
+  "answer": "**Nut allergy:** neither recipe lists nuts as an allergen. Check the labels on the products you buy.\n\n**Recipes**\n- **Broccoli Apple Salad, p. 54** (makes 4). Per serving: 96 kcal, 1 g protein, 15 g carbs, 3 g fiber, 10 g sugar.\n- **My Dad's Baked Beans, p. 100** (makes 2). Per serving: 67 kcal, 1 g protein, 16 g carbs, 1 g fiber, 15 g sugar.\n\n**Shopping list**\n- Broccoli Crowns Tray, 2 ct: $4.00\n- Kroger Gala Apples, 3 lb: $3.19\n- Wonderful Seedless Lemons, 3 lb: $5.00\n- Kroger Brown Sugar Hickory Baked Beans, 28 oz, 2 \u00d7 $2.59: $5.18\n- Kroger Yellow Mustard, 8 oz: $0.99\n- Kroger Light Brown Sugar, 32 oz: $2.00\n- La Costena Chipotle Sauce, 7.76 oz: $1.39\n\n**Total: $21.75. Left: $3.25** of your $25.\n\n**Not priced:** olive oil. The cheapest bottle, $6.00, would put you over budget. Salt and pepper are also unpriced.\n\n**Protein:** the week's total is 72 g, about 10 g per day. That counts only the baked beans. The other items have no protein label.",
+  "checks": {
+   "1 within budget": true,
+   "2 total + items match": true,
+   "3 every $ from a tool": true,
+   "4 diet respected": true,
+   "5 pages real": true
+  },
+  "cost": 0.0339601
+ },
+ {
+  "case": "gluten free please, something filling",
+  "answer": "**Gluten-free week: $18.80 of $30.00, with $11.20 left**\n\n**Recipes**\n- **Vegetable Quiche, Hold the Crust (p. 114):** per serving, 203 kcal, 13 g protein, 7 g carbs, 1 g fiber, 5 g sugar. It makes 4 servings.\n- **And Mine (p. 101), a bean dish:** per serving, 82 kcal, 1 g protein, 19 g carbs, 2 g fiber, 17 g sugar. It makes 2 servings.\n\n**Shopping list**\n- Kroger Large White Eggs, 18 ct: $2.65\n- Kroger 2% Milk, 1 gal: $3.29\n- Kroger Sharp Cheddar Block, 16 oz: $3.69\n- Kroger Yellow Onion, 3 lb bag: $2.99\n- Kroger Mixed Vegetables, 15 oz, 2 cans: $2.18\n- Pinto Beans, 15.5 oz, 2 cans: $2.00\n- Kroger Light Brown Sugar, 32 oz: $2.00\n\n**Total: $18.80. Left: $11.20.**\n\n**Protein:** the week's total is 600 g, which is 86 g per day. The brown sugar has no protein label.\n\n**Not priced:** butter, salt, pepper, mustard, chipotle or chili sauce, and canned tomatoes. These weren't in the Kroger results, so check your pantry.",
+  "checks": {
+   "1 within budget": true,
+   "2 total + items match": false,
+   "3 every $ from a tool": true,
+   "4 diet respected": true,
+   "5 pages real": true
+  },
+  "cost": 0.03760497
+ },
+ {
+  "case": "cheapest possible week of dinners, I eat anything",
+  "answer": "**Plan: Dal (p. 35) plus Rainbow Rice (p. 144), plain white rice version**\n\n**Nutrition**\n- Dal: 381 kcal, 24 g protein, 65 g carbs, 11 g fiber and 4 g sugar per serving. It makes 4 servings.\n- Rainbow Rice: 357 kcal, 8 g protein, 78 g carbs, 3 g fiber and 3 g sugar per serving. It makes 2 servings. One ingredient line wasn't counted in this nutrition.\n\n**Shopping list**\n- La Preferida Lentils, 16 oz: $1.49\n- Jumbo Yellow Onions, 1 lb: $1.19\n- Kroger Salted Butter Sticks, 16 oz: $3.29\n- Kroger Peeled Garlic, 6 oz: $2.99\n- Kroger Enriched Long Grain White Rice, 32 oz: $1.89\n\nEach line is quantity 1, so each line total equals its price.\n\n**Total: $10.85. Left: $4.15 of the $15.00 budget.**\n\n**Protein**\n- The week's protein is 126 g from the lentils plus 60 g from the rice, which makes 186 g.\n- That averages 27 g per day.\n- The onions, butter and garlic had no protein label, so they aren't counted.\n\n**Not priced**\n- Cumin seeds: the only results were hair and skin products.\n- Turmeric: the only results were capsules.\n- Green chili, ginger, salt and pepper. I left these out to stay cheap.",
+  "checks": {
+   "1 within budget": true,
+   "2 total + items match": true,
+   "3 every $ from a tool": true,
+   "4 diet respected": true,
+   "5 pages real": true
+  },
+  "cost": 0.03150062
+ },
+ {
+  "case": "I can't eat shellfish or eggs, want some comfort food",
+  "answer": "**Recipes (no shellfish or eggs)**\n- **Deconstructed Cabbage Rolls, p.109.** Per serving (6 servings): 603 kcal, 35g protein, 111g carbs, 17g fiber, 7g sugar.\n- **And Mine (beans), p.101.** Per serving (2 servings): 82 kcal, 1g protein, 19g carbs, 2g fiber, 17g sugar.\n\n**Shopping list**\n- Kroger Salted Butter, 16 oz: $3.29\n- Jimmy Dean Turkey Sausage, 16 oz: $2.99\n- Jumbo Yellow Onions, 1 lb: $1.19\n- Kroger Peeled Garlic, 6 oz: $2.99\n- Green Cabbage, 1 lb: $0.89\n- Kroger White Rice, 32 oz: $1.89\n- La Preferida Dry Lentils, 16 oz: $1.49\n- Kroger Crushed Tomatoes, 28 oz: $1.89\n- Pinto Beans, 15.5 oz, 2 \u00d7 $1.00: $2.00\n- Kroger Yellow Mustard, 8 oz: $0.99\n- Kroger Light Brown Sugar, 32 oz: $2.00\n\n**Total: $21.61. Left: $3.39** of your $25.00.\n\n**Not priced:** chipotle en adobo (not found at Kroger; skip it or use any chili sauce), salt and pepper.\n\n**Protein:** 325 g for the week, which is 46 g per day. Butter, onions, garlic, cabbage, mustard and brown sugar had no protein label, so they aren't counted.",
+  "checks": {
+   "1 within budget": true,
+   "2 total + items match": true,
+   "3 every $ from a tool": true,
+   "4 diet respected": true,
+   "5 pages real": true
+  },
+  "cost": 0.034579649999999997
+ },
+ {
+  "case": "I want to meal prep on Sunday for the whole week",
+  "answer": "**Recipes**\n- **Dal (p. 35):** per serving, 381 kcal, 24 g protein, 65 g carbs, 11 g fiber, 4 g sugar. It makes 4 servings.\n- **Rainbow Rice (p. 144), red rice version:** per serving, 357 kcal, 8 g protein, 78 g carbs, 3 g fiber, 3 g sugar. It makes 2 servings.\n\n**Shopping list**\n- La Preferida Lentils, 16 oz: $1.49\n- Kroger Salted Butter Sticks, 16 oz: $3.29\n- Kroger Yellow Onion, 3 lb bag: $2.99\n- Kroger Peeled Garlic, 6 oz: $2.99\n- ROTEL Diced Tomatoes and Green Chilies, 10 oz: $1.33\n- Organic Ginger Root, 1 lb: $3.49\n- Kroger Long Grain Rice, 5 lb: $3.79\n- Kroger Crushed Tomatoes in Puree, 28 oz: $1.89\n\nEach item is quantity 1, so each line total equals its price.\n\n**Total: $21.26. Left: $13.74** of the $35.00 budget.\n\n**Protein for the week:** 297 g, which is 42 g per day. The butter, garlic, ROTEL and ginger have no protein label, so they aren't counted.\n\n**Not priced:** I couldn't find cumin seeds, black mustard seeds or turmeric powder at Kroger. The cumin and turmeric results were hair-care products and supplements, and there were no mustard seed results. Salt and pepper aren't priced either.",
+  "checks": {
+   "1 within budget": true,
+   "2 total + items match": true,
+   "3 every $ from a tool": true,
+   "4 diet respected": true,
+   "5 pages real": true
+  },
+  "cost": 0.02913066
+ },
+ {
+  "case": "vegetarian, no soy, I need protein",
+  "answer": "**Recipes (vegetarian, no soy)**\n- **Dal, p.35:** per serving (4 servings), 381 kcal, 24 g protein, 65 g carbs, 11 g fiber, 4 g sugar.\n- **Chana Masala, p.92:** per serving (2 servings), 403 kcal, 20 g protein, 65 g carbs, 19 g fiber, 15 g sugar. I used butter instead of ghee.\n\n**Shopping list**\n- La Preferida Lentils, 16 oz: $1.49\n- Kroger Salted Butter, 16 oz: $3.29\n- Jumbo Yellow Onions, 1 lb: $1.19\n- Kroger Peeled Garlic, 6 oz: $2.99\n- Organic Ginger Root, 1 lb: $3.49\n- Kroger Mustard Seed Shaker, 2.62 oz: $2.49\n- Kroger Garbanzo Beans, 15.5 oz, 2 cans at $1.00: $2.00\n- Kroger Crushed Tomatoes in Puree, 28 oz: $1.89\n- Spice Islands Garam Masala, 3 oz: $5.49\n\n**Total: $24.32. Left: $0.68** (budget $25.00).\n\n**Protein:** the week's total is 187 g, which is 27 g per day. Butter, onions, garlic, ginger, mustard seed and garam masala have no protein label, so they aren't counted.\n\n**Not priced:** cumin seeds, turmeric, green chili and jalape\u00f1o, coriander powder, smoked paprika, cayenne, and the salt and pepper. Kroger had no suitable product for these. Cumin and turmeric only showed up as hair-care products and supplements. I skipped the jalape\u00f1o jar ($4.99) because it would put you over budget. I also left out the cilantro and yogurt garnish.",
+  "checks": {
+   "1 within budget": true,
+   "2 total + items match": true,
+   "3 every $ from a tool": true,
+   "4 diet respected": true,
+   "5 pages real": true
+  },
+  "cost": 0.03350765
+ },
+ {
+  "case": "sweet breakfast ideas, I hate oatmeal",
+  "answer": "**Sweet, oatmeal-free week**\n\n**Recipes**\n- Banana Pancakes (p. 18): whole recipe is 1888 kcal, 54 g protein, 371 g carbs, 19 g fiber and 131 g sugar. Servings are unknown, and one line wasn't counted.\n- Peach Coffee Cake (p. 156) is a dessert, but it works as a sweet breakfast. Per serving (12 servings), it's 317 kcal, 3 g protein, 40 g carbs, 1 g fiber and 24 g sugar. One line wasn't counted.\n\n**Buy (Kroger)**\n- Bleached All Purpose Flour, 5 lb: $2.00\n- Light Brown Sugar, 32 oz: $2.00\n- Bananas, 1 lb bunch: $0.55\n- Large White Eggs, 18 ct: $2.65\n- 2% Milk, 1 gal: $3.29\n- Imitation Vanilla, 2 fl oz: $1.99\n- Unsalted Butter, 16 oz: $3.29\n- Canned Sliced Peaches, 15 oz: $1.50\n- Ground Cinnamon, 1.94 oz: $1.25\n- Pure Baking Soda, 1 lb: $1.33\n\nEach line is quantity 1, so each line total equals its price.\n\n**Total: $19.85. Left: $0.15.**\n\n**Not priced:** baking powder, salt and lemon. Kroger had no baking powder in the results, and I didn't price salt or lemon. The canned peaches stand in for the 6 fresh peaches, and one can may be less than the recipe needs.\n\n**Protein:** 578 g for the week, which is 83 g per day. These items had no protein label: brown sugar, bananas, vanilla, butter, peaches, cinnamon and baking soda.",
+  "checks": {
+   "1 within budget": true,
+   "2 total + items match": true,
+   "3 every $ from a tool": true,
+   "4 diet respected": true,
+   "5 pages real": true
+  },
+  "cost": 0.03415591
+ }
+]

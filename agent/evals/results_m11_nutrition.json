@@ -1,0 +1,122 @@
+[
+ {
+  "case": "I'm broke till Friday, no peanuts, tired of rice, want something warm",
+  "answer": "**Recipes (both warm, no rice, no peanuts)**\n- Dal, p. 35 (makes 4)\n- My Dad's Baked Beans, p. 100 (makes 2)\n\n**Shopping list**\n- La Preferida Lentils, 16 oz: $1.49\n- Jumbo Yellow Onions, 1 lb: $1.19\n- Kroger Salted Butter, 16 oz: $3.29\n- Kroger Mustard Seed Shaker, 2.62 oz: $2.49\n- Kroger Peeled Garlic, 6 oz: $2.99\n- Organic Ginger Root, 1 lb: $3.49\n- Kroger Brown Sugar Hickory Baked Beans, 28 oz, 2 \u00d7 $2.59: $5.18\n- Kroger Yellow Mustard, 8 oz: $0.99\n- Kroger Light Brown Sugar, 32 oz: $2.00\n- La Costena Chipotle Sauce, 7.76 oz: $1.39\n\n**Total: $24.50. Left: $0.50.**\n\n**Protein:** 198 g for the week, which is 28 g per day. Only the lentils (126 g) and the baked beans (72 g) had labels. The other items had no label: onion, butter, mustard seed, garlic, ginger, yellow mustard, brown sugar and chipotle sauce.\n\n**Unpriced:**\n- Cumin seeds and turmeric: Kroger only showed hair-care products and capsules for these.\n- Green chili.\n- Salt and pepper.\n\nDal is only $0.60 a serving in the cookbook, so check your pantry for the unpriced spices.",
+  "checks": {
+   "1 within budget": true,
+   "2 total + items match": true,
+   "3 every $ from a tool": true,
+   "4 diet respected": true,
+   "5 pages real": true
+  },
+  "cost": 0.0312864
+ },
+ {
+  "case": "vegetarian, $20 for the week, I like spicy food",
+  "answer": "**Recipes:** Dal (p. 35), Spicy Green Beans (p. 59), Rainbow Rice (p. 144, plain rice).\n\n**Buy (each is 1 unit):**\n- La Preferida Lentils, 16 oz: $1.49\n- Jumbo Yellow Onions, 1 lb: $1.19\n- Kroger Peeled Garlic, 6 oz: $2.99\n- ROTEL Diced Tomatoes & Green Chilies, 10 oz: $1.33\n- Kroger Cut Green Beans, 14.5 oz: $0.89\n- Kroger Canola Oil, 48 fl oz: $3.99\n- Kroger Less Sodium Soy Sauce, 15 fl oz: $2.19\n- Huy Fong Sambal Oelek, 8 oz: $2.49\n- Kroger Enriched Long Grain White Rice, 32 oz: $1.89\n\n**Total: $18.45. Left: $1.55.**\n\n**Protein:** 220 g for the week, which is 31 g per day. Onions, garlic, ROTEL, oil and sambal had no label, so they aren't counted.\n\n**Not priced:** I left these out to stay in budget. Butter would cost $3.29 and wouldn't fit.\n- Butter\n- Cumin seeds\n- Black mustard seeds (none found at Kroger)\n- Turmeric powder (only supplement capsules found)\n- Fresh ginger\n- Lemon\n- Salt and pepper\n\nYou can use the sambal for the Dal's heat in place of fresh chili, and add oil in place of butter.",
+  "checks": {
+   "1 within budget": true,
+   "2 total + items match": true,
+   "3 every $ from a tool": true,
+   "4 diet respected": true,
+   "5 pages real": true
+  },
+  "cost": 0.028973640000000002
+ },
+ {
+  "case": "dairy-free, cheap breakfasts and dinners",
+  "answer": "**Recipes (all dairy-free)**\n- Berry Oatmeal, p. 29\n- Coconut and Lime Oatmeal, p. 29\n- My Dad's Baked Beans, p. 100 (its listed allergens are egg and wheat, not dairy)\n\n**Shopping list**\n- Simple Truth Rolled Oats, 18 oz: $3.69\n- Cape Cod Frozen Cranberries, 16 oz: $3.99\n- Kroger Light Brown Sugar, 32 oz: $2.00. It stands in for the sugar in both oatmeals and the beans.\n- Kroger Sweetened Coconut Flakes, 14 oz: $3.59\n- ReaLime Lime Juice, 15 oz: $2.50\n- Kroger Brown Sugar Hickory Baked Beans, 28 oz: $2.59 \u00d7 2 = $5.18\n- Kroger Yellow Mustard, 8 oz: $0.99\n\n**Total: $21.94. Budget $30.00. Left: $8.06.**\n\n**Protein:** 150 g for the week, which is 21 g per day. Four items had no label, so their protein isn't counted: cranberries, brown sugar, lime juice and mustard.\n\n**Not priced:** chipotle en adobo. Kroger had no result, so use any chili sauce you already have. The recipe's molasses is covered by the brown sugar.",
+  "checks": {
+   "1 within budget": true,
+   "2 total + items match": true,
+   "3 every $ from a tool": true,
+   "4 diet respected": true,
+   "5 pages real": true
+  },
+  "cost": 0.023246259999999998
+ },
+ {
+  "case": "I have a nut allergy, need lunches I can carry to class",
+  "answer": "**Recipes (none list nuts):** Deviled Eggs (p. 130) and Corn Soup (p. 36). Both travel well, and the soup can go in a thermos.\n\n**Shopping list**\n- Kroger Grade A Large White Eggs, 18 ct, $2.65 \u00d7 1 = $2.65\n- Kroger Real Mayo, 30 fl oz, $3.99 \u00d7 1 = $3.99\n- Kroger Original Yellow Mustard, 8 oz, $0.99 \u00d7 1 = $0.99\n- Smart Way Whole Kernel Sweet Golden Corn, 15.25 oz, $0.69 \u00d7 3 = $2.07\n- Kroger Salted Butter Sticks, 16 oz, $3.29 \u00d7 1 = $3.29\n- Jumbo Yellow Onions, 1 lb, $1.19 \u00d7 1 = $1.19\n- Fresh Large Green Bell Pepper, $0.89 \u00d7 1 = $0.89\n- Kroger Russet Potatoes, 5 lb, $2.79 \u00d7 1 = $2.79\n- Kroger Peeled Garlic, 6 oz, $2.99 \u00d7 1 = $2.99\n- Kroger Fat Free Vegetable Broth, 32 oz, $1.49 \u00d7 1 = $1.49\n\n**Total: $22.34. Left: $2.66.**\n\n**Protein:** 426 g for the week, which is 61 g per day. Only the eggs, corn and potatoes have labels. The mayo, mustard, butter, onion, pepper, garlic and broth have no label, so they aren't counted.\n\n**Not priced:** I dropped the celery ($3.00) because the full list came to $25.34, which is $0.34 over budget. The soup will be missing it. Salt, pepper and flour or cornmeal weren't in the Kroger results, so they aren't priced either.",
+  "checks": {
+   "1 within budget": true,
+   "2 total + items match": true,
+   "3 every $ from a tool": true,
+   "4 diet respected": true,
+   "5 pages real": true
+  },
+  "cost": 0.04255426
+ },
+ {
+  "case": "gluten free please, something filling",
+  "answer": "**Recipes (both gluten-free)**\n- And Mine (beans), p. 101\n- Vegetable Quiche, Hold the Crust, p. 114\n\nI skipped Shrimp and Grits (p. 116). Kroger had no grits in the search results.\n\n**Shopping list**\n- Kroger Pinto Beans, 4 lb: $4.49\n- Kroger Crushed Tomatoes in Puree, 28 oz: $1.89\n- Smart Way Yellow Mustard, 8 oz: $0.75\n- Kroger Yellow Onion, 3 lb bag: $2.99\n- Green bell pepper \u00d7 2 (the quiche vegetables): $0.89 each, $1.78 total\n- Kroger Large Eggs, 18 ct: $2.65\n- Kroger 2% Milk, 1 gal: $3.29\n- Kroger Sharp Cheddar block, 16 oz: $3.69\n\n**Total: $21.53. Left: $8.47** of the $30 budget.\n\n**Protein:** 648 g for the week, which is 93 g per day. The mustard and bell peppers had no label, so they aren't counted.\n\n**Not priced:**\n- Molasses or brown sugar. Kroger only showed granulated sugar, which isn't a match.\n- Chipotle or chili sauce\n- Butter\n- Salt and pepper\n\nYou have $8.47 left to cover these.",
+  "checks": {
+   "1 within budget": true,
+   "2 total + items match": true,
+   "3 every $ from a tool": true,
+   "4 diet respected": true,
+   "5 pages real": true
+  },
+  "cost": 0.027489839999999998
+ },
+ {
+  "case": "cheapest possible week of dinners, I eat anything",
+  "answer": "**Recipes**\n- Dal, p. 35. It serves four.\n- Rainbow Rice (green rice), p. 144. It serves two.\n\n**Shopping list**\n- La Preferida Lentils (Dry), 16 oz: $1.49 \u00d7 1 = $1.49\n- Jumbo Yellow Onions, 1 lb: $1.19 \u00d7 1 = $1.19\n- Kroger Enriched Long Grain White Rice, 32 oz: $1.89 \u00d7 1 = $1.89\n- Kroger Frozen Spinach Chopped, 12 oz: $1.50 \u00d7 1 = $1.50\n\n**Total: $6.07. Left from the $15.00 budget: $8.93.**\n\n**Protein:** 194 g for the week, which is 28 g per day. The onions had no label, so their protein isn't counted.\n\n**Not priced:** butter, cumin seeds, mustard seeds, turmeric, garlic, green chili, ginger, salt and pepper. The Kroger search returned no usable cumin, because the results were hair and skin products. Butter ($3.29), garlic ($2.99) and ginger ($3.49) were listed but I left them off to keep the list cheapest. Adding all three would bring the total to $15.84, over budget. Two of them would fit.",
+  "checks": {
+   "1 within budget": true,
+   "2 total + items match": true,
+   "3 every $ from a tool": false,
+   "4 diet respected": true,
+   "5 pages real": true
+  },
+  "cost": 0.024159860000000002
+ },
+ {
+  "case": "I can't eat shellfish or eggs, want some comfort food",
+  "answer": "**Recipes (no egg or shellfish):**\n- Deconstructed Cabbage Rolls, p. 109\n- Dal, p. 35\n\nI skipped Black-Eyed Peas and Collards. Its details list egg because of the scones.\n\n**Shopping list:**\n- Jimmy Dean Turkey Sausage, 16 oz: $2.99\n- Green Cabbage, 1 lb, 2 \u00d7 $0.89: $1.78\n- Kroger Long Grain White Rice, 32 oz: $1.89\n- La Preferida Dry Lentils, 16 oz, 2 \u00d7 $1.49: $2.98\n- Kroger Crushed Tomatoes in Puree, 28 oz: $1.89\n- Kroger Yellow Onion, 3 lb bag: $2.99\n- Kroger Peeled Garlic, 6 oz: $2.99\n- Kroger Salted Butter, 16 oz: $3.29\n- Kroger Mustard Seed Shaker, 2.62 oz: $2.49\n\n**Total: $23.29. Left: $1.71.**\n\n**Protein:** 411 g for the week, which is 59 g per day. Green cabbage, garlic, butter and mustard seed have no label, so they aren't counted.\n\n**Unpriced:**\n- Cumin seeds, turmeric, green chili: Kroger only returned non-food items (hair and skin products, supplements, burritos), so I left them out.\n- Ginger: I dropped it to stay within budget.\n- Salt and pepper.",
+  "checks": {
+   "1 within budget": true,
+   "2 total + items match": true,
+   "3 every $ from a tool": true,
+   "4 diet respected": true,
+   "5 pages real": true
+  },
+  "cost": 0.0297736
+ },
+ {
+  "case": "I want to meal prep on Sunday for the whole week",
+  "answer": "**Sunday meal prep (3 recipes):**\n- Dal, p. 35\n- Rainbow Rice (red, with tomatoes), p. 144\n- My Dad's Baked Beans, p. 100\n\n**Shopping list:**\n- La Preferida Lentils, 16 oz: $1.49\n- Kroger Salted Butter, 16 oz: $3.29\n- Jumbo Yellow Onion, 1 lb: $1.19\n- Kroger Mustard Seed, 2.62 oz: $2.49\n- Kroger Peeled Garlic, 6 oz: $2.99\n- ROTEL Tomatoes with Green Chilies, 10 oz: $1.33\n- Organic Ginger Root, 1 lb: $3.49\n- Kroger Long Grain White Rice, 32 oz: $1.89\n- Kroger Petite Diced Tomatoes, 28 oz: $1.89\n- Kroger Brown Sugar Hickory Baked Beans, 28 oz, 2 \u00d7 $2.59: $5.18\n- Kroger Yellow Mustard, 8 oz: $0.99\n- Kroger Chipotle Peppers in Adobo, 7 oz: $1.39\n\n**Total: $27.61. Left: $7.39** (budget $35.00).\n\n**Protein:** 262 g for the week, or 37 g per day. Eight items have no protein label: butter, onion, mustard seed, garlic, ROTEL, ginger, yellow mustard and chipotle.\n\n**Not priced:**\n- Cumin seeds: Kroger only returned hair and skin products.\n- Turmeric powder: Kroger only returned capsules.\n- Molasses or brown sugar: Kroger only returned granulated sugar.\n- Salt and pepper.",
+  "checks": {
+   "1 within budget": true,
+   "2 total + items match": true,
+   "3 every $ from a tool": true,
+   "4 diet respected": true,
+   "5 pages real": true
+  },
+  "cost": 0.031535839999999996
+ },
+ {
+  "case": "vegetarian, no soy, I need protein",
+  "answer": "**Recipes (both vegetarian, no soy):** Dal (p. 35) and My Dad's Baked Beans (p. 100).\n\n**Shopping list**\n- La Preferida Lentils, 16 oz: $1.49\n- Kroger Salted Butter, 16 oz: $3.29\n- Jumbo Yellow Onion, 1 lb: $1.19\n- Kroger Peeled Garlic, 6 oz: $2.99\n- Organic Ginger Root, 1 lb: $3.49\n- ROTEL Tomatoes and Green Chilies, 10 oz: $1.33\n- Kroger Brown Sugar Hickory Baked Beans, 28 oz, 2 \u00d7 $2.59: $5.18\n- Smart Way Yellow Mustard, 8 oz: $0.75\n- Kroger Light Brown Sugar, 32 oz: $2.00\n\n**Total: $21.71. Left: $3.29** (budget $25.00).\n\n**Protein:** 198 g for the week, which is 28 g per day. Only the lentils (126 g) and baked beans (72 g) have labels. The other items have no label, so they aren't counted.\n\n**Not priced:** cumin seeds, black mustard seeds, turmeric, salt and pepper, and chipotle or chili sauce. None of these came up in the Kroger search.\n\nDal contains milk (from the butter). The baked beans recipe lists egg and wheat as allergens.",
+  "checks": {
+   "1 within budget": true,
+   "2 total + items match": true,
+   "3 every $ from a tool": true,
+   "4 diet respected": true,
+   "5 pages real": true
+  },
+  "cost": 0.024165
+ },
+ {
+  "case": "sweet breakfast ideas, I hate oatmeal",
+  "answer": "",
+  "checks": {
+   "1 within budget": false,
+   "2 total + items match": false,
+   "3 every $ from a tool": false,
+   "4 diet respected": false,
+   "5 pages real": false
+  },
+  "cost": 0.0
+ }
+]

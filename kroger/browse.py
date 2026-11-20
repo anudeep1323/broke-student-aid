@@ -71,6 +71,22 @@ def get_products(headers, params, tries=4):
     raise RuntimeError(f"Kroger products failed: HTTP {r.status_code} for {params.get('filter.term')!r}")
 
 
+LABEL = {"Protein": "protein_g", "Calories": "calories", "Total Carbohydrate": "carbs_g", "Dietary Fiber": "fiber_g",
+         "Sugar": "sugar_g"}   # US label units: g, kcal, g
+
+
+def nutrition(product):
+    """Nutrition for the WHOLE package from Kroger's label: per-serving value x servings per package (code, not a guess).
+    Returns None when the label is missing (5 of 30 products in our check)."""
+    info = (product.get("nutritionInformation") or [{}])[0]
+    servings = (info.get("servingsPerPackage") or {}).get("value")
+    per_serving = {LABEL[n["displayName"]]: n.get("quantity") for n in info.get("nutrients", [])
+                   if n.get("displayName") in LABEL and n.get("quantity") is not None}
+    if not servings or "protein_g" not in per_serving:
+        return None
+    return {k: round(v * servings) for k, v in per_serving.items()} | {"servings": servings}
+
+
 def browse(headers, location_id, term, limit=10):
     """Real products for one search word at one store, with best price and unit price, cheapest per unit first."""
     data = get_products(headers, {"filter.term": term, "filter.locationId": location_id, "filter.limit": limit})
@@ -83,6 +99,7 @@ def browse(headers, location_id, term, limit=10):
             continue                                            # not sold at this store
         rows.append({"name": p["description"], "size": item.get("size", ""), "regular": price.get("regular"),
                      "promo": price.get("promo") or None, "best": best, "sizes": parse_size(item.get("size")),
+                     "nutrition": nutrition(p),
                      "product_id": p["productId"]})
     # one unit for the whole list: the family most single-size products use (eggs -> each, beans -> lb)
     common = Counter(f for r in rows if len(r["sizes"]) == 1 for f in r["sizes"]).most_common(1)

@@ -651,3 +651,183 @@ Agent baseline, second try ($0.571 for 10 cases):
 | cost / time per answer | **$0.057** (range $0.045-0.070), ~35 s (27-44 s) |
 
 Charter targets: quality met (10/10); cost $0.057 vs target $0.05; time ~35 s vs target 30 s -> M7.
+
+### M7 lever B: Sonnet 5.5 as the planner (PLAN_MODEL setting, 2026-11-18, eval $0.281)
+
+| | Opus planner (baseline) | Sonnet planner |
+|---|---|---|
+| all 5 checks | 10/10 | 6/10 |
+| $ per answer | 0.057 | **0.028** (-51%) |
+| time per answer | ~35 s | ~30.5 s (21-45 s) |
+
+The 4 failures, read one by one:
+- 3x "made up $": Sonnet MULTIPLIED in its head ("2 cans at $2.59 each: $5.18", "$0.69 each, $1.38 total").
+  The arithmetic is right, but it breaks the rule "code does the math"; check_budget only takes a flat price list, so line subtotals
+  had nowhere to come from. Opus avoided this; Sonnet doesn't. Fix in the TOOL (model-agnostic): check_budget takes quantities and returns line totals.
+- 1x "diet violated": an EVAL bug. Sonnet wrote "I skipped Black-Eyed Peas and Collards ... showed egg"; the eval counted any
+  mentioned title as recommended. Fix: a recipe counts as recommended only if its page is cited too.
+Also seen: Sonnet recommended "And Mine (p.101)", a title fragment from extraction (the Baked Beans variation), = card-quality debt.
+
+### M7 done: Sonnet planner + check_budget with quantities (2026-11-18, eval $0.289)
+
+Fixes: check_budget(items=[{name, price, quantity}]) returns line totals computed by code (2 x $2.59 = $5.18);
+planner told to quote them; eval counts a recipe as recommended only if its page is cited (title alone = "I skipped X").
+
+| | Opus planner (baseline) | Sonnet v1 | **Sonnet v2 (fixed tool + eval)** | Charter target |
+|---|---|---|---|---|
+| all 5 checks | 10/10 | 6/10 | **10/10** | 10/10 |
+| $ per answer | 0.057 | 0.028 | **0.029** | <= 0.05 |
+| time per answer | ~35 s | ~30.5 s | **~27.8 s** (17-35 s) | < 30 s |
+
+Default planner is now claude-sonnet-5-5 (PLAN_MODEL env var switches back to Opus).
+Lessons: the cheaper model exposed a tool-design gap (no way to get code-computed line totals) that Opus papered over;
+fixing the tool, not the prompt, made the cheap model pass. Two of the four v1 "failures" were real, one was an eval bug, and
+the eval was fixed only where it was provably wrong (Sonnet wrote "I skipped ...").
+Caveats: one run of 10 cases (1 case = 10 points); Opus not re-run with the new tool; card-quality debt: "And Mine (p.101)" title fragment.
+
+## M8: the agent in Streamlit (DRAFT, before code)
+
+```mermaid
+flowchart LR
+    SB["sidebar fields (code, no LLM):<br/>ZIP (5 digits -> nearest Kroger)<br/>weekly budget"] --> ASK
+    ASK["tab 'Ask': chat box<br/>'broke till Friday, no peanuts...'"] -->|"app.invoke(sentence, location_id, budget)<br/>Haiku gathers -> Sonnet decides + writes"| ANS["answer (every $ escaped: Streamlit reads $..$ as math)"]
+    ANS --> PH["recipe photos: cards whose title AND page<br/>appear in the answer (same rule as the eval)"]
+    ANS --> HOW["expander 'how I got this':<br/>tool calls, $ and seconds"]
+    SB --> BR["tab 'Browse': screen 1 as before<br/>(search, tick, basket, basket recipes)"]
+```
+Each chat message is one fresh agent run (no follow-up memory yet).
+
+### M8 done: the agent in Streamlit (app.py, 2026-11-18)
+
+Layout: sidebar = ZIP (checked by code -> Kroger On the Rhine) + budget; tab "Ask" = chat with the agent; tab "Browse Kroger" = screen 1.
+Browser test (new sentence, not in the eval): ZIP 45202, $25, "vegetarian, no peanuts, I want something spicy I can eat all week"
+-> Dal p.35 + Spicy Green Beans p.59 with their cookbook photos, 9 Kroger items, total $23.57 (hand check: correct), $1.43 left,
+no $ display bug (every $ escaped), "How I got this": 7 tool calls, $0.031, 30 s.
+Photos: only recipes whose title AND page are in the answer (same rule as the agent eval). Each message = one fresh agent run.
+
+### M11 research: where nutrition comes from (2026-11-19, $0, nothing invented)
+
+| Source | What it has | Checked |
+|---|---|---|
+| **Kroger product API** (same call we already make) | `nutritionInformation`: serving size, servings per package, 15-22 nutrients (protein, calories, fat, fiber, sodium...), ingredient statement; `allergens` with "Contains" / "Free from" / "May contain" | protein on 25 of 30 products (lentils, eggs, beans, rice, chicken, zucchini); missing on 5 (e.g. Bush's beans, zucchini trays) |
+| USDA FoodData Central (key in .env) | generic foods per 100 g ("lentils, raw") | returned HTTP 502 today (worked on 2026-11-17) |
+| Open Food Facts (by UPC) | branded products | Kroger lentils UPC 0001111089654: not found |
+
+Note: printing only allergen NAMES looked alarming (rice listing "fish, peanuts"); the entries carry levelOfContainmentName and most say "Free from".
+Idea: protein per package = protein per serving x servings per package (e.g. 18 eggs x 6 g = 108 g), computed by code from Kroger's own label data.
+
+### M11: nutrition from Kroger labels (picked A over USDA per recipe, DRAFT)
+
+```mermaid
+flowchart LR
+    K["Kroger product (same call as prices)<br/>label: protein/serving, servings/package"] -->|"browse.py: code multiplies<br/>9 g x 13 servings = 117 g per bag"| R["product row + nutrition"]
+    R -->|"search_kroger shows protein per package<br/>+ protein per $ (code)"| P["planner (Sonnet)"]
+    T["sidebar toggle 'High protein'<br/>(state, not chat)"] --> P
+    P -->|"check_budget(items)"| C["code: total $, AND total protein /<br/>calories / fiber for the week, per day"]
+    C --> A["answer: '$23.40, 312 g protein (45 g/day)'<br/>numbers only from check_budget"]
+```
+
+### M11 built: nutrition from Kroger labels + high-protein toggle (2026-11-19)
+
+browse.py nutrition(): label per-serving x servings per package (12/12 products in the test; dry lentils 126 g protein for $1.49 = 85 g/$, canned 19 g/$).
+search_kroger shows protein_g + protein_per_dollar; check_budget adds protein / calories / fiber for the week + protein per day + "no_label" items.
+Sidebar toggle "High protein" -> state.high_protein -> planner prompt (favour protein per $, aim >= 60 g/day).
+Same request ("vegetarian, cheap dinners for the week", $25): OFF 2 recipes, $16.74, 33 g/day; ON 3 recipes, $22.61, 69 g/day.
+Component evals unchanged. Agent eval 8/10 ($0.263):
+- "cheapest dinners": Sonnet wrote "adding butter, garlic and ginger would bring the total to $15.84" = a what-if sum done in its head (rule break; fix: what-if totals must come from check_budget too).
+- "sweet breakfast": CRASHED with HTTP 400 "Your credit balance is too low to access the Anthropic API" = billing, not code. All paid runs blocked until credits are added.
+Recipes per answer: 2-3 pages cited in every completed case (M10 lead: "only one recipe" not reproduced by the eval sentences).
+
+### M11b design: recipe nutrition from USDA (2026-11-19)
+
+Facts checked first: USDA key works (FDC_API_KEY, "Lentils, raw" per 100 g: 352 kcal, 24.6 g protein, 63.4 g carbs, 10.7 g fiber, 2.03 g sugar).
+Kroger labels (39 products): Protein 37, Total Carbohydrate 36, Dietary Fiber 36, Calories 37, Sugar 36 -> all 5 available for groceries too.
+
+```mermaid
+flowchart LR
+    C["95 recipe cards<br/>'4 eggs', '1 cup dry lentils'"] -->|"code parses amount + unit + food<br/>WHY: USDA has portions (1 cup lentils = 192 g);<br/>rejected: Haiku for grams. Salt/pepper/spices = 0"| G["ingredient grams"]
+    G -->|"USDA search (Foundation / SR Legacy)<br/>WHY: per-100 g lab data, free; rejected: Claude guessing = made-up numbers"| U["per 100 g: kcal, protein,<br/>carbs, fiber, sugar"]
+    U -->|"code: grams/100 x value, sum lines,<br/>divide by servings ('makes')"| N["card.nutrition per serving<br/>(saved in the card JSON, done once)"]
+    N --> T["find_recipes shows it; toggles<br/>(high protein, low sugar) filter/rank by code"]
+    K["Kroger labels: + carbs, sugar<br/>(already on 36/39 products)"] --> B["check_budget: week totals for all 5"]
+```
+
+### M11b built: recipe nutrition, code + USDA, no LLM (2026-11-19)
+
+recipes_rag/nutrition.py + usda_foods.py (87 hand-checked pattern -> exact USDA SR Legacy name) -> data/nutrition.json. 4 min first run, then cached.
+
+| | Run 1: USDA search top hit | Run 2: hand list (usda_foods.py) |
+|---|---|---|
+| lines counted | 322 | 392 |
+| missed | 328 | 230 (146 have no amount, 46 not in list, 38 no matching portion) |
+| wrong matches | "2 eggs -> Bagels, egg", "½ cup milk -> Crackers, milk", "1 medium onion = 14 g" | none in a 14-line spot check |
+
+Lesson: search ranks by word overlap ("egg" is in "Bagels, egg"); a hand-checked list of 87 foods beats fuzzy search when the vocabulary is small.
+Gotcha: USDA search returns HTTP 400 on ( ) % / in the query -> strip punctuation, still demand the exact name.
+Examples: Dal (p.35) per serving 381 kcal, 24 g protein, 65 g carbs, 11 g fiber, 4 g sugar. Omelette (p.17) 126 kcal, 11 g protein.
+Servings known for 55/95 recipes ("makes" is empty on the rest) -> those get whole-recipe totals only.
+
+### M11c design: recipe + grocery nutrition into the agent (2026-11-19)
+
+```mermaid
+flowchart LR
+    N["data/nutrition.json<br/>(USDA, per serving or per recipe)"] -->|"search.py load_cards merges by page|title<br/>WHY: one card object everywhere; rejected: a 6th tool (more calls)"| S["card.nutrition"]
+    S -->|"card_summary adds it<br/>(find_recipes, recipes_for_basket, recipe_details)"| P["planner (Sonnet)"]
+    K["Kroger label: + carbs, sugar"] -->|"check_budget sums all 5 for the week"| P
+    T["High protein toggle"] -->|"prefer recipes with more protein per serving"| P
+    P --> A["answer: each recipe's kcal / protein / carbs / fiber / sugar per serving<br/>+ the week's groceries totals (numbers only from tools)"]
+```
+
+### M11c built (2026-11-19)
+Tools now return nutrition: find_recipes("warm lentil soup") -> Dal p.35 381 kcal / 24 g protein / 65 g carbs / 11 g fiber / 4 g sugar per serving (0 lines uncounted).
+check_budget(2 x lentils $1.25) -> week 700 kcal, 48 g protein, 132 g carbs, 20 g fiber, 8 g sugar. Planner rule added: what-if totals only from check_budget.
+Component evals unchanged (34/34, 75% -> 95%, allergen 55/55, rules 8/8). Live agent run: blocked, HTTP 400 credit balance too low.
+
+### M13 design: protein goal slider (2026-11-19)
+
+```mermaid
+flowchart LR
+    S["sidebar slider<br/>Protein goal 0-150 g/day (0 = no goal)"] -->|"state.protein_goal (number, not chat)<br/>WHY: a number the student sets, checked by code;<br/>rejected: on/off toggle (no target), typing it in chat (AI could misread)"| P["planner (Sonnet)"]
+    P -->|"check_budget(items)"| C["code: protein_g_per_day vs goal<br/>-> 'goal_met', 'protein_short_g_per_day'"]
+    C -->|"short and money left?<br/>swap/add high protein-per-$ items, check again"| P
+    C --> A["answer: '62 of 80 g/day' exactly as check_budget said"]
+```
+
+### M13 built (2026-11-19)
+Slider 0-150 g/day -> state.protein_goal -> check_budget adds protein_goal_g_per_day, goal_met, protein_short_g_per_day (code).
+Same question in the app ("vegetarian, cheap dinners for the week, I want to build muscle", $25):
+
+| | toggle ON (before) | goal 80 g/day (after) |
+|---|---|---|
+| protein per day | 40 g (goal not mentioned) | 83 g, "goal met" |
+| lentil bags | 1 | 4, + 3 cans chickpeas |
+| total / left | $19.46 / $5.54 | $24.60 / $0.40 |
+
+### M14 design: click a recipe -> full recipe pop-up (2026-11-19)
+
+```mermaid
+flowchart LR
+    A["answer cites Dal p.35, Rainbow Rice p.144"] -->|"cited_recipes(): title AND page cited (same rule as eval)"| C["recipe cards under the answer<br/>photo + title + protein + 'View recipe' button"]
+    C -->|"click -> st.dialog pop-up<br/>WHY: opens over the chat, chat stays put;<br/>rejected: expander (pushes the chat down)"| D["full card from search.cards (page + title)<br/>big photo, nutrition tiles, ingredients, steps"]
+```
+No LLM call: the pop-up reads the saved card, so opening a recipe is free and instant.
+
+### M14 built (2026-11-19)
+app.py: recipe_cards() under each answer (photo, title, kcal + protein, "View recipe") -> show_recipe() st.dialog pop-up
+(photo beside 5 nutrition tiles, ingredients left, steps right). Reads the saved card: $0, no LLM call.
+Checked in the browser: Dal p.35 and Spinach and Chickpea p.73 open with photo, nutrition, ingredients, steps.
+First try: photo full width filled the pop-up -> moved beside the numbers.
+
+### M11 finished: 2 small fixes, agent eval back to 10/10 (2026-11-19)
+- "And Mine" (p.101) = the author's own baked beans after her dad's (p.100) -> TITLE_FIXES in search.py -> "Baked Beans from Scratch".
+  Its nutrition missed the beans (pinto not in usda_foods.py): 82 kcal / 1 g protein -> 446 kcal / 24 g protein per serving after adding pinto + kidney.
+- Planner: quantity > 1 is written "$1.09 x 2 = $2.18".
+- Also since the last eval: Browse groups each food (best value + "see N more"), quick-pick staples, recipe pop-up, protein slider.
+Agent eval m14_fixes: 10/10 on all 5 checks, $0.0334 per answer, ~27 s.
+
+| eval run | all 5 checks | $ per answer |
+|---|---|---|
+| m11_nutrition | 8/10 (credits ran out + what-if total) | $0.026 |
+| m11c_nutrition | 9/10 (menu card with same title) | $0.032 |
+| m11d_cookable | 9/10 (unit price missing for qty 2) | $0.032 |
+| m14_fixes | 10/10 | $0.033 |

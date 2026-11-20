@@ -1,10 +1,11 @@
 """Agent piece 4: Haiku 5.5 gathers facts (fetching jobs), Opus 5.5 decides and writes (judgment jobs).
 
 gatherer (Haiku) <-> gather tools ... --DONE--> planner (Opus) <-> check_budget ... --> answer --> END
-Usage: python3 -I agent/graph.py 45202 25 "I'm broke till Friday, no peanuts, tired of rice, want something warm"
+Usage: python3 -I agent/graph.py 45202 25 "I'm broke till Friday, no peanuts, tired of rice, want something warm" [protein_goal_g_per_day]
 """
 import json
 import operator
+import os
 import sys
 import time
 from pathlib import Path
@@ -21,9 +22,11 @@ load_dotenv(Path(__file__).resolve().parent.parent / ".env")
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from tools import check_budget, find_recipes, kroger_headers, recipe_details, search_kroger   # noqa: E402
 
-GATHER_MODEL, PLAN_MODEL = "claude-haiku-5-5", "claude-opus-5-5"
+GATHER_MODEL = "claude-haiku-5-5"
+PLAN_MODEL = os.environ.get("PLAN_MODEL", "claude-sonnet-5-5")   # M7: Sonnet passed 10/10 at half of Opus cost
 PRICES = {  # $ per million tokens: input, output, cache read
-    PLAN_MODEL: (4.00, 20.00, 0.20),
+    "claude-opus-5-5": (4.00, 20.00, 0.20),
+    "claude-sonnet-5-5": (2.00, 10.00, 0.10),
     GATHER_MODEL: (0.10, 0.50, 0.01),
 }
 CACHE = {"type": "ephemeral"}   # top-level auto-caching: repeat calls re-read earlier turns from cache
@@ -39,10 +42,21 @@ Then reply with just DONE."""
 PLAN_SYSTEM = """You plan a week of cheap meals for a broke college student from the facts below
 (their request, cookbook recipes, and real prices at their nearest Kroger).
 - Choose 2-3 recipes and, for each ingredient to buy, ONE Kroger product (cheapest per unit that fits).
-- Total your picks with check_budget (never add yourself); if over budget, drop or swap items and check again.
+- Price your list with check_budget: one item per product with its quantity (2 cans = quantity 2). Never multiply
+  or add yourself; if over budget, drop or swap items and check again. Any total you mention, even a "what if",
+  must come from a check_budget call.
 - Respect allergies and diet. Every price, product and page must come from the facts.
+- Mention ONLY the recipes you chose. Don't list recipes you skipped or couldn't use.
 - Then write the answer, under 150 words: recipes (title + page), what to buy (product, size, price),
-  the total and what's left exactly as check_budget returned it, and anything left unpriced."""
+  each line total, the total and what's left exactly as check_budget returned them, and anything left unpriced.
+  When quantity is more than 1, write the line as 'unit price x quantity = line total' (e.g. '$1.09 x 2 = $2.18').
+- For each recipe give its nutrition exactly as the recipe tools returned it (kcal, protein, carbs, fiber, sugar,
+  per serving; say "whole recipe" when servings are unknown). Never estimate nutrition yourself.
+- Also give the week's protein and protein per day exactly as check_budget returned them (say which items had no label)."""
+PROTEIN_GOAL = ("\nThe student set a PROTEIN GOAL of {goal} g per day. Prefer products with high protein_per_dollar "
+                "(e.g. dry beans, lentils, eggs, tofu) and recipes with the most protein per serving. If check_budget says "
+                "goal_met is false and money is left, add or swap toward high protein_per_dollar items and check again. "
+                "Report protein per day against the goal exactly as check_budget returned it (e.g. '62 of 80 g a day').")
 
 
 class State(TypedDict):
@@ -50,6 +64,7 @@ class State(TypedDict):
     plan_messages: Annotated[list[AnyMessage], add_messages]   # Opus's planning conversation
     location_id: str                                           # nearest Kroger, from the ZIP field (code)
     budget: float                                              # from the budget field
+    protein_goal: int                                          # sidebar slider, g/day, 0 = none (code, not chat)
     tool_calls: Annotated[list[str], operator.add]             # trace for printing
 
 
@@ -83,7 +98,9 @@ def planner(state: State):
         results = [compact(m) for m in state["messages"] if isinstance(m, ToolMessage)]
         new = [HumanMessage(f"Student: {state['messages'][0].content}\nWeekly budget: ${state['budget']}\n\n"
                             "Facts:\n" + "\n".join(results))]
-    reply = plan_llm.invoke([SystemMessage(PLAN_SYSTEM)] + state.get("plan_messages", []) + new, cache_control=CACHE)
+    goal = state.get("protein_goal") or 0
+    system = PLAN_SYSTEM + (PROTEIN_GOAL.format(goal=goal) if goal else "")
+    reply = plan_llm.invoke([SystemMessage(system)] + state.get("plan_messages", []) + new, cache_control=CACHE)
     return {"plan_messages": new + [reply], "tool_calls": [f"[opus] {c['name']}({c['args']})" for c in reply.tool_calls]}
 
 
@@ -134,7 +151,7 @@ if __name__ == "__main__":
     print(f"store: {store} | budget ${budget}\nstudent: {sentence}\n")
     t0 = time.time()
     out = app.invoke({"messages": [HumanMessage(sentence)], "plan_messages": [], "location_id": location_id,
-                      "budget": budget, "tool_calls": []})
+                      "budget": budget, "tool_calls": [], "protein_goal": int(sys.argv[4]) if len(sys.argv) > 4 else 0})
     secs = time.time() - t0
     for i, c in enumerate(out["tool_calls"], 1):
         print(f"tool call {i}: {c[:150]}")

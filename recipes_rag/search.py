@@ -27,6 +27,14 @@ def load_cards():
     cards = []
     for f in sorted(glob.glob(str(DATA / "cards" / "pdf*_haiku.json"))):
         cards += [c for c in json.load(open(f)) if c["kind"] != "section" and c["category"] not in ("tip", "about")]  # food only
+    TITLE_FIXES = {(101, "And Mine"): "Baked Beans from Scratch"}   # p.101 heading only makes sense after p.100
+    facts = json.loads((DATA / "nutrition.json").read_text()) if (DATA / "nutrition.json").exists() else {}
+    for c in cards:   # USDA nutrition computed by code (nutrition.py): per serving if servings known, else whole recipe
+        c["title"] = TITLE_FIXES.get((c["book_page"], c["title"]), c["title"])   # fix first: every file sees one title
+        n = facts.get(f"{c['book_page']}|{c['title']}")
+        c["nutrition"] = None if n is None else (
+            {"per_serving": n["per_serving"], "servings": n["servings"]} if n["per_serving"]
+            else {"whole_recipe": n["total"], "servings": "unknown"}) | {"lines_not_counted": len(n["missed"])}
     return cards
 
 
