@@ -10,7 +10,7 @@ from typing import Annotated
 
 from langchain_core.tools import tool
 from langgraph.prebuilt import InjectedState
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 ROOT = Path(__file__).resolve().parent.parent
 for folder in ("kroger", "grocery", "recipes_rag"):
@@ -148,7 +148,7 @@ class RecipePick(BaseModel):
     """One cookbook recipe in the final plan."""
     title: str        # exact title from the recipe tools
     page: int         # its page
-    batches: int = 1  # how many times the student cooks it this week
+    batches: int = Field(1, ge=1, le=7)   # how many times the student cooks it this week
 
 
 class Plan(BaseModel):
@@ -187,8 +187,32 @@ def submit_plan(plan: Plan, state: Annotated[dict, InjectedState]) -> dict:
         problems.append("no recipes: pick 2-3 from the recipe tools")
     if problems:
         return {"accepted": False, "problems": problems}
-    return {"accepted": True, "recipes": recipes, **priced, "avoid": plan.avoid, "vegetarian": plan.vegetarian,
-            "note": plan.note}
+    return {"accepted": True, "recipes": recipes, **priced, **eaten_nutrition(recipes, state),
+            "avoid": plan.avoid, "vegetarian": plan.vegetarian, "note": plan.note}
+
+
+def eaten_nutrition(recipes, state):
+    """What the student EATS this week: each recipe's USDA totals x batches (not the groceries bought, which include
+    leftovers like a whole bag of sugar). Also servings planned, and the protein goal checked against what's eaten."""
+    week = dict.fromkeys(["calories", "protein_g", "carbs_g", "fiber_g", "sugar_g"], 0)
+    servings, uncounted = 0, []
+    for r in recipes:
+        n = r.get("nutrition")
+        if not n:
+            uncounted.append(r["title"])
+            continue
+        for k in week:
+            week[k] += n["whole_recipe"][k] * r["batches"]
+        if n.get("per") == "serving" and isinstance(n.get("servings"), (int, float)):
+            servings += n["servings"] * r["batches"]     # people servings only (muffins/cups aren't meals)
+    out = {"eaten_week": week, "eaten_per_day": {k: round(v / 7) for k, v in week.items()},
+           "servings_planned": servings, "recipes_without_nutrition": uncounted}
+    goal = state.get("protein_goal") or 0
+    if goal:   # the goal is about what the student eats, so it's checked here, not on the groceries
+        out["protein_goal_g_per_day"] = goal
+        out["goal_met"] = out["eaten_per_day"]["protein_g"] >= goal
+        out["protein_short_g_per_day"] = max(goal - out["eaten_per_day"]["protein_g"], 0)
+    return out
 
 
 TOOLS = [search_kroger, find_recipes, recipes_for_basket, recipe_details, check_budget, submit_plan]

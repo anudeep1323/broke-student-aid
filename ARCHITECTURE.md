@@ -911,3 +911,29 @@ Eval reads plan fields (no regex over prose). App renders tiles, cards, table fr
 | m16_json_plan | 10/10 | $0.030 | - |
 57 unit tests pass (8 new submit_plan cases). Browser: "sweet breakfast, I hate oatmeal" -> $22.98 of $25, 41 g/day, 2 recipes.
 Tiles moved to 2 x 2: 4 in a row cut off the numbers in a narrow window.
+
+### M17 design: nutrition from what you EAT (recipes x batches), not what you BUY (2026-11-20)
+
+| | bought (Kroger labels, today) | eaten (recipes x batches, new) |
+|---|---|---|
+| 5 cans red beans | 140 g protein, all counted | only what the recipes use |
+| 32 oz brown sugar | the whole bag | 2 tbsp |
+
+```mermaid
+flowchart LR
+    P["Plan: Dal p.35 x 2 batches,<br/>Corn Soup p.36 x 1"] -->|"code: recipe total (USDA) x batches<br/>WHY: counts food eaten; rejected: grocery labels (leftovers count as eaten)"| W["week: kcal, protein, carbs, fiber, sugar<br/>/ 7 = per day"]
+    P -->|"servings x batches (recipes that say 'for four')"| M["meals covered: 8 + 4 = 12 servings"]
+    W --> G["protein goal check: eaten g/day vs slider"]
+    L["Kroger labels"] -.->|"kept as a side fact: 'groceries hold X g'"| T["tiles"]
+    W --> T
+    M --> T
+```
+
+### M17 built: nutrition eaten = recipe totals x batches (2026-11-20)
+submit_plan adds eaten_week / eaten_per_day / servings_planned; protein goal checked on eaten. Tiles: protein eaten/day,
+servings planned (Dal x2, Rainbow Rice x2 = 12), kcal eaten/day. Grocery-label protein shown as a side note. 59 tests pass.
+Agent eval m17_eaten: 10/10, $0.036 per answer (was $0.030: the planner now also picks batches).
+What the 10 plans show (eaten vs bought, per day):
+- bought protein is 1.2x-2.8x eaten (gluten free: 98 g bought vs 35 g eaten) -> the old number counted leftovers.
+- eaten 290-1,083 kcal/day; servings planned 4-18 -> plans cover a few meals, not a week of eating (~2,000 kcal/day).
+- "Baked Beans from Scratch" is in 6 of 10 plans.

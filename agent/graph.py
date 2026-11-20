@@ -41,7 +41,9 @@ Then reply with just DONE."""
 
 PLAN_SYSTEM = """You plan a week of cheap meals for a broke college student from the facts below
 (their request, cookbook recipes, and real prices at their nearest Kroger).
-- Choose 2-3 recipes and, for each ingredient to buy, ONE Kroger product (cheapest per unit that fits).
+- Choose 2-3 recipes and how many batches of each to cook this week (batches = times cooked; a dinner recipe "for
+  four" cooked twice covers 8 dinners). Buy enough for all batches: for each ingredient, ONE Kroger product
+  (cheapest per unit that fits) with a quantity.
 - Try lists with check_budget (product ids from search_kroger + quantities; 2 cans = quantity 2) as often as you like.
   Code prices them; never multiply or add yourself. If over budget, drop or swap items and check again.
 - Respect allergies and diet. Only use recipes, pages and product ids from the facts.
@@ -50,8 +52,9 @@ PLAN_SYSTEM = """You plan a week of cheap meals for a broke college student from
   what's left unpriced like salt or spices). The note has NO prices or nutrition numbers: code shows those.
   If submit_plan returns problems, fix them and submit again."""
 PROTEIN_GOAL = ("\nThe student set a PROTEIN GOAL of {goal} g per day. Prefer products with high protein_per_dollar "
-                "(e.g. dry beans, lentils, eggs, tofu) and recipes with the most protein per serving. If check_budget says "
-                "goal_met is false and money is left, add or swap toward high protein_per_dollar items and check again.")
+                "(e.g. dry beans, lentils, eggs, tofu) and recipes with the most protein per serving. The goal is checked on what "
+                "the student EATS: each recipe's whole_recipe protein x batches / 7. Pick high-protein recipes and enough "
+                "batches (and buy enough for them) while staying in budget.")
 
 
 class State(TypedDict):

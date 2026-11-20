@@ -1,0 +1,2092 @@
+[
+ {
+  "case": "I'm broke till Friday, no peanuts, tired of rice, want something warm",
+  "plan": {
+   "accepted": true,
+   "recipes": [
+    {
+     "title": "Corn Soup",
+     "page": 36,
+     "category": "soup",
+     "book_price": "$1.25/serving",
+     "allergens": [
+      "egg",
+      "milk",
+      "wheat"
+     ],
+     "vegetarian": "no",
+     "photo_id": "p37_1",
+     "nutrition": {
+      "per_serving": {
+       "calories": 277,
+       "protein_g": 10,
+       "carbs_g": 54,
+       "fiber_g": 6,
+       "sugar_g": 18
+      },
+      "servings": 4,
+      "per": "serving",
+      "whole_recipe": {
+       "calories": 1107,
+       "protein_g": 38,
+       "carbs_g": 218,
+       "fiber_g": 24,
+       "sugar_g": 74
+      },
+      "lines_not_counted": 2
+     },
+     "batches": 1
+    },
+    {
+     "title": "Baked Beans from Scratch",
+     "page": 101,
+     "category": "dinner",
+     "book_price": null,
+     "allergens": [],
+     "vegetarian": "no",
+     "photo_id": null,
+     "nutrition": {
+      "per_serving": {
+       "calories": 446,
+       "protein_g": 24,
+       "carbs_g": 86,
+       "fiber_g": 25,
+       "sugar_g": 18
+      },
+      "servings": 2,
+      "per": "serving",
+      "whole_recipe": {
+       "calories": 892,
+       "protein_g": 48,
+       "carbs_g": 172,
+       "fiber_g": 50,
+       "sugar_g": 36
+      },
+      "lines_not_counted": 9
+     },
+     "batches": 2
+    }
+   ],
+   "lines": [
+    {
+     "id": "0001111010926",
+     "name": "Smart Way\u2122 Whole Kernel Sweet Golden Corn",
+     "size": "15.25 oz",
+     "price": 0.69,
+     "quantity": 2,
+     "line_total": 1.38,
+     "protein_g": 14
+    },
+    {
+     "id": "0001111089301",
+     "name": "Kroger\u00ae Salted Butter Sticks",
+     "size": "4 sticks / 16 oz",
+     "price": 3.29,
+     "quantity": 1,
+     "line_total": 3.29,
+     "protein_g": null
+    },
+    {
+     "id": "0000000004093",
+     "name": "Jumbo Yellow Onions",
+     "size": "1 lb",
+     "price": 1.19,
+     "quantity": 1,
+     "line_total": 1.19,
+     "protein_g": null
+    },
+    {
+     "id": "0000000004065",
+     "name": "Fresh Large Green Bell Pepper",
+     "size": "1 ct",
+     "price": 0.89,
+     "quantity": 1,
+     "line_total": 0.89,
+     "protein_g": null
+    },
+    {
+     "id": "0001111091760",
+     "name": "Kroger\u00ae Russet Potatoes Bag",
+     "size": "5 lb",
+     "price": 2.79,
+     "quantity": 1,
+     "line_total": 2.79,
+     "protein_g": 45
+    },
+    {
+     "id": "0001111001679",
+     "name": "Kroger\u00ae Peeled Garlic",
+     "size": "6 oz",
+     "price": 2.99,
+     "quantity": 1,
+     "line_total": 2.99,
+     "protein_g": null
+    },
+    {
+     "id": "0001111004968",
+     "name": "Kroger\u00ae Fat Free Vegetable Broth",
+     "size": "32 oz",
+     "price": 1.49,
+     "quantity": 2,
+     "line_total": 2.98,
+     "protein_g": null
+    },
+    {
+     "id": "0001111072565",
+     "name": "Pinto Beans",
+     "size": "15.5 oz",
+     "price": 1,
+     "quantity": 4,
+     "line_total": 4,
+     "protein_g": 96
+    },
+    {
+     "id": "0001111011619",
+     "name": "Kroger Petite Diced Tomatoes",
+     "size": "28 oz",
+     "price": 1.89,
+     "quantity": 1,
+     "line_total": 1.89,
+     "protein_g": 7
+    },
+    {
+     "id": "0001111081237",
+     "name": "Kroger Original Yellow Mustard",
+     "size": "8 oz",
+     "price": 0.99,
+     "quantity": 1,
+     "line_total": 0.99,
+     "protein_g": null
+    },
+    {
+     "id": "0001111085585",
+     "name": "Kroger\u00ae Light Brown Sugar",
+     "size": "32 oz",
+     "price": 2,
+     "quantity": 1,
+     "line_total": 2,
+     "protein_g": null
+    }
+   ],
+   "total": 24.39,
+   "budget": 25.0,
+   "left": 0.61,
+   "within_budget": true,
+   "nutrition_week": {
+    "calories": 3785,
+    "protein_g": 162,
+    "carbs_g": 841,
+    "fiber_g": 123,
+    "sugar_g": 88
+   },
+   "protein_g_per_day": 23,
+   "no_label": [
+    "Kroger\u00ae Salted Butter Sticks",
+    "Jumbo Yellow Onions",
+    "Fresh Large Green Bell Pepper",
+    "Kroger\u00ae Peeled Garlic",
+    "Kroger\u00ae Fat Free Vegetable Broth",
+    "Kroger Original Yellow Mustard",
+    "Kroger\u00ae Light Brown Sugar"
+   ],
+   "eaten_week": {
+    "calories": 2891,
+    "protein_g": 134,
+    "carbs_g": 562,
+    "fiber_g": 124,
+    "sugar_g": 146
+   },
+   "eaten_per_day": {
+    "calories": 413,
+    "protein_g": 19,
+    "carbs_g": 80,
+    "fiber_g": 18,
+    "sugar_g": 21
+   },
+   "servings_planned": 8,
+   "recipes_without_nutrition": [],
+   "avoid": [
+    "peanuts"
+   ],
+   "vegetarian": false,
+   "note": "Two warm, rice-free, peanut-free recipes: a corn soup and a hearty pinto baked beans dish that is cheap and high in protein and fiber. Tip: the soup reheats well, and the beans are good on a baked potato. Not priced or skipped: salt, pepper, optional chili, celery, cornmeal/flour (skipped to save money), and chipotle (not found at Kroger, so use the 'no chipotle' variation). Use the onion for both recipes."
+  },
+  "checks": {
+   "1 within budget": true,
+   "2 plan complete": true,
+   "3 every $ from a tool": true,
+   "4 diet respected": true,
+   "5 pages real": true
+  },
+  "cost": 0.04668116
+ },
+ {
+  "case": "vegetarian, $20 for the week, I like spicy food",
+  "plan": {
+   "accepted": true,
+   "recipes": [
+    {
+     "title": "Dal",
+     "page": 35,
+     "category": "soup",
+     "book_price": "$0.6/serving",
+     "allergens": [
+      "milk"
+     ],
+     "vegetarian": "yes",
+     "photo_id": "p35_2",
+     "nutrition": {
+      "per_serving": {
+       "calories": 381,
+       "protein_g": 24,
+       "carbs_g": 65,
+       "fiber_g": 11,
+       "sugar_g": 4
+      },
+      "servings": 4,
+      "per": "serving",
+      "whole_recipe": {
+       "calories": 1525,
+       "protein_g": 97,
+       "carbs_g": 260,
+       "fiber_g": 44,
+       "sugar_g": 15
+      },
+      "lines_not_counted": 0
+     },
+     "batches": 2
+    },
+    {
+     "title": "Rainbow Rice",
+     "page": 144,
+     "category": "staple",
+     "book_price": "$0.75/serving",
+     "allergens": [],
+     "vegetarian": "yes",
+     "photo_id": "p144_1",
+     "nutrition": {
+      "per_serving": {
+       "calories": 357,
+       "protein_g": 8,
+       "carbs_g": 78,
+       "fiber_g": 3,
+       "sugar_g": 3
+      },
+      "servings": 2,
+      "per": "serving",
+      "whole_recipe": {
+       "calories": 714,
+       "protein_g": 15,
+       "carbs_g": 156,
+       "fiber_g": 7,
+       "sugar_g": 6
+      },
+      "lines_not_counted": 1
+     },
+     "batches": 1
+    }
+   ],
+   "lines": [
+    {
+     "id": "0007152401253",
+     "name": "La Preferida\u00ae Lentils (Dry)",
+     "size": "16 oz",
+     "price": 1.49,
+     "quantity": 2,
+     "line_total": 2.98,
+     "protein_g": 252
+    },
+    {
+     "id": "0001111089301",
+     "name": "Kroger\u00ae Salted Butter Sticks",
+     "size": "4 sticks / 16 oz",
+     "price": 3.29,
+     "quantity": 1,
+     "line_total": 3.29,
+     "protein_g": null
+    },
+    {
+     "id": "0000000004093",
+     "name": "Jumbo Yellow Onions",
+     "size": "1 lb",
+     "price": 1.19,
+     "quantity": 1,
+     "line_total": 1.19,
+     "protein_g": null
+    },
+    {
+     "id": "0001111068337",
+     "name": "Kroger\u00ae Ground Turmeric Shaker",
+     "size": "1.5 oz",
+     "price": 2.49,
+     "quantity": 1,
+     "line_total": 2.49,
+     "protein_g": null
+    },
+    {
+     "id": "0001111001679",
+     "name": "Kroger\u00ae Peeled Garlic",
+     "size": "6 oz",
+     "price": 2.99,
+     "quantity": 1,
+     "line_total": 2.99,
+     "protein_g": null
+    },
+    {
+     "id": "0006414428243",
+     "name": "ROTEL Original Diced Tomatoes and Green Chilies",
+     "size": "10 oz",
+     "price": 1.33,
+     "quantity": 1,
+     "line_total": 1.33,
+     "protein_g": null
+    },
+    {
+     "id": "0000000094612",
+     "name": "Organic Ginger Root",
+     "size": "1 lb",
+     "price": 3.49,
+     "quantity": 1,
+     "line_total": 3.49,
+     "protein_g": null
+    },
+    {
+     "id": "0001111089875",
+     "name": "Kroger\u00ae Enriched Long Grain White Rice",
+     "size": "32 oz",
+     "price": 1.89,
+     "quantity": 1,
+     "line_total": 1.89,
+     "protein_g": 60
+    }
+   ],
+   "total": 19.65,
+   "budget": 20.0,
+   "left": 0.35,
+   "within_budget": true,
+   "nutrition_week": {
+    "calories": 6280,
+    "protein_g": 312,
+    "carbs_g": 1280,
+    "fiber_g": 244,
+    "sugar_g": 0
+   },
+   "protein_g_per_day": 45,
+   "no_label": [
+    "Kroger\u00ae Salted Butter Sticks",
+    "Jumbo Yellow Onions",
+    "Kroger\u00ae Ground Turmeric Shaker",
+    "Kroger\u00ae Peeled Garlic",
+    "ROTEL Original Diced Tomatoes and Green Chilies",
+    "Organic Ginger Root"
+   ],
+   "eaten_week": {
+    "calories": 3764,
+    "protein_g": 209,
+    "carbs_g": 676,
+    "fiber_g": 95,
+    "sugar_g": 36
+   },
+   "eaten_per_day": {
+    "calories": 538,
+    "protein_g": 30,
+    "carbs_g": 97,
+    "fiber_g": 14,
+    "sugar_g": 5
+   },
+   "servings_planned": 10,
+   "recipes_without_nutrition": [],
+   "avoid": [],
+   "vegetarian": true,
+   "note": "Dal is the cheapest, most filling vegetarian option, and two batches cover 8 hearty servings with lots of protein and fiber. Spice it up with the Rotel green chilies and extra chili flakes if you have them. Rice is for serving alongside, or cook it plain. Salt, pepper, cumin seeds and black mustard seeds aren't priced (the store search had no spice-aisle cumin or mustard seeds), so use what you have or skip them."
+  },
+  "checks": {
+   "1 within budget": true,
+   "2 plan complete": true,
+   "3 every $ from a tool": true,
+   "4 diet respected": true,
+   "5 pages real": true
+  },
+  "cost": 0.03752379
+ },
+ {
+  "case": "dairy-free, cheap breakfasts and dinners",
+  "plan": {
+   "accepted": true,
+   "recipes": [
+    {
+     "title": "Berry Oatmeal",
+     "page": 29,
+     "category": "breakfast",
+     "book_price": "$0.55/serving",
+     "allergens": [],
+     "vegetarian": "yes",
+     "photo_id": "p29_2",
+     "nutrition": null,
+     "batches": 7
+    },
+    {
+     "title": "Baked Beans from Scratch",
+     "page": 101,
+     "category": "dinner",
+     "book_price": null,
+     "allergens": [],
+     "vegetarian": "no",
+     "photo_id": null,
+     "nutrition": {
+      "per_serving": {
+       "calories": 446,
+       "protein_g": 24,
+       "carbs_g": 86,
+       "fiber_g": 25,
+       "sugar_g": 18
+      },
+      "servings": 2,
+      "per": "serving",
+      "whole_recipe": {
+       "calories": 892,
+       "protein_g": 48,
+       "carbs_g": 172,
+       "fiber_g": 50,
+       "sugar_g": 36
+      },
+      "lines_not_counted": 9
+     },
+     "batches": 3
+    },
+    {
+     "title": "Rainbow Rice",
+     "page": 144,
+     "category": "staple",
+     "book_price": "$0.75/serving",
+     "allergens": [],
+     "vegetarian": "yes",
+     "photo_id": "p144_1",
+     "nutrition": {
+      "per_serving": {
+       "calories": 357,
+       "protein_g": 8,
+       "carbs_g": 78,
+       "fiber_g": 3,
+       "sugar_g": 3
+      },
+      "servings": 2,
+      "per": "serving",
+      "whole_recipe": {
+       "calories": 714,
+       "protein_g": 15,
+       "carbs_g": 156,
+       "fiber_g": 7,
+       "sugar_g": 6
+      },
+      "lines_not_counted": 1
+     },
+     "batches": 1
+    }
+   ],
+   "lines": [
+    {
+     "id": "0001111076655",
+     "name": "Kroger\u00ae 100% Whole Grain Old Fashioned Oats",
+     "size": "42 oz",
+     "price": 4.49,
+     "quantity": 1,
+     "line_total": 4.49,
+     "protein_g": 150
+    },
+    {
+     "id": "0001111079120",
+     "name": "Private Selection\u00ae Triple Berry Blend Frozen Fruit",
+     "size": "48 oz",
+     "price": 12.99,
+     "quantity": 1,
+     "line_total": 12.99,
+     "protein_g": 10
+    },
+    {
+     "id": "0001111085585",
+     "name": "Kroger\u00ae Light Brown Sugar",
+     "size": "32 oz",
+     "price": 2,
+     "quantity": 1,
+     "line_total": 2,
+     "protein_g": null
+    },
+    {
+     "id": "0001111089864",
+     "name": "Kroger\u00ae Pinto Beans",
+     "size": "32 oz",
+     "price": 2.29,
+     "quantity": 1,
+     "line_total": 2.29,
+     "protein_g": 182
+    },
+    {
+     "id": "0001111011619",
+     "name": "Kroger Petite Diced Tomatoes",
+     "size": "28 oz",
+     "price": 1.89,
+     "quantity": 1,
+     "line_total": 1.89,
+     "protein_g": 7
+    },
+    {
+     "id": "0000000004093",
+     "name": "Jumbo Yellow Onions",
+     "size": "1 lb",
+     "price": 1.19,
+     "quantity": 1,
+     "line_total": 1.19,
+     "protein_g": null
+    },
+    {
+     "id": "0001111013768",
+     "name": "Smart Way\u2122 Original Yellow Mustard",
+     "size": "8 oz",
+     "price": 0.75,
+     "quantity": 1,
+     "line_total": 0.75,
+     "protein_g": null
+    },
+    {
+     "id": "0007639700408",
+     "name": "La Costena\u00ae Chipotle Sauce",
+     "size": "7.76 oz",
+     "price": 1.39,
+     "quantity": 1,
+     "line_total": 1.39,
+     "protein_g": null
+    },
+    {
+     "id": "0001111089875",
+     "name": "Kroger\u00ae Enriched Long Grain White Rice",
+     "size": "32 oz",
+     "price": 1.89,
+     "quantity": 1,
+     "line_total": 1.89,
+     "protein_g": 60
+    }
+   ],
+   "total": 28.88,
+   "budget": 30.0,
+   "left": 1.12,
+   "within_budget": true,
+   "nutrition_week": {
+    "calories": 11795,
+    "protein_g": 409,
+    "carbs_g": 2347,
+    "fiber_g": 367,
+    "sugar_g": 167
+   },
+   "protein_g_per_day": 58,
+   "no_label": [
+    "Kroger\u00ae Light Brown Sugar",
+    "Jumbo Yellow Onions",
+    "Smart Way\u2122 Original Yellow Mustard",
+    "La Costena\u00ae Chipotle Sauce"
+   ],
+   "eaten_week": {
+    "calories": 3390,
+    "protein_g": 159,
+    "carbs_g": 672,
+    "fiber_g": 157,
+    "sugar_g": 114
+   },
+   "eaten_per_day": {
+    "calories": 484,
+    "protein_g": 23,
+    "carbs_g": 96,
+    "fiber_g": 22,
+    "sugar_g": 16
+   },
+   "servings_planned": 8,
+   "recipes_without_nutrition": [
+    "Berry Oatmeal"
+   ],
+   "avoid": [
+    "dairy"
+   ],
+   "vegetarian": false,
+   "note": "Oatmeal covers breakfasts, and the pinto bean dinners are cheap and high in protein and fiber. Rainbow Rice (red rice, using the canned tomatoes) stretches the beans into extra meals. Brown sugar stands in for the sugar and molasses. Salt and water aren't priced. Cook the beans in bulk and freeze portions."
+  },
+  "checks": {
+   "1 within budget": true,
+   "2 plan complete": true,
+   "3 every $ from a tool": true,
+   "4 diet respected": true,
+   "5 pages real": true
+  },
+  "cost": 0.03609491
+ },
+ {
+  "case": "I have a nut allergy, need lunches I can carry to class",
+  "plan": {
+   "accepted": true,
+   "recipes": [
+    {
+     "title": "Baked Beans from Scratch",
+     "page": 101,
+     "category": "dinner",
+     "book_price": null,
+     "allergens": [],
+     "vegetarian": "no",
+     "photo_id": null,
+     "nutrition": {
+      "per_serving": {
+       "calories": 446,
+       "protein_g": 24,
+       "carbs_g": 86,
+       "fiber_g": 25,
+       "sugar_g": 18
+      },
+      "servings": 2,
+      "per": "serving",
+      "whole_recipe": {
+       "calories": 892,
+       "protein_g": 48,
+       "carbs_g": 172,
+       "fiber_g": 50,
+       "sugar_g": 36
+      },
+      "lines_not_counted": 9
+     },
+     "batches": 2
+    },
+    {
+     "title": "Perogies",
+     "page": 132,
+     "category": "big_batch",
+     "book_price": "$0.2/perogy",
+     "allergens": [
+      "egg",
+      "milk",
+      "wheat"
+     ],
+     "vegetarian": "yes",
+     "photo_id": "p132_4",
+     "nutrition": {
+      "per_serving": {
+       "calories": 66,
+       "protein_g": 2,
+       "carbs_g": 13,
+       "fiber_g": 1,
+       "sugar_g": 1
+      },
+      "servings": 60,
+      "per": "piece",
+      "whole_recipe": {
+       "calories": 3970,
+       "protein_g": 128,
+       "carbs_g": 793,
+       "fiber_g": 41,
+       "sugar_g": 37
+      },
+      "lines_not_counted": 3
+     },
+     "batches": 1
+    }
+   ],
+   "lines": [
+    {
+     "id": "0001111072565",
+     "name": "Pinto Beans",
+     "size": "15.5 oz",
+     "price": 1,
+     "quantity": 4,
+     "line_total": 4,
+     "protein_g": 96
+    },
+    {
+     "id": "0001111011619",
+     "name": "Kroger Petite Diced Tomatoes",
+     "size": "28 oz",
+     "price": 1.89,
+     "quantity": 1,
+     "line_total": 1.89,
+     "protein_g": 7
+    },
+    {
+     "id": "0000000004093",
+     "name": "Jumbo Yellow Onions",
+     "size": "1 lb",
+     "price": 1.19,
+     "quantity": 1,
+     "line_total": 1.19,
+     "protein_g": null
+    },
+    {
+     "id": "0001111081237",
+     "name": "Kroger Original Yellow Mustard",
+     "size": "8 oz",
+     "price": 0.99,
+     "quantity": 1,
+     "line_total": 0.99,
+     "protein_g": null
+    },
+    {
+     "id": "0001111085585",
+     "name": "Kroger\u00ae Light Brown Sugar",
+     "size": "32 oz",
+     "price": 2,
+     "quantity": 1,
+     "line_total": 2,
+     "protein_g": null
+    },
+    {
+     "id": "0007639700408",
+     "name": "La Costena\u00ae Chipotle Sauce",
+     "size": "7.76 oz",
+     "price": 1.39,
+     "quantity": 1,
+     "line_total": 1.39,
+     "protein_g": null
+    },
+    {
+     "id": "0001111085402",
+     "name": "Kroger\u00ae Bleached All Purpose Flour",
+     "size": "5 lb",
+     "price": 2,
+     "quantity": 1,
+     "line_total": 2,
+     "protein_g": 90
+    },
+    {
+     "id": "0007047000300",
+     "name": "Yoplait\u2122 Original Low Fat Strawberry Yogurt Cup",
+     "size": "6 oz",
+     "price": 0.8,
+     "quantity": 3,
+     "line_total": 2.4,
+     "protein_g": null
+    },
+    {
+     "id": "0001111060903",
+     "name": "Kroger\u00ae Grade A Large White Eggs",
+     "size": "12 ct",
+     "price": 1.79,
+     "quantity": 1,
+     "line_total": 1.79,
+     "protein_g": 72
+    },
+    {
+     "id": "0001111091760",
+     "name": "Kroger\u00ae Russet Potatoes Bag",
+     "size": "5 lb",
+     "price": 2.79,
+     "quantity": 1,
+     "line_total": 2.79,
+     "protein_g": 45
+    },
+    {
+     "id": "0001111058733",
+     "name": "Kroger\u00ae Sharp Cheddar Block Cheese",
+     "size": "16 oz",
+     "price": 3.69,
+     "quantity": 1,
+     "line_total": 3.69,
+     "protein_g": 112
+    }
+   ],
+   "total": 24.13,
+   "budget": 25.0,
+   "left": 0.87,
+   "within_budget": true,
+   "nutrition_week": {
+    "calories": 9125,
+    "protein_g": 422,
+    "carbs_g": 1427,
+    "fiber_g": 139,
+    "sugar_g": 82
+   },
+   "protein_g_per_day": 60,
+   "no_label": [
+    "Jumbo Yellow Onions",
+    "Kroger Original Yellow Mustard",
+    "Kroger\u00ae Light Brown Sugar",
+    "La Costena\u00ae Chipotle Sauce",
+    "Yoplait\u2122 Original Low Fat Strawberry Yogurt Cup"
+   ],
+   "eaten_week": {
+    "calories": 5754,
+    "protein_g": 224,
+    "carbs_g": 1137,
+    "fiber_g": 141,
+    "sugar_g": 109
+   },
+   "eaten_per_day": {
+    "calories": 822,
+    "protein_g": 32,
+    "carbs_g": 162,
+    "fiber_g": 20,
+    "sugar_g": 16
+   },
+   "servings_planned": 4,
+   "recipes_without_nutrition": [],
+   "avoid": [
+    "nuts"
+   ],
+   "vegetarian": false,
+   "note": "Baked beans (nut-free) and perogies both pack well in a container and reheat or eat cold in class. Perogies freeze well, so cook them all once and freeze portions for the week. Salt, pepper and water are not priced. The yogurt is flavored strawberry, the only option found, so plain yogurt or sour cream would be better if you can swap it in."
+  },
+  "checks": {
+   "1 within budget": true,
+   "2 plan complete": true,
+   "3 every $ from a tool": true,
+   "4 diet respected": true,
+   "5 pages real": true
+  },
+  "cost": 0.03371447
+ },
+ {
+  "case": "gluten free please, something filling",
+  "plan": {
+   "accepted": true,
+   "recipes": [
+    {
+     "title": "Baked Beans from Scratch",
+     "page": 101,
+     "category": "dinner",
+     "book_price": null,
+     "allergens": [],
+     "vegetarian": "no",
+     "photo_id": null,
+     "nutrition": {
+      "per_serving": {
+       "calories": 446,
+       "protein_g": 24,
+       "carbs_g": 86,
+       "fiber_g": 25,
+       "sugar_g": 18
+      },
+      "servings": 2,
+      "per": "serving",
+      "whole_recipe": {
+       "calories": 892,
+       "protein_g": 48,
+       "carbs_g": 172,
+       "fiber_g": 50,
+       "sugar_g": 36
+      },
+      "lines_not_counted": 9
+     },
+     "batches": 4
+    },
+    {
+     "title": "Vegetable Quiche, Hold the Crust",
+     "page": 114,
+     "category": "dinner",
+     "book_price": "$1.5/serving",
+     "allergens": [
+      "egg",
+      "milk"
+     ],
+     "vegetarian": "yes",
+     "photo_id": "p115_1",
+     "nutrition": {
+      "per_serving": {
+       "calories": 203,
+       "protein_g": 13,
+       "carbs_g": 7,
+       "fiber_g": 1,
+       "sugar_g": 5
+      },
+      "servings": 4,
+      "per": "serving",
+      "whole_recipe": {
+       "calories": 814,
+       "protein_g": 54,
+       "carbs_g": 28,
+       "fiber_g": 3,
+       "sugar_g": 20
+      },
+      "lines_not_counted": 2
+     },
+     "batches": 1
+    }
+   ],
+   "lines": [
+    {
+     "id": "0001111084753",
+     "name": "Kroger\u00ae Pinto Beans",
+     "size": "4 lb",
+     "price": 4.49,
+     "quantity": 1,
+     "line_total": 4.49,
+     "protein_g": 416
+    },
+    {
+     "id": "0001111011619",
+     "name": "Kroger Petite Diced Tomatoes",
+     "size": "28 oz",
+     "price": 1.89,
+     "quantity": 1,
+     "line_total": 1.89,
+     "protein_g": 7
+    },
+    {
+     "id": "0001111091682",
+     "name": "Kroger\u00ae Yellow Onion 3 lb Bag",
+     "size": "3 lb",
+     "price": 2.99,
+     "quantity": 1,
+     "line_total": 2.99,
+     "protein_g": 8
+    },
+    {
+     "id": "0001111081237",
+     "name": "Kroger Original Yellow Mustard",
+     "size": "8 oz",
+     "price": 0.99,
+     "quantity": 1,
+     "line_total": 0.99,
+     "protein_g": null
+    },
+    {
+     "id": "0001111085585",
+     "name": "Kroger\u00ae Light Brown Sugar",
+     "size": "32 oz",
+     "price": 2,
+     "quantity": 1,
+     "line_total": 2,
+     "protein_g": null
+    },
+    {
+     "id": "0001111088003",
+     "name": "Kroger\u00ae Gluten Free Whole Chipotle Peppers in Adobo Sauce",
+     "size": "7 oz",
+     "price": 1.39,
+     "quantity": 1,
+     "line_total": 1.39,
+     "protein_g": null
+    },
+    {
+     "id": "0001111060903",
+     "name": "Kroger\u00ae Grade A Large White Eggs",
+     "size": "12 ct",
+     "price": 1.79,
+     "quantity": 1,
+     "line_total": 1.79,
+     "protein_g": 72
+    },
+    {
+     "id": "0001111041700",
+     "name": "Kroger\u00ae 2% Reduced Fat Milk Gallon",
+     "size": "1 gal",
+     "price": 3.29,
+     "quantity": 1,
+     "line_total": 3.29,
+     "protein_g": 128
+    },
+    {
+     "id": "0004610040066",
+     "name": "Sargento Off the Block Fine Cut Sharp Cheddar Natural Cheese Shreds",
+     "size": "8 oz",
+     "price": 1.99,
+     "quantity": 1,
+     "line_total": 1.99,
+     "protein_g": 56
+    },
+    {
+     "id": "0001111089301",
+     "name": "Kroger\u00ae Salted Butter Sticks",
+     "size": "4 sticks / 16 oz",
+     "price": 3.29,
+     "quantity": 1,
+     "line_total": 3.29,
+     "protein_g": null
+    },
+    {
+     "id": "0085007650309",
+     "name": "Broccoli Crowns Tray",
+     "size": "2 ct",
+     "price": 4,
+     "quantity": 1,
+     "line_total": 4,
+     "protein_g": null
+    }
+   ],
+   "total": 28.11,
+   "budget": 30.0,
+   "left": 1.89,
+   "within_budget": true,
+   "nutrition_week": {
+    "calories": 9015,
+    "protein_g": 687,
+    "carbs_g": 1475,
+    "fiber_g": 275,
+    "sugar_g": 321
+   },
+   "protein_g_per_day": 98,
+   "no_label": [
+    "Kroger Original Yellow Mustard",
+    "Kroger\u00ae Light Brown Sugar",
+    "Kroger\u00ae Gluten Free Whole Chipotle Peppers in Adobo Sauce",
+    "Kroger\u00ae Salted Butter Sticks",
+    "Broccoli Crowns Tray"
+   ],
+   "eaten_week": {
+    "calories": 4382,
+    "protein_g": 246,
+    "carbs_g": 716,
+    "fiber_g": 203,
+    "sugar_g": 164
+   },
+   "eaten_per_day": {
+    "calories": 626,
+    "protein_g": 35,
+    "carbs_g": 102,
+    "fiber_g": 29,
+    "sugar_g": 23
+   },
+   "servings_planned": 12,
+   "recipes_without_nutrition": [],
+   "avoid": [
+    "gluten"
+   ],
+   "vegetarian": false,
+   "note": "Baked beans are very cheap and filling, high in fiber and protein, and the crustless quiche adds a few egg-and-veggie meals. Both recipes have no gluten ingredients, and I picked the chipotle product labeled gluten free. Check the mustard and brown sugar labels if you're sensitive. Salt and pepper are not priced. Cook the beans in bulk and freeze portions, and use leftover broccoli in the quiche."
+  },
+  "checks": {
+   "1 within budget": true,
+   "2 plan complete": true,
+   "3 every $ from a tool": true,
+   "4 diet respected": true,
+   "5 pages real": true
+  },
+  "cost": 0.0324242
+ },
+ {
+  "case": "cheapest possible week of dinners, I eat anything",
+  "plan": {
+   "accepted": true,
+   "recipes": [
+    {
+     "title": "Baked Beans from Scratch",
+     "page": 101,
+     "category": "dinner",
+     "book_price": null,
+     "allergens": [],
+     "vegetarian": "no",
+     "photo_id": null,
+     "nutrition": {
+      "per_serving": {
+       "calories": 446,
+       "protein_g": 24,
+       "carbs_g": 86,
+       "fiber_g": 25,
+       "sugar_g": 18
+      },
+      "servings": 2,
+      "per": "serving",
+      "whole_recipe": {
+       "calories": 892,
+       "protein_g": 48,
+       "carbs_g": 172,
+       "fiber_g": 50,
+       "sugar_g": 36
+      },
+      "lines_not_counted": 9
+     },
+     "batches": 4
+    },
+    {
+     "title": "Rainbow Rice",
+     "page": 144,
+     "category": "staple",
+     "book_price": "$0.75/serving",
+     "allergens": [],
+     "vegetarian": "yes",
+     "photo_id": "p144_1",
+     "nutrition": {
+      "per_serving": {
+       "calories": 357,
+       "protein_g": 8,
+       "carbs_g": 78,
+       "fiber_g": 3,
+       "sugar_g": 3
+      },
+      "servings": 2,
+      "per": "serving",
+      "whole_recipe": {
+       "calories": 714,
+       "protein_g": 15,
+       "carbs_g": 156,
+       "fiber_g": 7,
+       "sugar_g": 6
+      },
+      "lines_not_counted": 1
+     },
+     "batches": 4
+    }
+   ],
+   "lines": [
+    {
+     "id": "0001111089864",
+     "name": "Kroger\u00ae Pinto Beans",
+     "size": "32 oz",
+     "price": 2.29,
+     "quantity": 1,
+     "line_total": 2.29,
+     "protein_g": 182
+    },
+    {
+     "id": "0001111011619",
+     "name": "Kroger Petite Diced Tomatoes",
+     "size": "28 oz",
+     "price": 1.89,
+     "quantity": 1,
+     "line_total": 1.89,
+     "protein_g": 7
+    },
+    {
+     "id": "0000000004093",
+     "name": "Jumbo Yellow Onions",
+     "size": "1 lb",
+     "price": 1.19,
+     "quantity": 1,
+     "line_total": 1.19,
+     "protein_g": null
+    },
+    {
+     "id": "0001111013768",
+     "name": "Smart Way\u2122 Original Yellow Mustard",
+     "size": "8 oz",
+     "price": 0.75,
+     "quantity": 1,
+     "line_total": 0.75,
+     "protein_g": null
+    },
+    {
+     "id": "0001111085585",
+     "name": "Kroger\u00ae Light Brown Sugar",
+     "size": "32 oz",
+     "price": 2,
+     "quantity": 1,
+     "line_total": 2,
+     "protein_g": null
+    },
+    {
+     "id": "0007639700408",
+     "name": "La Costena\u00ae Chipotle Sauce",
+     "size": "7.76 oz",
+     "price": 1.39,
+     "quantity": 1,
+     "line_total": 1.39,
+     "protein_g": null
+    },
+    {
+     "id": "0001111084703",
+     "name": "Kroger\u00ae Long Grain Rice",
+     "size": "5 lb",
+     "price": 3.79,
+     "quantity": 1,
+     "line_total": 3.79,
+     "protein_g": 150
+    }
+   ],
+   "total": 13.3,
+   "budget": 15.0,
+   "left": 1.7,
+   "within_budget": true,
+   "nutrition_week": {
+    "calories": 11295,
+    "protein_g": 339,
+    "carbs_g": 2407,
+    "fiber_g": 187,
+    "sugar_g": 47
+   },
+   "protein_g_per_day": 48,
+   "no_label": [
+    "Jumbo Yellow Onions",
+    "Smart Way\u2122 Original Yellow Mustard",
+    "Kroger\u00ae Light Brown Sugar",
+    "La Costena\u00ae Chipotle Sauce"
+   ],
+   "eaten_week": {
+    "calories": 6424,
+    "protein_g": 252,
+    "carbs_g": 1312,
+    "fiber_g": 228,
+    "sugar_g": 168
+   },
+   "eaten_per_day": {
+    "calories": 918,
+    "protein_g": 36,
+    "carbs_g": 187,
+    "fiber_g": 33,
+    "sugar_g": 24
+   },
+   "servings_planned": 16,
+   "recipes_without_nutrition": [],
+   "avoid": [],
+   "vegetarian": false,
+   "note": "Dried pinto beans and rice are the cheapest calories and protein at the store, so baked beans served over red rice (stir in some of the canned tomatoes) make a filling week of dinners. Soak and cook the whole bag of beans at once, and freeze extra portions. Salt is not priced. The leftover rice, brown sugar and mustard will last for future weeks."
+  },
+  "checks": {
+   "1 within budget": true,
+   "2 plan complete": true,
+   "3 every $ from a tool": true,
+   "4 diet respected": true,
+   "5 pages real": true
+  },
+  "cost": 0.03051348
+ },
+ {
+  "case": "I can't eat shellfish or eggs, want some comfort food",
+  "plan": {
+   "accepted": true,
+   "recipes": [
+    {
+     "title": "Deconstructed Cabbage Rolls",
+     "page": 109,
+     "category": "dinner",
+     "book_price": "$1.5/serving",
+     "allergens": [
+      "milk",
+      "wheat"
+     ],
+     "vegetarian": "no",
+     "photo_id": "p108_1",
+     "nutrition": {
+      "per_serving": {
+       "calories": 603,
+       "protein_g": 35,
+       "carbs_g": 111,
+       "fiber_g": 17,
+       "sugar_g": 7
+      },
+      "servings": 6,
+      "per": "serving",
+      "whole_recipe": {
+       "calories": 3618,
+       "protein_g": 211,
+       "carbs_g": 663,
+       "fiber_g": 102,
+       "sugar_g": 42
+      },
+      "lines_not_counted": 8
+     },
+     "batches": 1
+    },
+    {
+     "title": "Baked Beans from Scratch",
+     "page": 101,
+     "category": "dinner",
+     "book_price": null,
+     "allergens": [],
+     "vegetarian": "no",
+     "photo_id": null,
+     "nutrition": {
+      "per_serving": {
+       "calories": 446,
+       "protein_g": 24,
+       "carbs_g": 86,
+       "fiber_g": 25,
+       "sugar_g": 18
+      },
+      "servings": 2,
+      "per": "serving",
+      "whole_recipe": {
+       "calories": 892,
+       "protein_g": 48,
+       "carbs_g": 172,
+       "fiber_g": 50,
+       "sugar_g": 36
+      },
+      "lines_not_counted": 9
+     },
+     "batches": 1
+    }
+   ],
+   "lines": [
+    {
+     "id": "0001111089864",
+     "name": "Kroger\u00ae Pinto Beans",
+     "size": "32 oz",
+     "price": 2.29,
+     "quantity": 1,
+     "line_total": 2.29,
+     "protein_g": 182
+    },
+    {
+     "id": "0001111011618",
+     "name": "Kroger Crushed Tomatoes in Puree",
+     "size": "28 oz",
+     "price": 1.89,
+     "quantity": 2,
+     "line_total": 3.78,
+     "protein_g": 26
+    },
+    {
+     "id": "0001111013768",
+     "name": "Smart Way\u2122 Original Yellow Mustard",
+     "size": "8 oz",
+     "price": 0.75,
+     "quantity": 1,
+     "line_total": 0.75,
+     "protein_g": null
+    },
+    {
+     "id": "0001111085585",
+     "name": "Kroger\u00ae Light Brown Sugar",
+     "size": "32 oz",
+     "price": 2,
+     "quantity": 1,
+     "line_total": 2,
+     "protein_g": null
+    },
+    {
+     "id": "0007639700408",
+     "name": "La Costena\u00ae Chipotle Sauce",
+     "size": "7.76 oz",
+     "price": 1.39,
+     "quantity": 1,
+     "line_total": 1.39,
+     "protein_g": null
+    },
+    {
+     "id": "0001111091682",
+     "name": "Kroger\u00ae Yellow Onion 3 lb Bag",
+     "size": "3 lb",
+     "price": 2.99,
+     "quantity": 1,
+     "line_total": 2.99,
+     "protein_g": 8
+    },
+    {
+     "id": "0007790000334",
+     "name": "Jimmy Dean\u00ae NEW Premium Turkey Sausage Roll Fresh Regular Ready to Cook",
+     "size": "16 oz",
+     "price": 2.99,
+     "quantity": 1,
+     "line_total": 2.99,
+     "protein_g": 78
+    },
+    {
+     "id": "0000000004069",
+     "name": "Green Cabbage",
+     "size": "1 lb",
+     "price": 0.89,
+     "quantity": 2,
+     "line_total": 1.78,
+     "protein_g": null
+    },
+    {
+     "id": "0001111089875",
+     "name": "Kroger\u00ae Enriched Long Grain White Rice",
+     "size": "32 oz",
+     "price": 1.89,
+     "quantity": 1,
+     "line_total": 1.89,
+     "protein_g": 60
+    },
+    {
+     "id": "0007152401253",
+     "name": "La Preferida\u00ae Lentils (Dry)",
+     "size": "16 oz",
+     "price": 1.49,
+     "quantity": 1,
+     "line_total": 1.49,
+     "protein_g": 126
+    },
+    {
+     "id": "0001111001679",
+     "name": "Kroger\u00ae Peeled Garlic",
+     "size": "6 oz",
+     "price": 2.99,
+     "quantity": 1,
+     "line_total": 2.99,
+     "protein_g": null
+    }
+   ],
+   "total": 24.34,
+   "budget": 25.0,
+   "left": 0.66,
+   "within_budget": true,
+   "nutrition_week": {
+    "calories": 9100,
+    "protein_g": 480,
+    "carbs_g": 1776,
+    "fiber_g": 296,
+    "sugar_g": 160
+   },
+   "protein_g_per_day": 69,
+   "no_label": [
+    "Smart Way\u2122 Original Yellow Mustard",
+    "Kroger\u00ae Light Brown Sugar",
+    "La Costena\u00ae Chipotle Sauce",
+    "Green Cabbage",
+    "Kroger\u00ae Peeled Garlic"
+   ],
+   "eaten_week": {
+    "calories": 4510,
+    "protein_g": 259,
+    "carbs_g": 835,
+    "fiber_g": 152,
+    "sugar_g": 78
+   },
+   "eaten_per_day": {
+    "calories": 644,
+    "protein_g": 37,
+    "carbs_g": 119,
+    "fiber_g": 22,
+    "sugar_g": 11
+   },
+   "servings_planned": 8,
+   "recipes_without_nutrition": [],
+   "avoid": [
+    "shellfish",
+    "eggs"
+   ],
+   "vegetarian": false,
+   "note": "Both recipes are warm, hearty comfort food with no shellfish or egg. The cabbage rolls make 6 servings and the baked beans make 2, and leftovers reheat well. Butter, salt and pepper are not priced, so use what you have. Brown sugar stands in for the molasses, and the beans can be eaten over rice."
+  },
+  "checks": {
+   "1 within budget": true,
+   "2 plan complete": true,
+   "3 every $ from a tool": true,
+   "4 diet respected": true,
+   "5 pages real": true
+  },
+  "cost": 0.029951779999999997
+ },
+ {
+  "case": "I want to meal prep on Sunday for the whole week",
+  "plan": {
+   "accepted": true,
+   "recipes": [
+    {
+     "title": "Vegetable Jambalaya",
+     "page": 96,
+     "category": "dinner",
+     "book_price": "$0.65/serving",
+     "allergens": [
+      "egg",
+      "shellfish",
+      "soy",
+      "wheat"
+     ],
+     "vegetarian": "no",
+     "photo_id": "p96_1",
+     "nutrition": {
+      "per_serving": {
+       "calories": 157,
+       "protein_g": 3,
+       "carbs_g": 26,
+       "fiber_g": 2,
+       "sugar_g": 4
+      },
+      "servings": 6,
+      "per": "serving",
+      "whole_recipe": {
+       "calories": 942,
+       "protein_g": 18,
+       "carbs_g": 154,
+       "fiber_g": 12,
+       "sugar_g": 23
+      },
+      "lines_not_counted": 5
+     },
+     "batches": 2
+    },
+    {
+     "title": "Rainbow Rice",
+     "page": 144,
+     "category": "staple",
+     "book_price": "$0.75/serving",
+     "allergens": [],
+     "vegetarian": "yes",
+     "photo_id": "p144_1",
+     "nutrition": {
+      "per_serving": {
+       "calories": 357,
+       "protein_g": 8,
+       "carbs_g": 78,
+       "fiber_g": 3,
+       "sugar_g": 3
+      },
+      "servings": 2,
+      "per": "serving",
+      "whole_recipe": {
+       "calories": 714,
+       "protein_g": 15,
+       "carbs_g": 156,
+       "fiber_g": 7,
+       "sugar_g": 6
+      },
+      "lines_not_counted": 1
+     },
+     "batches": 3
+    }
+   ],
+   "lines": [
+    {
+     "id": "0001111084703",
+     "name": "Kroger\u00ae Long Grain Rice",
+     "size": "5 lb",
+     "price": 3.79,
+     "quantity": 1,
+     "line_total": 3.79,
+     "protein_g": 150
+    },
+    {
+     "id": "0001111004968",
+     "name": "Kroger\u00ae Fat Free Vegetable Broth",
+     "size": "32 oz",
+     "price": 1.49,
+     "quantity": 2,
+     "line_total": 2.98,
+     "protein_g": null
+    },
+    {
+     "id": "0001111091682",
+     "name": "Kroger\u00ae Yellow Onion 3 lb Bag",
+     "size": "3 lb",
+     "price": 2.99,
+     "quantity": 1,
+     "line_total": 2.99,
+     "protein_g": 8
+    },
+    {
+     "id": "0000000004065",
+     "name": "Fresh Large Green Bell Pepper",
+     "size": "1 ct",
+     "price": 0.89,
+     "quantity": 2,
+     "line_total": 1.78,
+     "protein_g": null
+    },
+    {
+     "id": "0001111060376",
+     "name": "Private Selection\u00ae Long Celery Sticks",
+     "size": "16 oz",
+     "price": 3,
+     "quantity": 1,
+     "line_total": 3,
+     "protein_g": null
+    },
+    {
+     "id": "0001111001679",
+     "name": "Kroger\u00ae Peeled Garlic",
+     "size": "6 oz",
+     "price": 2.99,
+     "quantity": 1,
+     "line_total": 2.99,
+     "protein_g": null
+    },
+    {
+     "id": "0000000004087",
+     "name": "Fresh Roma Tomato",
+     "size": "1 lb",
+     "price": 1.49,
+     "quantity": 2,
+     "line_total": 2.98,
+     "protein_g": null
+    },
+    {
+     "id": "0001111085634",
+     "name": "Kroger\u00ae 100% Pure Canola Oil",
+     "size": "48 fl oz",
+     "price": 3.99,
+     "quantity": 1,
+     "line_total": 3.99,
+     "protein_g": null
+    },
+    {
+     "id": "0001111066985",
+     "name": "Kroger\u00ae Worcestershire Sauce",
+     "size": "10 oz",
+     "price": 1.49,
+     "quantity": 1,
+     "line_total": 1.49,
+     "protein_g": null
+    },
+    {
+     "id": "0001111011619",
+     "name": "Kroger Petite Diced Tomatoes",
+     "size": "28 oz",
+     "price": 1.89,
+     "quantity": 1,
+     "line_total": 1.89,
+     "protein_g": 7
+    },
+    {
+     "id": "0001111089785",
+     "name": "Kroger\u00ae Frozen Spinach Chopped",
+     "size": "12 oz",
+     "price": 1.5,
+     "quantity": 1,
+     "line_total": 1.5,
+     "protein_g": 8
+    }
+   ],
+   "total": 29.38,
+   "budget": 35.0,
+   "left": 5.62,
+   "within_budget": true,
+   "nutrition_week": {
+    "calories": 8295,
+    "protein_g": 173,
+    "carbs_g": 1935,
+    "fiber_g": 69,
+    "sugar_g": 81
+   },
+   "protein_g_per_day": 25,
+   "no_label": [
+    "Kroger\u00ae Fat Free Vegetable Broth",
+    "Fresh Large Green Bell Pepper",
+    "Private Selection\u00ae Long Celery Sticks",
+    "Kroger\u00ae Peeled Garlic",
+    "Fresh Roma Tomato",
+    "Kroger\u00ae 100% Pure Canola Oil",
+    "Kroger\u00ae Worcestershire Sauce"
+   ],
+   "eaten_week": {
+    "calories": 4026,
+    "protein_g": 81,
+    "carbs_g": 776,
+    "fiber_g": 45,
+    "sugar_g": 64
+   },
+   "eaten_per_day": {
+    "calories": 575,
+    "protein_g": 12,
+    "carbs_g": 111,
+    "fiber_g": 6,
+    "sugar_g": 9
+   },
+   "servings_planned": 18,
+   "recipes_without_nutrition": [],
+   "avoid": [],
+   "vegetarian": false,
+   "note": "Jambalaya (2 batches, 12 servings) plus Rainbow Rice (3 batches: red with canned tomatoes, green with spinach) is the cheapest filling combo and shares one bag of rice. Tip: portion into containers on Sunday and add beans or leftover meat to the jambalaya for protein if you have extra cash. Salt, pepper, spices, bay leaves, and the optional chili are not priced."
+  },
+  "checks": {
+   "1 within budget": true,
+   "2 plan complete": true,
+   "3 every $ from a tool": true,
+   "4 diet respected": true,
+   "5 pages real": true
+  },
+  "cost": 0.04046343
+ },
+ {
+  "case": "vegetarian, no soy, I need protein",
+  "plan": {
+   "accepted": true,
+   "recipes": [
+    {
+     "title": "Dal",
+     "page": 35,
+     "category": "soup",
+     "book_price": "$0.6/serving",
+     "allergens": [
+      "milk"
+     ],
+     "vegetarian": "yes",
+     "photo_id": "p35_2",
+     "nutrition": {
+      "per_serving": {
+       "calories": 381,
+       "protein_g": 24,
+       "carbs_g": 65,
+       "fiber_g": 11,
+       "sugar_g": 4
+      },
+      "servings": 4,
+      "per": "serving",
+      "whole_recipe": {
+       "calories": 1525,
+       "protein_g": 97,
+       "carbs_g": 260,
+       "fiber_g": 44,
+       "sugar_g": 15
+      },
+      "lines_not_counted": 0
+     },
+     "batches": 1
+    },
+    {
+     "title": "Savory Oatmeal",
+     "page": 31,
+     "category": "breakfast",
+     "book_price": "$0.75/serving",
+     "allergens": [
+      "egg",
+      "milk"
+     ],
+     "vegetarian": "yes",
+     "photo_id": "p31_4",
+     "nutrition": {
+      "servings": "unknown",
+      "whole_recipe": {
+       "calories": 169,
+       "protein_g": 12,
+       "carbs_g": 3,
+       "fiber_g": 1,
+       "sugar_g": 1
+      },
+      "lines_not_counted": 1
+     },
+     "batches": 3
+    }
+   ],
+   "lines": [
+    {
+     "id": "0007152401253",
+     "name": "La Preferida\u00ae Lentils (Dry)",
+     "size": "16 oz",
+     "price": 1.49,
+     "quantity": 1,
+     "line_total": 1.49,
+     "protein_g": 126
+    },
+    {
+     "id": "0001111089301",
+     "name": "Kroger\u00ae Salted Butter Sticks",
+     "size": "4 sticks / 16 oz",
+     "price": 3.29,
+     "quantity": 1,
+     "line_total": 3.29,
+     "protein_g": null
+    },
+    {
+     "id": "0000000004093",
+     "name": "Jumbo Yellow Onions",
+     "size": "1 lb",
+     "price": 1.19,
+     "quantity": 1,
+     "line_total": 1.19,
+     "protein_g": null
+    },
+    {
+     "id": "0001111068337",
+     "name": "Kroger\u00ae Ground Turmeric Shaker",
+     "size": "1.5 oz",
+     "price": 2.49,
+     "quantity": 1,
+     "line_total": 2.49,
+     "protein_g": null
+    },
+    {
+     "id": "0001111001679",
+     "name": "Kroger\u00ae Peeled Garlic",
+     "size": "6 oz",
+     "price": 2.99,
+     "quantity": 1,
+     "line_total": 2.99,
+     "protein_g": null
+    },
+    {
+     "id": "0006414428243",
+     "name": "ROTEL Original Diced Tomatoes and Green Chilies",
+     "size": "10 oz",
+     "price": 1.33,
+     "quantity": 1,
+     "line_total": 1.33,
+     "protein_g": null
+    },
+    {
+     "id": "0000000094612",
+     "name": "Organic Ginger Root",
+     "size": "1 lb",
+     "price": 3.49,
+     "quantity": 1,
+     "line_total": 3.49,
+     "protein_g": null
+    },
+    {
+     "id": "0001111060903",
+     "name": "Kroger\u00ae Grade A Large White Eggs",
+     "size": "12 ct",
+     "price": 1.79,
+     "quantity": 1,
+     "line_total": 1.79,
+     "protein_g": 72
+    },
+    {
+     "id": "0085007650328",
+     "name": "Green Onions BBQ Bag",
+     "size": "10 oz",
+     "price": 1.99,
+     "quantity": 1,
+     "line_total": 1.99,
+     "protein_g": null
+    },
+    {
+     "id": "0001111058733",
+     "name": "Kroger\u00ae Sharp Cheddar Block Cheese",
+     "size": "16 oz",
+     "price": 3.69,
+     "quantity": 1,
+     "line_total": 3.69,
+     "protein_g": 112
+    }
+   ],
+   "total": 23.74,
+   "budget": 25.0,
+   "left": 1.26,
+   "within_budget": true,
+   "nutrition_week": {
+    "calories": 4140,
+    "protein_g": 310,
+    "carbs_g": 296,
+    "fiber_g": 112,
+    "sugar_g": 0
+   },
+   "protein_g_per_day": 44,
+   "no_label": [
+    "Kroger\u00ae Salted Butter Sticks",
+    "Jumbo Yellow Onions",
+    "Kroger\u00ae Ground Turmeric Shaker",
+    "Kroger\u00ae Peeled Garlic",
+    "ROTEL Original Diced Tomatoes and Green Chilies",
+    "Organic Ginger Root",
+    "Green Onions BBQ Bag"
+   ],
+   "eaten_week": {
+    "calories": 2032,
+    "protein_g": 133,
+    "carbs_g": 269,
+    "fiber_g": 47,
+    "sugar_g": 18
+   },
+   "eaten_per_day": {
+    "calories": 290,
+    "protein_g": 19,
+    "carbs_g": 38,
+    "fiber_g": 7,
+    "sugar_g": 3
+   },
+   "servings_planned": 4,
+   "recipes_without_nutrition": [],
+   "avoid": [
+    "soy"
+   ],
+   "vegetarian": true,
+   "note": "Dal is a cheap, high-protein lentil meal, and Savory Oatmeal adds eggs and cheddar for more protein at breakfast. Neither recipe contains soy. Salt, pepper, cumin seeds and black mustard seeds aren't priced because the store search had no real spice for them, so use any spices you already have. The canned tomatoes with green chilies stand in for the fresh chili. Freeze extra dal portions so they keep through the week."
+  },
+  "checks": {
+   "1 within budget": true,
+   "2 plan complete": true,
+   "3 every $ from a tool": true,
+   "4 diet respected": true,
+   "5 pages real": true
+  },
+  "cost": 0.0409949
+ },
+ {
+  "case": "sweet breakfast ideas, I hate oatmeal",
+  "plan": {
+   "accepted": true,
+   "recipes": [
+    {
+     "title": "Banana Pancakes",
+     "page": 18,
+     "category": "breakfast",
+     "book_price": "$0.7/serving",
+     "allergens": [
+      "egg",
+      "milk",
+      "wheat"
+     ],
+     "vegetarian": "yes",
+     "photo_id": "p19_1",
+     "nutrition": {
+      "per_serving": {
+       "calories": 189,
+       "protein_g": 5,
+       "carbs_g": 37,
+       "fiber_g": 2,
+       "sugar_g": 13
+      },
+      "servings": 10,
+      "per": "pancake",
+      "whole_recipe": {
+       "calories": 1888,
+       "protein_g": 54,
+       "carbs_g": 371,
+       "fiber_g": 19,
+       "sugar_g": 131
+      },
+      "lines_not_counted": 1
+     },
+     "batches": 2
+    },
+    {
+     "title": "Peach Coffee Cake",
+     "page": 156,
+     "category": "dessert",
+     "book_price": "$0.75/serving",
+     "allergens": [
+      "egg",
+      "milk",
+      "wheat"
+     ],
+     "vegetarian": "yes",
+     "photo_id": "p157_1",
+     "nutrition": {
+      "per_serving": {
+       "calories": 317,
+       "protein_g": 3,
+       "carbs_g": 40,
+       "fiber_g": 1,
+       "sugar_g": 24
+      },
+      "servings": 12,
+      "per": "serving",
+      "whole_recipe": {
+       "calories": 3806,
+       "protein_g": 41,
+       "carbs_g": 483,
+       "fiber_g": 8,
+       "sugar_g": 287
+      },
+      "lines_not_counted": 1
+     },
+     "batches": 1
+    }
+   ],
+   "lines": [
+    {
+     "id": "0001111085402",
+     "name": "Kroger\u00ae Bleached All Purpose Flour",
+     "size": "5 lb",
+     "price": 2,
+     "quantity": 1,
+     "line_total": 2,
+     "protein_g": 90
+    },
+    {
+     "id": "0001111085585",
+     "name": "Kroger\u00ae Light Brown Sugar",
+     "size": "32 oz",
+     "price": 2,
+     "quantity": 1,
+     "line_total": 2,
+     "protein_g": null
+    },
+    {
+     "id": "0003320001110",
+     "name": "ARM & HAMMER Pure Baking Soda",
+     "size": "1 lb",
+     "price": 1.33,
+     "quantity": 1,
+     "line_total": 1.33,
+     "protein_g": null
+    },
+    {
+     "id": "0000000004011",
+     "name": "Fresh Bunch of Bananas \u2013 5-7 Bananas",
+     "size": "1 lb",
+     "price": 0.55,
+     "quantity": 2,
+     "line_total": 1.1,
+     "protein_g": null
+    },
+    {
+     "id": "0001111060903",
+     "name": "Kroger\u00ae Grade A Large White Eggs",
+     "size": "12 ct",
+     "price": 1.79,
+     "quantity": 1,
+     "line_total": 1.79,
+     "protein_g": 72
+    },
+    {
+     "id": "0001111041700",
+     "name": "Kroger\u00ae 2% Reduced Fat Milk Gallon",
+     "size": "1 gal",
+     "price": 3.29,
+     "quantity": 1,
+     "line_total": 3.29,
+     "protein_g": 128
+    },
+    {
+     "id": "0001111005453",
+     "name": "Kroger\u00ae Clear Imitation Vanilla Extract",
+     "size": "2 fl oz",
+     "price": 1.99,
+     "quantity": 1,
+     "line_total": 1.99,
+     "protein_g": null
+    },
+    {
+     "id": "0001111089301",
+     "name": "Kroger\u00ae Salted Butter Sticks",
+     "size": "4 sticks / 16 oz",
+     "price": 3.29,
+     "quantity": 1,
+     "line_total": 3.29,
+     "protein_g": null
+    },
+    {
+     "id": "0001111002927",
+     "name": "Kroger\u00ae Canned Yellow Cling Sliced Peaches in Heavy Syrup",
+     "size": "15.25 oz",
+     "price": 1.5,
+     "quantity": 1,
+     "line_total": 1.5,
+     "protein_g": null
+    },
+    {
+     "id": "0001111011748",
+     "name": "Smart Way\u2122 Ground Cinnamon",
+     "size": "1.94 oz",
+     "price": 1.25,
+     "quantity": 1,
+     "line_total": 1.25,
+     "protein_g": null
+    }
+   ],
+   "total": 19.54,
+   "budget": 20.0,
+   "left": 0.46,
+   "within_budget": true,
+   "nutrition_week": {
+    "calories": 6060,
+    "protein_g": 290,
+    "carbs_g": 882,
+    "fiber_g": 30,
+    "sugar_g": 222
+   },
+   "protein_g_per_day": 41,
+   "no_label": [
+    "Kroger\u00ae Light Brown Sugar",
+    "ARM & HAMMER Pure Baking Soda",
+    "Fresh Bunch of Bananas \u2013 5-7 Bananas",
+    "Kroger\u00ae Clear Imitation Vanilla Extract",
+    "Kroger\u00ae Salted Butter Sticks",
+    "Kroger\u00ae Canned Yellow Cling Sliced Peaches in Heavy Syrup",
+    "Smart Way\u2122 Ground Cinnamon"
+   ],
+   "eaten_week": {
+    "calories": 7582,
+    "protein_g": 149,
+    "carbs_g": 1225,
+    "fiber_g": 46,
+    "sugar_g": 549
+   },
+   "eaten_per_day": {
+    "calories": 1083,
+    "protein_g": 21,
+    "carbs_g": 175,
+    "fiber_g": 7,
+    "sugar_g": 78
+   },
+   "servings_planned": 12,
+   "recipes_without_nutrition": [],
+   "avoid": [],
+   "vegetarian": true,
+   "note": "No oatmeal: sweet banana pancakes (two batches, freeze extras for quick mornings) plus a peach coffee cake that works as a sweet breakfast slice all week. The recipes share flour, sugar, eggs, butter and vanilla, which keeps the cost down. Salt and baking powder aren't priced (no baking powder product turned up in the search, so grab a small one if you can). I skipped the lemon juice in the cake to save money, and one can of peaches stands in for fresh."
+  },
+  "checks": {
+   "1 within budget": true,
+   "2 plan complete": true,
+   "3 every $ from a tool": true,
+   "4 diet respected": true,
+   "5 pages real": true
+  },
+  "cost": 0.033878229999999995
+ }
+]

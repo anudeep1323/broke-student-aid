@@ -35,7 +35,8 @@ def load_cards():
         c["nutrition"] = None if n is None else (
             {"per_serving": n["per_serving"], "servings": n["servings"], "per": n.get("serving_unit") or "serving"}
             if n["per_serving"]
-            else {"whole_recipe": n["total"], "servings": "unknown"}) | {"lines_not_counted": len(n["missed"])}
+            else {"servings": "unknown"}) | {"whole_recipe": n["total"], "lines_not_counted": len(n["missed"])}
+            # whole_recipe always there: one batch's totals, used to count what the student eats (x batches)
     return cards
 
 

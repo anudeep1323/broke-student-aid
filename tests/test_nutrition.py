@@ -287,3 +287,22 @@ def test_submit_plan_allergen(tools):
     allergen = sorted(dal["allergens"])[0]                      # whatever Dal contains (butter -> milk)
     out = tools.submit_plan.func(plan(tools, [("Dal", 35)], [("LEN", 1)], avoid=[allergen]), {"location_id": "S1", "budget": 10.0})
     assert out["accepted"] is False and "breaks the diet" in out["problems"][0]
+
+
+# 15. Nutrition eaten = recipe totals x batches (not the groceries bought)
+def test_eaten_nutrition(tools):
+    dal = next(c for c in tools.cards if c["title"] == "Dal" and c["book_page"] == 35)
+    whole = dal["nutrition"]["whole_recipe"]
+    p = tools.Plan(recipes=[tools.RecipePick(title="Dal", page=35, batches=2)], items=[tools.Item(id="LEN", quantity=4)],
+                   note="Two pots of dal.")
+    out = tools.submit_plan.func(p, {"location_id": "S1", "budget": 10.0, "protein_goal": 200})
+    assert out["eaten_week"]["protein_g"] == whole["protein_g"] * 2               # 2 batches
+    assert out["eaten_per_day"]["protein_g"] == round(whole["protein_g"] * 2 / 7)
+    assert out["servings_planned"] == 8                                           # "for four" x 2
+    assert out["goal_met"] is False and out["protein_short_g_per_day"] == 200 - out["eaten_per_day"]["protein_g"]
+    assert out["nutrition_week"]["protein_g"] == 126 * 4                          # groceries bought: a separate number
+
+
+def test_batches_must_be_sensible(tools):
+    with pytest.raises(Exception):
+        tools.RecipePick(title="Dal", page=35, batches=0)

@@ -123,11 +123,13 @@ def plan_view(plan, key):
     a, c2 = st.columns(2)   # 2 x 2 tiles: 4 in a row cut off the numbers in a narrow window
     c3, c4 = st.columns(2)
     a.metric("🛒 Total", f"${plan['total']:.2f}", f"${plan['left']:.2f} left", border=True)   # code refuses over-budget plans
-    goal = plan.get("protein_goal_g_per_day")
-    c2.metric(f"💪 Protein / day" + (f" (goal {goal} g)" if goal else ""), f"{plan['protein_g_per_day']} g",
+    goal, day = plan.get("protein_goal_g_per_day"), plan["eaten_per_day"]   # from recipes x batches: what you eat
+    c2.metric(f"💪 Protein eaten / day" + (f" (goal {goal} g)" if goal else ""), f"{day['protein_g']} g",
               (("goal met" if plan.get("goal_met") else f"-{plan['protein_short_g_per_day']} g") if goal else None), border=True)
-    c3.metric("🍳 Recipes", len(plan["recipes"]), border=True)
-    c4.metric("🔥 Week kcal", f"{plan['nutrition_week']['calories']:,}", border=True)
+    c3.metric("🍳 Servings planned", plan["servings_planned"] or "–",
+              ", ".join(f"{r['title']} ×{r['batches']}" for r in plan["recipes"]), delta_color="off", border=True)
+    c4.metric("🔥 kcal eaten / day", f"{day['calories']:,}",
+              f"carbs {day['carbs_g']} g · fiber {day['fiber_g']} g · sugar {day['sugar_g']} g", delta_color="off", border=True)
     recipe_cards(plan["recipes"], key=key)
     st.markdown("**🧾 Shopping list**")
     st.dataframe([{"Product": l["name"], "Size": l["size"], "Qty": l["quantity"], "Price": l["price"],
@@ -135,8 +137,8 @@ def plan_view(plan, key):
                   for l in plan["lines"]], hide_index=True, width="stretch",
                  column_config={"Price": st.column_config.NumberColumn(format="$%.2f"),
                                 "Line total": st.column_config.NumberColumn(format="$%.2f")})
-    if plan.get("no_label"):
-        st.caption("No nutrition label from Kroger: " + ", ".join(plan["no_label"]))
+    st.caption(f"Groceries hold {plan['protein_g_per_day']} g protein/day from Kroger labels (leftovers included); "
+               "the tiles count only what the recipes use." + (" No label: " + ", ".join(plan["no_label"]) if plan.get("no_label") else ""))
     with st.expander("🧩 The plan as JSON (what code checked)"):
         st.json({k: v for k, v in plan.items() if k != "note"}, expanded=False)
 
