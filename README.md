@@ -47,7 +47,7 @@ flowchart LR
 | All 5 checks (budget, complete plan, no made-up numbers, diet, real pages) | **12/12** |
 | Week covered | **12/12** |
 | Cost / time per answer | **$0.037**, ~30 s |
-| Unit tests (no API calls, ~10 s) | **87 passing** |
+| Unit tests (no API calls, ~10 s) | **95 passing** |
 
 How it got there (each row is a real failure the eval caught): see [ARCHITECTURE.md](ARCHITECTURE.md), the build log
 with every diagram and number. Highlights: cost $0.15 → $0.03 per answer by splitting Haiku/Sonnet jobs and caching;
@@ -55,21 +55,31 @@ with every diagram and number. Highlights: cost $0.15 → $0.03 per answer by sp
 
 ## Run it
 
-Needs Python 3.12+. Keys can go in a `.env` file (never committed), or each user can enter their own in the app's
-🔑 API keys panel (sent per request, never stored on the server):
+Tested with Python 3.13 and Node 20. All keys are free to create:
+
+| Key | Get it at | Needed for |
+|---|---|---|
+| `ANTHROPIC_API_KEY` | console.anthropic.com | the one-time data build (~$0.10) and every plan (~$0.03) |
+| `KROGER_CLIENT_ID`, `KROGER_CLIENT_SECRET` | developer.kroger.com (create an app, scope `product.compact`) | prices and stores |
+| `FDC_API_KEY` | fdc.nal.usda.gov/api-guide | the one-time nutrition build only |
+
+Put them in a `.env` file in the repo root (it's in `.gitignore`, never committed):
 
 ```
-ANTHROPIC_API_KEY=...       # console.anthropic.com
-KROGER_CLIENT_ID=...        # developer.kroger.com, scope product.compact
+ANTHROPIC_API_KEY=...
+KROGER_CLIENT_ID=...
 KROGER_CLIENT_SECRET=...
-FDC_API_KEY=...             # fdc.nal.usda.gov/api-guide
+FDC_API_KEY=...
 ```
+
+Once the app runs, each user can also enter their own Anthropic and Kroger keys in the 🔑 API keys panel
+(sent with each request, never stored on the server); empty fields fall back to the `.env` keys.
 
 ```bash
 python3 -m pip install -r requirements.txt
 ```
 
-The cookbook-derived data isn't in the repo (the book is CC BY-NC-SA). Build it once (~$0.10 of Claude calls):
+The cookbook-derived data isn't in the repo (the book is CC BY-NC-SA). Build it once (~2 min, ~$0.10 of Claude calls):
 
 ```bash
 mkdir -p recipes_rag/data/raw && curl -L -o recipes_rag/data/raw/good-and-cheap.pdf "https://web.archive.org/web/20240721235918id_/https://cookbooks.leannebrown.com/good-and-cheap.pdf"
@@ -79,7 +89,8 @@ mkdir -p recipes_rag/data/raw && curl -L -o recipes_rag/data/raw/good-and-cheap.
 python3 recipes_rag/run_all.py haiku && python3 recipes_rag/nutrition.py
 ```
 
-Then start the API and the React page (two terminals; needs Node 20+), and open http://localhost:5173:
+Then start the API and the React page in two terminals. The first API start downloads the small search model
+(~90 MB); wait for `Application startup complete`.
 
 ```bash
 python3 -m uvicorn api.main:api --port 8000
@@ -88,6 +99,9 @@ python3 -m uvicorn api.main:api --port 8000
 ```bash
 cd web && npm install && npm run dev
 ```
+
+Open http://localhost:5173, type a ZIP (e.g. 45202, Cincinnati), set a budget, and ask in your own words, or click
+one of the example requests. A plan takes ~30 s; you'll see the agent's steps live.
 
 The first version of the screen (Streamlit) still runs with `python3 -m streamlit run app.py`.
 

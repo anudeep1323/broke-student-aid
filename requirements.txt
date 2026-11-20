@@ -11,6 +11,11 @@ rank-bm25==0.2.2
 requests==2.34.2
 sentence-transformers==6.1.0
 streamlit==1.65.0
+# web API
+fastapi==0.142.2
+uvicorn==0.54.0
+sse-starlette==3.5.0
 # tests
+httpx==0.28.1
 pytest==9.1.1
 pytest-cov==7.1.0
