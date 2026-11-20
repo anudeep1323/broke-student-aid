@@ -264,8 +264,8 @@ def plan(tools, recipes, items, **kw):
 
 
 def test_submit_plan_accepted(tools):
-    out = tools.submit_plan.func(plan(tools, [("Dal", 35)], [("LEN", 2), ("GAR", 1)]), {"location_id": "S1", "budget": 10.0})
-    assert out["accepted"] and out["total"] == 5.97 and out["recipes"][0]["page"] == 35
+    out = tools.submit_plan.func(plan(tools, [("Dal", 35)], [("LEN", 2), ("GAR", 1)]), {"location_id": "S1", "budget": 6.0})
+    assert out["accepted"] and out["total"] == 5.97 and out["budget_limited"]   # short week, but the money is spent and out["recipes"][0]["page"] == 35
     assert out["recipes"][0]["nutrition"]["per_serving"]["protein_g"] > 0 and out["note"] == "Cheap and warm."
 
 
@@ -293,8 +293,8 @@ def test_submit_plan_allergen(tools):
 def test_eaten_nutrition(tools):
     dal = next(c for c in tools.cards if c["title"] == "Dal" and c["book_page"] == 35)
     whole = dal["nutrition"]["whole_recipe"]
-    p = tools.Plan(recipes=[tools.RecipePick(title="Dal", page=35, batches=2)], items=[tools.Item(id="LEN", quantity=4)],
-                   note="Two pots of dal.")
+    p = tools.Plan(meals=["dinner"], recipes=[tools.RecipePick(title="Dal", page=35, batches=2)],
+                   items=[tools.Item(id="LEN", quantity=4)], note="Two pots of dal.")
     out = tools.submit_plan.func(p, {"location_id": "S1", "budget": 10.0, "protein_goal": 200})
     assert out["eaten_week"]["protein_g"] == whole["protein_g"] * 2               # 2 batches
     assert out["eaten_per_day"]["protein_g"] == round(whole["protein_g"] * 2 / 7)
@@ -306,3 +306,49 @@ def test_eaten_nutrition(tools):
 def test_batches_must_be_sensible(tools):
     with pytest.raises(Exception):
         tools.RecipePick(title="Dal", page=35, batches=0)
+
+
+# 16. The plan must feed the student for the week (code enforces)
+def test_meals_from(tools):
+    four = {"batches": 2, "nutrition": {"per": "serving", "servings": 4, "whole_recipe": {"calories": 1500}}}
+    muffins = {"batches": 1, "nutrition": {"per": "muffin", "servings": 24, "whole_recipe": {"calories": 3168}}}
+    unknown = {"batches": 1, "nutrition": {"servings": "unknown", "whole_recipe": {"calories": 250}}}
+    assert tools.meals_from(four) == 8                      # "for four" x 2 batches
+    assert tools.meals_from(muffins) == 5                   # 3,168 kcal / 600 = 5.3 -> 5 meals, no guessed portion
+    assert tools.meals_from(unknown) == 1                   # never 0 for a real recipe
+
+
+def test_short_week_rejected_while_money_left(tools):
+    p = tools.Plan(meals=["lunch", "dinner"], recipes=[tools.RecipePick(title="Dal", page=35)],
+                   items=[tools.Item(id="LEN", quantity=1)], note="One pot.")
+    out = tools.submit_plan.func(p, {"location_id": "S1", "budget": 25.0})
+    assert out["accepted"] is False and "covers 4 of 14 meals" in out["problems"][0]
+
+
+def test_short_week_accepted_when_budget_used(tools):
+    p = tools.Plan(meals=["lunch", "dinner"], recipes=[tools.RecipePick(title="Dal", page=35)],
+                   items=[tools.Item(id="LEN", quantity=6)], note="One pot.")           # $8.94 of $9.50 = 94%
+    out = tools.submit_plan.func(p, {"location_id": "S1", "budget": 9.50})
+    assert out["accepted"] and out["budget_limited"] and out["meals_planned"] == 4 and out["meals_target"] == 14
+
+
+def test_calendar_covers_the_week(tools):
+    p = tools.Plan(meals=["dinner"], recipes=[tools.RecipePick(title="Dal", page=35, batches=2)],
+                   items=[tools.Item(id="LEN", quantity=2)], note="Dal all week.")
+    out = tools.submit_plan.func(p, {"location_id": "S1", "budget": 25.0})
+    assert out["accepted"] and out["meals_planned"] == 8 and out["meals_target"] == 7
+    assert list(out["calendar"]) == ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
+    assert all(out["calendar"][d]["dinner"] == "Dal" for d in out["calendar"])
+
+
+def test_calendar_takes_turns():
+    import tools as t
+    recipes = [{"title": "Dal", "category": "dinner", "batches": 1, "nutrition": {"per": "serving", "servings": 4}},
+               {"title": "Rice", "category": "dinner", "batches": 1, "nutrition": {"per": "serving", "servings": 4}},
+               {"title": "Pancakes", "category": "breakfast", "batches": 1, "nutrition": {"per": "serving", "servings": 2}}]
+    cal = t.calendar(recipes, ["breakfast", "dinner"])
+    assert [cal[d]["dinner"] for d in ["Mon", "Tue"]] == ["Dal", "Rice"]                           # recipes take turns
+    assert [cal[d]["breakfast"] for d in ["Mon", "Tue", "Wed"]] == ["Pancakes", "Pancakes", "Dal"]  # then borrows a main
+    assert cal["Wed"]["dinner"] == "Rice"                                                          # not Dal twice in a day
+    assert sum(v is not None for d in cal.values() for v in d.values()) == 10                      # 4 + 4 + 2 portions
+    assert cal["Sun"] == {"breakfast": None, "dinner": None}                                       # uncovered, shown as gaps

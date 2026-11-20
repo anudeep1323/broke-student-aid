@@ -937,3 +937,42 @@ What the 10 plans show (eaten vs bought, per day):
 - bought protein is 1.2x-2.8x eaten (gluten free: 98 g bought vs 35 g eaten) -> the old number counted leftovers.
 - eaten 290-1,083 kcal/day; servings planned 4-18 -> plans cover a few meals, not a week of eating (~2,000 kcal/day).
 - "Baked Beans from Scratch" is in 6 of 10 plans.
+
+### Tests + eval gaps closed (2026-11-20)
+Unit tests 59 -> 76: graph.py routing + final_plan + compact (was 0%), basket matching, and the real app.py rendered by
+Streamlit AppTest with a saved plan (tiles show eaten 27 g, not bought 72 g). Routing lambdas -> named functions to test them.
+Eval: 2 protein-slider cases (10 old cases unchanged), check 3 now also catches nutrition numbers in the note,
+measures kcal/protein eaten per day, servings, rejected plans, goal met.
+Baseline m18_baseline_week (12 cases): 11/12 all checks, $0.035/answer. Week coverage median 599 kcal/day (183-1,402),
+median 10 servings, 0 rejected plans, protein goal met 0/2 (97 of 100 g, 70 of 80 g).
+Fail: "vegetarian and I want lots of protein" note said "30 g", "80 g", "$6" (rule: no numbers in the note).
+
+### M18 design: the plan must cover the week (code enforces) (2026-11-20)
+
+```mermaid
+flowchart LR
+    P["Plan: meals = [lunch, dinner]<br/>Dal x2, Rainbow Rice x2"] -->|"target = 7 x 2 = 14 meals"| T["target"]
+    P -->|"meals per batch: 'for four' -> 4;<br/>pieces / unknown -> whole kcal / 600<br/>WHY: no guessed portions; rejected: count only 'for N' (pancakes = 0 meals)"| M["meals planned: 8 + 4 = 12"]
+    T --> V{"12 >= 14?"}
+    M --> V
+    V -->|"no, and money left (total < 90% of budget)<br/>-> reject: 'covers 12 of 14 meals: add batches or a cheap filling recipe'"| P
+    V -->|"no, but budget used (>= 90%) -> accept, flag budget_limited"| C
+    V -->|"yes -> accept"| C["code lays out Mon-Sun calendar<br/>(meal slots filled recipe by recipe)"]
+    C --> U["app: week calendar"]
+```
+Andy picked A (enforce) over B (report only): the mission promises a week of meals.
+
+### M18 built: week coverage enforced (2026-11-20)
+Plan.meals (default lunch + dinner) -> target 7 per meal type; meals_from: "for four" x batches, else whole kcal / 600;
+submit_plan rejects a short week while < 90% of the budget is spent; code lays out a Mon-Sun calendar. 81 tests pass.
+
+| 12 cases | m18 baseline | m19 week enforced |
+|---|---|---|
+| all 5 checks | 11/12 | 12/12 |
+| week covered (meals planned >= target) | not measured | 12/12 (0 needed "budget ran out") |
+| kcal eaten / day | median 599 (183-1,402) | median 908 (436-1,933) |
+| protein goal met | 0/2 | 1/2 (116 of 100 g; vegetarian 59 of 80 g) |
+| $ / answer | $0.035 | $0.037 |
+Planner read meals right: "lunches I can carry" -> lunch only; "breakfasts and dinners" -> both; "dinners" -> dinner.
+Rejected plans: 0 -> the prompt rule did the work, code is the backstop. A "for four" serving counts as a meal even
+when it's a light dish, so kcal/day (~450 per meal) is still below ~2,000/day.

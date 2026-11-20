@@ -41,13 +41,17 @@ Then reply with just DONE."""
 
 PLAN_SYSTEM = """You plan a week of cheap meals for a broke college student from the facts below
 (their request, cookbook recipes, and real prices at their nearest Kroger).
+- The plan must FEED the student for 7 days. Decide which meals they want covered from their words (default lunch
+  and dinner; "breakfasts" -> breakfast; "dinners" -> dinner only): 7 meals per meal type. Code counts a "for four"
+  recipe as 4 meals per batch, other recipes as their calories / 600, and rejects a plan that falls short while money
+  is left. Favour cheap, filling recipes and enough batches.
 - Choose 2-3 recipes and how many batches of each to cook this week (batches = times cooked; a dinner recipe "for
   four" cooked twice covers 8 dinners). Buy enough for all batches: for each ingredient, ONE Kroger product
   (cheapest per unit that fits) with a quantity.
 - Try lists with check_budget (product ids from search_kroger + quantities; 2 cans = quantity 2) as often as you like.
   Code prices them; never multiply or add yourself. If over budget, drop or swap items and check again.
 - Respect allergies and diet. Only use recipes, pages and product ids from the facts.
-- FINISH by calling submit_plan once with the final recipes (title, page, batches), items (id, quantity), the
+- FINISH by calling submit_plan once with the meals to cover, the final recipes (title, page, batches), items (id, quantity), the
   allergens to avoid and vegetarian as the student asked, and a short note (2-4 sentences: why these recipes, a tip,
   what's left unpriced like salt or spices). The note has NO prices or nutrition numbers: code shows those.
   If submit_plan returns problems, fix them and submit again."""
@@ -118,18 +122,31 @@ def final_plan(out):
     return None
 
 
+def after_gatherer(s):
+    """Haiku asked for tools -> run them; said DONE -> hand over to the planner."""
+    return "gather_tools" if s["messages"][-1].tool_calls else "planner"
+
+
+def after_planner(s):
+    """Planner asked for a tool -> run it; replied with text only -> stop (no plan)."""
+    return "plan_tools" if s["plan_messages"][-1].tool_calls else END
+
+
+def after_plan_tools(s):
+    """An accepted submit_plan ends the run; a what-if or a rejected plan goes back to the planner."""
+    return END if final_plan(s) else "planner"
+
+
 graph = StateGraph(State)
 graph.add_node("gatherer", gatherer)
 graph.add_node("gather_tools", ToolNode(GATHER_TOOLS))
 graph.add_node("planner", planner)
 graph.add_node("plan_tools", run_plan_tools)
 graph.add_edge(START, "gatherer")
-graph.add_conditional_edges("gatherer", lambda s: "gather_tools" if s["messages"][-1].tool_calls else "planner",
-                            ["gather_tools", "planner"])
+graph.add_conditional_edges("gatherer", after_gatherer, ["gather_tools", "planner"])
 graph.add_edge("gather_tools", "gatherer")
-graph.add_conditional_edges("planner", lambda s: "plan_tools" if s["plan_messages"][-1].tool_calls else END,
-                            ["plan_tools", END])
-graph.add_conditional_edges("plan_tools", lambda s: END if final_plan(s) else "planner", ["planner", END])
+graph.add_conditional_edges("planner", after_planner, ["plan_tools", END])
+graph.add_conditional_edges("plan_tools", after_plan_tools, ["planner", END])
 app = graph.compile()
 
 

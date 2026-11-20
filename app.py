@@ -126,10 +126,14 @@ def plan_view(plan, key):
     goal, day = plan.get("protein_goal_g_per_day"), plan["eaten_per_day"]   # from recipes x batches: what you eat
     c2.metric(f"💪 Protein eaten / day" + (f" (goal {goal} g)" if goal else ""), f"{day['protein_g']} g",
               (("goal met" if plan.get("goal_met") else f"-{plan['protein_short_g_per_day']} g") if goal else None), border=True)
-    c3.metric("🍳 Servings planned", plan["servings_planned"] or "–",
-              ", ".join(f"{r['title']} ×{r['batches']}" for r in plan["recipes"]), delta_color="off", border=True)
+    c3.metric("🍳 Meals covered", f"{plan['meals_planned']} of {plan['meals_target']}",
+              "budget ran out" if plan.get("budget_limited") else ", ".join(f"{r['title']} ×{r['batches']}" for r in plan["recipes"]),
+              delta_color="inverse" if plan.get("budget_limited") else "off", border=True)
     c4.metric("🔥 kcal eaten / day", f"{day['calories']:,}",
               f"carbs {day['carbs_g']} g · fiber {day['fiber_g']} g · sugar {day['sugar_g']} g", delta_color="off", border=True)
+    st.markdown("**🗓️ Your week**")
+    st.dataframe([{"": m.title(), **{d: plan["calendar"][d][m] or "–" for d in plan["calendar"]}} for m in plan["meals"]],
+                 hide_index=True, width="stretch")
     recipe_cards(plan["recipes"], key=key)
     st.markdown("**🧾 Shopping list**")
     st.dataframe([{"Product": l["name"], "Size": l["size"], "Qty": l["quantity"], "Price": l["price"],

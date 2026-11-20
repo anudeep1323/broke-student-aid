@@ -6,7 +6,7 @@ The student's store comes from the graph state (InjectedState), never from Claud
 import sys
 import time
 from pathlib import Path
-from typing import Annotated
+from typing import Annotated, Literal
 
 from langchain_core.tools import tool
 from langgraph.prebuilt import InjectedState
@@ -153,6 +153,7 @@ class RecipePick(BaseModel):
 
 class Plan(BaseModel):
     """The final, decided plan. Code checks it and shows every number; the note carries no numbers."""
+    meals: list[Literal["breakfast", "lunch", "dinner"]] = ["lunch", "dinner"]   # meals the student wants covered, 7 days
     recipes: list[RecipePick]
     items: list[Item]                 # product ids from search_kroger + quantities
     avoid: list[str] = []             # allergens the student must avoid: peanut, tree_nut, milk, egg, wheat, soy, fish, shellfish, sesame
@@ -185,10 +186,53 @@ def submit_plan(plan: Plan, state: Annotated[dict, InjectedState]) -> dict:
         recipes.append({**card_summary(c), "batches": r.batches})
     if not plan.recipes:
         problems.append("no recipes: pick 2-3 from the recipe tools")
+    target = 7 * len(set(plan.meals))
+    planned = sum(meals_from(r) for r in recipes)
+    budget_limited = planned < target and priced["total"] >= 0.9 * priced["budget"]   # money really ran out
+    if planned < target and not budget_limited and not problems:
+        problems.append(f"covers {planned} of {target} meals ({', '.join(plan.meals)} x 7 days) and "
+                        f"${priced['left']:.2f} is left: add batches or a cheap, filling recipe, then submit again")
     if problems:
         return {"accepted": False, "problems": problems}
-    return {"accepted": True, "recipes": recipes, **priced, **eaten_nutrition(recipes, state),
+    week = {"meals": sorted(set(plan.meals), key=MEAL_ORDER.index), "meals_target": target, "meals_planned": planned,
+            "budget_limited": budget_limited, "calendar": calendar(recipes, sorted(set(plan.meals), key=MEAL_ORDER.index))}
+    return {"accepted": True, "recipes": recipes, **priced, **eaten_nutrition(recipes, state), **week,
             "avoid": plan.avoid, "vegetarian": plan.vegetarian, "note": plan.note}
+
+
+KCAL_PER_MEAL = 600                       # one meal for a student (~2,000 kcal/day over 3 meals); a setting
+MEAL_ORDER = ["breakfast", "lunch", "dinner"]
+DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
+
+
+def meals_from(r):
+    """How many meals one picked recipe gives this week. 'for four' x 2 batches = 8. Pieces or unknown servings
+    (24 muffins, 'Oatmeal'): whole-recipe kcal / 600, so nothing is guessed about portion sizes."""
+    n = r.get("nutrition")
+    if n and n.get("per") == "serving" and isinstance(n.get("servings"), (int, float)):
+        return int(n["servings"] * r["batches"])
+    if n:
+        return max(1, round(n["whole_recipe"]["calories"] * r["batches"] / KCAL_PER_MEAL))
+    return r["batches"]
+
+
+def calendar(recipes, meals):
+    """Code lays the meals out Mon-Sun: breakfast slots take breakfast recipes first, lunch/dinner the others;
+    recipes take turns so the week isn't 7 days of one dish. Empty slot = None (not covered)."""
+    pools = {"breakfast": [], "main": []}
+    for r in recipes:
+        pools["breakfast" if r["category"] == "breakfast" else "main"].append([r["title"], meals_from(r)])
+
+    def take(order):
+        for pool in order:
+            alive = [x for x in pools[pool] if x[1] > 0]
+            if alive:
+                alive[0][1] -= 1
+                pools[pool].append(pools[pool].pop(pools[pool].index(alive[0])))   # rotate: next time another recipe
+                return alive[0][0]
+        return None
+
+    return {d: {m: take(["breakfast", "main"] if m == "breakfast" else ["main", "breakfast"]) for m in meals} for d in DAYS}
 
 
 def eaten_nutrition(recipes, state):
