@@ -47,7 +47,7 @@ flowchart LR
 | All 5 checks (budget, complete plan, no made-up numbers, diet, real pages) | **12/12** |
 | Week covered | **12/12** |
 | Cost / time per answer | **$0.037**, ~30 s |
-| Unit tests (no API calls, ~10 s) | **81 passing** |
+| Unit tests (no API calls, ~10 s) | **87 passing** |
 
 How it got there (each row is a real failure the eval caught): see [ARCHITECTURE.md](ARCHITECTURE.md), the build log
 with every diagram and number. Highlights: cost $0.15 → $0.03 per answer by splitting Haiku/Sonnet jobs and caching;
@@ -78,11 +78,17 @@ mkdir -p recipes_rag/data/raw && curl -L -o recipes_rag/data/raw/good-and-cheap.
 python3 recipes_rag/run_all.py haiku && python3 recipes_rag/nutrition.py
 ```
 
-Then:
+Then start the API and the React page (two terminals; needs Node 20+), and open http://localhost:5173:
 
 ```bash
-python3 -m streamlit run app.py
+python3 -m uvicorn api.main:api --port 8000
 ```
+
+```bash
+cd web && npm install && npm run dev
+```
+
+The first version of the screen (Streamlit) still runs with `python3 -m streamlit run app.py`.
 
 ```bash
 python3 run_evals.py            # unit tests + component evals, ~$0
@@ -100,8 +106,10 @@ python3 run_evals.py --agent    # + the 12-case agent eval, ~$0.45
 | `kroger/` | store lookup, products, unit prices, labels (`browse.py`) |
 | `grocery/` | recipe lines → grocery names, basket → recipes |
 | `agent/` | tools (incl. `submit_plan`), LangGraph graph, agent eval |
-| `tests/` | unit tests for the code parts, and the real app rendered by Streamlit's test runner |
-| `app.py` | Streamlit screen (logic stays in `agent/`, so the UI can be swapped) |
+| `tests/` | unit tests for the code parts, the API with a fake agent, and the Streamlit app rendered by its test runner |
+| `api/` | FastAPI: the agent streamed over server-sent events, store, products, recipes |
+| `web/` | React + TypeScript page (Vite): live steps, tiles, week calendar, recipe pop-up, Browse |
+| `app.py` | the first screen (Streamlit); logic stays in `agent/`, so screens can be swapped |
 | `PLAN.md`, `ARCHITECTURE.md` | the plan, and the build log with every decision and number |
 
 Recipes and photos: *Good and Cheap* by Leanne Brown, CC BY-NC-SA 4.0.

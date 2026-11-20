@@ -220,8 +220,9 @@ def calendar(recipes, meals):
     """Code lays the meals out Mon-Sun: breakfast slots take breakfast recipes first, lunch/dinner the others;
     recipes take turns so the week isn't 7 days of one dish. Empty slot = None (not covered)."""
     pools = {"breakfast": [], "main": []}
-    for r in recipes:
-        pools["breakfast" if r["category"] == "breakfast" else "main"].append([r["title"], meals_from(r)])
+    for r in recipes:   # no breakfast slots: every recipe is a main (eggs picked "for a few dinners" must show up at dinner)
+        is_breakfast = r["category"] == "breakfast" and "breakfast" in meals
+        pools["breakfast" if is_breakfast else "main"].append([r["title"], meals_from(r)])
 
     def take(order):
         for pool in order:

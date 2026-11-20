@@ -8,3 +8,7 @@ __pycache__/
 # local tooling (absolute paths to this Mac)
 .claude/
 .coverage
+
+# React app build output and packages
+web/node_modules/
+web/dist/

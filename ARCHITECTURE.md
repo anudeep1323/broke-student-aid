@@ -976,3 +976,40 @@ submit_plan rejects a short week while < 90% of the budget is spent; code lays o
 Planner read meals right: "lunches I can carry" -> lunch only; "breakfasts and dinners" -> both; "dinners" -> dinner.
 Rejected plans: 0 -> the prompt rule did the work, code is the backstop. A "for four" serving counts as a meal even
 when it's a light dish, so kcal/day (~450 per meal) is still below ~2,000/day.
+
+### M19 design: FastAPI + React replaces Streamlit (2026-11-20)
+
+```mermaid
+flowchart LR
+    R["React page (web/)<br/>ZIP, budget, protein slider, chat box"] -->|"GET /api/store?zip=45202"| F["FastAPI (api/main.py)"]
+    R -->|"POST /api/plan {sentence, zip, budget, goal}"| F
+    F -->|"app.stream(...): each node as it finishes<br/>WHY: student sees progress; rejected: one 30 s spinner"| G["LangGraph agent (agent/, unchanged)"]
+    F -->|"events: 'Searching recipes...', 'Checking prices...',<br/>then the final plan JSON"| R
+    R --> V["tiles, Mon-Sun calendar, recipe cards + pop-up,<br/>shopping table: all from the plan JSON"]
+    F -->|"GET /api/products?term=rice"| K["kroger/browse.py (Browse tab)"]
+    F -->|"GET /images/p35_1.png"| I["recipe photos"]
+```
+Nothing in agent/, kroger/, recipes_rag/ changes: the API wraps the same functions app.py calls.
+Andy picked: stream steps (server-sent events) + Vite + React + TypeScript (rejected Next.js: two servers, more than needed).
+
+### M19 built: FastAPI + React (2026-11-20)
+api/main.py (FastAPI): /api/store, /api/plan (server-sent events: one 'step' per tool call, then 'plan' or 'error'),
+/api/products, /api/recipe, /images. Same agent/ and kroger/ code; nothing in them changed.
+web/ (Vite + React + TypeScript): sidebar (ZIP, budget, protein slider), "Plan my week" with live steps, tiles,
+Mon-Sun calendar, recipe cards + pop-up, shopping table, plan JSON; Browse tab with staples, grouped products, basket.
+Browser check: steps streamed live ("Searching the cookbook 2s" ... "Checking prices at your Kroger 6s"), then the plan:
+$24.52 of $25, 24 of 7 dinners, 83 g protein eaten/day (goal 80, met). Phone width 375 px: no sideways scroll.
+Bugs found while checking: blank page (useEffect returned scrollIntoView's Promise -> "destroy is not a function");
+page scrolled sideways (grid column needed min-width: 0); tall photo hid the recipe (max-height).
+Tests: 6 API tests with a fake agent (SSE order, validation, error events) -> 87 pass.
+
+### M20: premium "Fresh market" UI (2026-11-20)
+Andy picked: Fresh market look (cream, tomato / avocado / saffron, Fraunces serif) + animated agent timeline +
+rings with count-up numbers + tick-off shopping list (remembered in browser storage). Rejected: dark premium, photo calendar.
+Built: header bar with ZIP / budget stepper / protein slider; start screen with 4 one-click example requests;
+5-stage timeline (read -> cookbook -> Kroger -> pricing -> checks) lighting up from the SSE steps, collapsing to
+"Planned in 29 s · 9 steps · $0.034"; hero with 3 rings (99% of budget, 16/7 meals, 50 g of 80 protein); colour-coded
+Mon-Sun chips (click = recipe); photo cards with hover lift; checklist "2 of 9 in the cart · $7.76 of $24.73".
+Bug the new calendar exposed: a breakfast-category recipe (Tomato Scrambled Eggs x2) picked "for a few dinners" never
+appeared in a dinner-only week. Fix in tools.calendar(): with no breakfast slots, every recipe is a main. +1 test (88).
+Phone 375 px: no sideways scroll, rings in one row.

@@ -352,3 +352,12 @@ def test_calendar_takes_turns():
     assert cal["Wed"]["dinner"] == "Rice"                                                          # not Dal twice in a day
     assert sum(v is not None for d in cal.values() for v in d.values()) == 10                      # 4 + 4 + 2 portions
     assert cal["Sun"] == {"breakfast": None, "dinner": None}                                       # uncovered, shown as gaps
+
+
+def test_calendar_breakfast_recipe_at_dinner_when_no_breakfast():
+    """Bug seen in the React check: Tomato Scrambled Eggs x2 picked 'for a few dinners' never appeared on the calendar."""
+    import tools as t
+    recipes = [{"title": "Dal", "category": "dinner", "batches": 3, "nutrition": {"per": "serving", "servings": 4}},
+               {"title": "Eggs", "category": "breakfast", "batches": 2, "nutrition": {"per": "serving", "servings": 2}}]
+    cal = t.calendar(recipes, ["dinner"])
+    assert [cal[d]["dinner"] for d in ["Mon", "Tue", "Wed"]] == ["Dal", "Eggs", "Dal"]
