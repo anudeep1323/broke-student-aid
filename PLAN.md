@@ -1,6 +1,6 @@
 # Broke Student Aid: charter and plan
 
-Status updated: 2026-11-19. Update this file at every pivot or finished piece; ARCHITECTURE.md is the build log, this is the map.
+Status updated: 2026-11-20. Update this file at every pivot or finished piece; ARCHITECTURE.md is the build log, this is the map.
 
 ## Mission (read this first)
 
@@ -52,17 +52,22 @@ adds them up and checks allergens, because those must never be guessed.
 | M6 | Agent eval (10 cases, 5 code checks) merged into one `run_evals.py` | ✅ | 10/10 cases pass all 5 checks; $0.057 and ~35 s per answer | Component vs end-to-end evals |
 | M7 | Cost/quality tuning with the agent eval | ✅ | Sonnet planner + check_budget quantities: 10/10, $0.029, ~28 s (was Opus $0.057, ~35 s) | Measured trade-offs; fix the tool, not the prompt |
 | M8 | Streamlit: agent chat wired in beside ZIP + budget, photos | ✅ | sidebar fields + Ask tab + Browse tab; live test $0.031, 30 s, total correct | Shipping it |
-| M9 | README + commit + push | ⬜ (first commit pushed; much since uncommitted) | - | Presenting the work |
+| M9 | README + commit + push | ⬜ (all work pushed, last 2a9b602; README missing) | - | Presenting the work |
+| M10 | Answers show 2-3 recipes, not 1 | ✅ (closed by M16) | the plan is JSON now: 12/12 eval plans have 1-3 recipes laid out over the week; the prose answer that showed 1 is gone | Debugging from a real user report |
+| M11 | Nutrition per recipe (USDA, code) + per grocery (Kroger labels) | ✅ | 87-food hand list, 393 lines; 77/95 recipes per serving/piece/cup | Hand list beats fuzzy search |
+| M12 | Streamlit UI: tiles, recipe cards + pop-up, shopping table, grouped Browse, quick picks | ✅ | checked in the browser; Streamlit AppTest renders the real app.py | Product polish |
+| M13 | Protein goal slider | ✅ | 40 -> 83 g/day on the same question | State from UI, checked by code |
+| M14 | Product ids: code owns every price | ✅ | pinto 32 oz label 182 g (was 91 g); made-up id refused | Don't let the LLM type facts |
+| M15 | Final answer = JSON plan (submit_plan), checked by code | ✅ | eval 8/10 -> 10/10, regex over prose gone | Structured output + validation loop |
+| M16 | Nutrition eaten = recipes x batches | ✅ | bought protein was 1.2-2.8x eaten | Measure the right thing |
+| M17 | Week coverage enforced + Mon-Sun calendar | ✅ | 12/12 weeks covered; median 599 -> 908 kcal/day; eval 12/12, $0.037 | Rules in code, prompt as first try |
+| M18 | Tests | ✅ | 81 unit tests, no API calls; 12-case agent eval with week/goal measures | Unit tests for code, evals for the AI |
 
-| M10 | Answers show 2-3 recipes, not 1 (Andy saw only one recipe per answer) | ⬜ | need the question that showed it | Debugging from a real user report |
-| M11 | Nutrition: kcal, protein, carbs, fiber, sugar per recipe (USDA, code) + per grocery week (Kroger labels), high-protein toggle | ✅ | 392 lines counted by a hand-checked 87-food USDA list; Dal 381 kcal / 24 g protein per serving; agent eval 9/10, $0.032 | Hand list beats fuzzy search; only cookable cards |
-| M12 | UI redesign: appealing, shows recipes, photos, nutrition, budget at a glance | ⬜ | after M11 (it must show nutrition) | Product polish |
-| M13 | Protein goal slider (g/day) replaces the on/off toggle; check_budget reports goal_met | ✅ | 40 -> 83 g/day on the same question, $24.60 of $25 | State from UI, checked by code |
+**UI decision (Andy, 2026-11-19, confirmed 2026-11-20):** finish features on Streamlit, then switch to FastAPI + React.
+Logic stays in agent/ and tools, never in app.py, so the switch is a new screen only.
 
-**UI decision (Andy, 2026-11-19):** stay on Streamlit until every feature is done; switch to FastAPI + React only when UI is the last pending work. Keep all logic in agent/ and tools, never in app.py, so the switch is a new screen only.
-
-**Next up (2026-11-19):** unit tests DONE (27 pass). Then M12 (UI polish), M10 (needs the question), M9 (README + commit).
-Nutrition moved from "after the MVP" into the MVP.
+**Next up (2026-11-20):** M9 README. Then the switch to FastAPI + React (UI is the last pending work).
+Open questions: kcal/day still ~900 (a "for four" serving counts as a meal even when light); vegetarian protein goal 59 of 80 g.
 
 ## After the MVP (backlog)
 
