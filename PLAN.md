@@ -62,12 +62,14 @@ adds them up and checks allergens, because those must never be guessed.
 | M16 | Nutrition eaten = recipes x batches | ✅ | bought protein was 1.2-2.8x eaten | Measure the right thing |
 | M17 | Week coverage enforced + Mon-Sun calendar | ✅ | 12/12 weeks covered; median 599 -> 908 kcal/day; eval 12/12, $0.037 | Rules in code, prompt as first try |
 | M18 | Tests | ✅ | 81 unit tests, no API calls; 12-case agent eval with week/goal measures | Unit tests for code, evals for the AI |
+| M19 | FastAPI + React (replaces Streamlit as the main screen) | ✅ | /api/plan streams steps over SSE; 6 API tests with a fake agent | API + SPA, streaming |
+| M20 | Premium "Fresh market" UI | ✅ | animated timeline, rings, colour-coded week, tick-off list; 375 px phone OK (6014dc8) | Product polish |
 
 **UI decision (Andy, 2026-11-19, confirmed 2026-11-20):** finish features on Streamlit, then switch to FastAPI + React.
 Logic stays in agent/ and tools, never in app.py, so the switch is a new screen only.
 
-**Next up (2026-11-20):** README done. Next: switch the UI to FastAPI + React (UI is the last pending work).
-Open questions: kcal/day still ~900 (a "for four" serving counts as a meal even when light); vegetarian protein goal 59 of 80 g.
+**Next up (2026-11-20):** MVP + UI done. Candidates: deploy (render.yaml-style, one container for API + built web),
+kcal/day still ~900 (light "for four" servings count as meals), vegetarian protein goal 59 of 80 g.
 
 ## After the MVP (backlog)
 
