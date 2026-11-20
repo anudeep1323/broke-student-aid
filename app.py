@@ -54,19 +54,10 @@ def agent():
     return app, PRICES
 
 
-def cited_recipes(out, answer):
-    """Recipe cards the answer actually recommends: title named AND its page cited (same rule as the agent eval)."""
-    pages = {int(p) for p in re.findall(r"p(?:age|\.)?\s*(\d{1,3})", answer)}
-    seen, found = set(), []
-    for m in out["messages"]:
-        if isinstance(m, ToolMessage) and m.name in ("find_recipes", "recipe_details"):
-            data = json.loads(m.content)
-            for c in data if isinstance(data, list) else [data]:
-                key = (c.get("title"), c.get("page"))
-                if c.get("title") and c["title"].lower() in answer.lower() and c.get("page") in pages and key not in seen:
-                    seen.add(key)
-                    found.append(c)
-    return found
+def final_plan(out):
+    """The accepted, code-checked plan from graph.py (same function the eval uses)."""
+    from graph import final_plan as fp
+    return fp(out)
 
 
 def full_card(title, page):
@@ -90,7 +81,9 @@ def show_recipe(title, page):
     n = c.get("nutrition")
     if n:
         per = n.get("per_serving") or n.get("whole_recipe")
-        label = f"per serving ({n['servings']} servings)" if n.get("per_serving") else "whole recipe (servings unknown)"
+        unit = n.get("per", "serving")
+        label = (f"per {unit} (makes {n['servings']:g} {unit}s)" if n.get("per_serving")
+                 else "whole recipe (servings unknown)")
         facts_col.caption(f"Nutrition {label}, from USDA data")
         top, bottom = facts_col.columns(3), facts_col.columns(3)
         for col, (k, name) in zip(top + bottom, [("calories", "kcal"), ("protein_g", "protein g"), ("carbs_g", "carbs g"),
@@ -119,9 +112,33 @@ def recipe_cards(recs, key):
             st.markdown(f"**{c['title']}** · p.{c['page']}")
             per = (c.get("nutrition") or {}).get("per_serving")
             if per:
-                st.caption(f"{per['calories']} kcal · {per['protein_g']} g protein per serving")
+                st.caption(f"{per['calories']} kcal · {per['protein_g']} g protein per {c['nutrition'].get('per', 'serving')}")
             if st.button("📖 View recipe", key=f"{key}-{c['page']}-{c['title']}", width="stretch"):
                 show_recipe(c["title"], c["page"])
+
+
+def plan_view(plan, key):
+    """One accepted plan at a glance. Every number comes from code (submit_plan); only the note is Claude's words."""
+    st.markdown(money(plan["note"]))
+    a, c2 = st.columns(2)   # 2 x 2 tiles: 4 in a row cut off the numbers in a narrow window
+    c3, c4 = st.columns(2)
+    a.metric("🛒 Total", f"${plan['total']:.2f}", f"${plan['left']:.2f} left", border=True)   # code refuses over-budget plans
+    goal = plan.get("protein_goal_g_per_day")
+    c2.metric(f"💪 Protein / day" + (f" (goal {goal} g)" if goal else ""), f"{plan['protein_g_per_day']} g",
+              (("goal met" if plan.get("goal_met") else f"-{plan['protein_short_g_per_day']} g") if goal else None), border=True)
+    c3.metric("🍳 Recipes", len(plan["recipes"]), border=True)
+    c4.metric("🔥 Week kcal", f"{plan['nutrition_week']['calories']:,}", border=True)
+    recipe_cards(plan["recipes"], key=key)
+    st.markdown("**🧾 Shopping list**")
+    st.dataframe([{"Product": l["name"], "Size": l["size"], "Qty": l["quantity"], "Price": l["price"],
+                   "Line total": l["line_total"], "Protein (g)": l["protein_g"] if l["protein_g"] is not None else "–"}
+                  for l in plan["lines"]], hide_index=True, width="stretch",
+                 column_config={"Price": st.column_config.NumberColumn(format="$%.2f"),
+                                "Line total": st.column_config.NumberColumn(format="$%.2f")})
+    if plan.get("no_label"):
+        st.caption("No nutrition label from Kroger: " + ", ".join(plan["no_label"]))
+    with st.expander("🧩 The plan as JSON (what code checked)"):
+        st.json({k: v for k, v in plan.items() if k != "note"}, expanded=False)
 
 
 def cost_of(out, prices):
@@ -169,28 +186,34 @@ ask_tab, browse_tab = st.tabs(["💬 Ask", "🔎 Browse Kroger"])
 
 # Tab 1: the agent
 with ask_tab:
-    history = st.session_state.setdefault("chat", [])   # [(role, text, recipes, how)]
-    for n, (role, text, recs, how) in enumerate(history):
+    history = st.session_state.setdefault("chat", [])   # [(role, text, recipes, how, plan)]
+    for n, (role, text, recs, how, *rest) in enumerate(history):
         with st.chat_message(role):
-            st.markdown(money(text))
-            if recs:
-                recipe_cards(recs, key=f"msg{n}")
+            if role == "assistant" and rest and rest[0] and "note" in rest[0]:
+                plan_view(rest[0], key=f"msg{n}")
+            else:
+                st.markdown(money(text))
+                if recs:
+                    recipe_cards(recs, key=f"msg{n}")
             if how:
-                with st.expander("How I got this"):
+                with st.expander("🔍 How I got this"):
                     st.markdown(money(how))
     sentence = st.chat_input("e.g. I'm broke till Friday, no peanuts, tired of rice, want something warm")
     if sentence:
-        history.append(("user", sentence, [], ""))
+        history.append(("user", sentence, [], "", None))
         with st.spinner("Checking the cookbook and your Kroger's prices... (~30 s)"):
             app, prices = agent()
             t0 = time.time()
             out = app.invoke({"messages": [HumanMessage(sentence)], "plan_messages": [], "location_id": location_id,
                               "budget": float(budget), "tool_calls": [], "protein_goal": protein_goal})
             secs = time.time() - t0
-        answer = out["plan_messages"][-1].text
         how = (f"{len(out['tool_calls'])} tool calls, ${cost_of(out, prices):.3f}, {secs:.0f} s\n\n"
                + "\n".join(f"- `{c[:120]}`" for c in out["tool_calls"]))
-        history.append(("assistant", answer, cited_recipes(out, answer), how))
+        plan = final_plan(out)
+        if plan:   # the normal case: one accepted, code-checked plan
+            history.append(("assistant", plan["note"], plan["recipes"], how, plan))
+        else:      # no accepted plan (e.g. Kroger down): show Claude's explanation, no numbers
+            history.append(("assistant", out["plan_messages"][-1].text or "Sorry, I couldn't build a plan.", [], how, None))
         st.rerun()
 
 # Tab 2: browse + basket (screen 1)

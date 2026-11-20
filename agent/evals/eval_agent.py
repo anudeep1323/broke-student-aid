@@ -1,7 +1,7 @@
 """Agent eval: 10 student sentences through agent/graph.py, every answer checked by code (no LLM judge).
 
-Checks: 1 within budget, 2 answer total = check_budget total and every priced item is listed,
-3 every $ in the answer came from a tool, 4 recipes respect avoid/vegetarian, 5 cited pages are real.
+Checks read the submitted JSON plan (no regex over prose): 1 within budget, 2 plan complete (recipes, items, line math),
+3 every $ in the note came from a tool, 4 recipes respect avoid/vegetarian, 5 every recipe was shown by the recipe tools.
 Usage: python3 -I agent/evals/eval_agent.py [label]      (~$0.06 per case, ~40 s, 2 at a time)
 """
 import json
@@ -15,7 +15,7 @@ from langchain_core.messages import HumanMessage, ToolMessage
 
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE.parent))
-from graph import PRICES, app   # noqa: E402
+from graph import PRICES, app, final_plan   # noqa: E402
 from tools import cards, kroger_headers   # noqa: E402
 from browse import nearest_store   # noqa: E402
 
@@ -32,6 +32,7 @@ CASES = [  # (sentence, weekly budget, allergens to avoid, vegetarian)
     ("vegetarian, no soy, I need protein", 25, {"soy"}, True),
     ("sweet breakfast ideas, I hate oatmeal", 20, set(), False),
 ]
+NAMES = ["1 within budget", "2 plan complete", "3 every $ from a tool", "4 diet respected", "5 pages real"]
 MONEY = re.compile(r"\$(\d+(?:\.\d{1,2})?)")
 norm = lambda t: re.sub(r"[^a-z0-9 ]", "", t.lower().replace("’", "'").replace("'", ""))
 
@@ -49,37 +50,29 @@ def cost_of(out):
 
 
 def check(case, out):
-    """Run the 5 code checks on one answer; returns {check: (passed, why)}."""
+    """Run the 5 code checks on the submitted JSON plan; returns {check: (passed, why)}. No regex over prose."""
     sentence, budget, avoid, veg = case
-    answer = out["plan_messages"][-1].text
+    plan = final_plan(out)
+    if plan is None:
+        return {n: (False, "no accepted plan") for n in NAMES}
     tool_msgs = [m for m in out["messages"] + out["plan_messages"] if isinstance(m, ToolMessage)]
-    budgets = [json.loads(m.content) for m in tool_msgs if m.name == "check_budget"]
-    last = budgets[-1] if budgets else None
-    picked = [m for m in out["plan_messages"] if getattr(m, "tool_calls", None)]
-    prices = [i["price"] for i in picked[-1].tool_calls[-1]["args"]["items"]] if picked else []
-    said = [float(x) for x in MONEY.findall(answer)]
-    tool_text = " ".join(m.content for m in tool_msgs)
-    tool_numbers = re.findall(r'"(?:price|line_total|total|left|budget)":\s*(-?\d+(?:\.\d+)?)', tool_text)
-    known = ({float(x) for x in MONEY.findall(tool_text)} | {float(budget)}
-             | {abs(float(x)) for x in tool_numbers})   # abs: "left": -1.38 is said as "$1.38 over"
-    shown = {c["title"] for m in tool_msgs if m.name in ("find_recipes", "recipe_details")
+    shown = {(c["title"], c["page"]) for m in tool_msgs if m.name in ("find_recipes", "recipe_details")
              for c in (json.loads(m.content) if m.content.startswith("[") else [json.loads(m.content)]) if "title" in c}
-    cited = {int(p) for p in re.findall(r"p(?:age|\.)?\s*(\d{1,3})", answer)}
-    # recommended = title named AND its page cited ("I skipped X" names X but cites no page for it)
-    lines = [norm(l) + " " for l in answer.splitlines()]
-    recs = [c for c in cards if c["title"] in shown and any(
-        norm(c["title"]) in l and re.search(rf"p(?:age)?\s*{c['book_page']}\b", l) for l in lines)]   # title + its own page, same line
-    r = {}
-    r["1 within budget"] = (bool(last) and last["within_budget"], f"total {last and last['total']} of ${budget}")
-    r["2 total + items match"] = (bool(last) and last["total"] in said and all(p in said for p in prices),
-                                  f"missing from answer: {[p for p in prices if p not in said]}")
-    r["3 every $ from a tool"] = (all(x in known for x in said), f"made up: {sorted(set(x for x in said if x not in known))}")
-    bad = [c["title"] for c in recs if c["allergens"] & avoid or (veg and c["vegetarian"] == "no")]
-    r["4 diet respected"] = (bool(recs) and not bad, f"recipes {[c['title'] for c in recs]}, violations {bad}")
-    pages = {int(p) for p in re.findall(r"p(?:age|\.)?\s*(\d{1,3})", answer)}
-    real = {c["book_page"] for c in recs}
-    r["5 pages real"] = (pages <= real | {c["book_page"] for c in cards if c["title"] in shown}, f"cited {sorted(pages)}, real {sorted(real)}")
-    return r
+    tool_text = " ".join(m.content for m in tool_msgs if m.name != "submit_plan")
+    known = {float(x) for x in re.findall(r'"(?:price|line_total|total|left|budget)":\s*(-?\d+(?:\.\d+)?)', tool_text)}
+    said = [float(x) for x in MONEY.findall(plan["note"])]
+    recs = plan["recipes"]
+    bad = [r["title"] for r in recs if set(r["allergens"]) & avoid or (veg and r["vegetarian"] == "no")]
+    lines_ok = all(l["line_total"] == round(l["price"] * l["quantity"], 2) for l in plan["lines"])
+    return {
+        "1 within budget": (plan["total"] <= budget, f"total {plan['total']} of ${budget}"),
+        "2 plan complete": (bool(recs) and bool(plan["lines"]) and lines_ok and not plan.get("unknown_ids"),
+                            f"{len(recs)} recipes, {len(plan['lines'])} items, line math ok {lines_ok}"),
+        "3 every $ from a tool": (all(abs(x) in known for x in said), f"note $: {said}"),
+        "4 diet respected": (not bad, f"recipes {[r['title'] for r in recs]}, violations {bad}"),
+        "5 pages real": (all((r["title"], r["page"]) in shown for r in recs),
+                         f"plan {[(r['title'], r['page']) for r in recs]} not all shown by tools"),
+    }
 
 
 def run(case):
@@ -89,9 +82,8 @@ def run(case):
         out = app.invoke({"messages": [HumanMessage(case[0])], "plan_messages": [], "location_id": LOCATION,
                           "budget": float(case[1]), "tool_calls": []})
     except Exception as e:  # noqa: BLE001
-        names = ["1 within budget", "2 total + items match", "3 every $ from a tool", "4 diet respected", "5 pages real"]
-        return case, {n: (False, f"CRASHED: {type(e).__name__}: {str(e)[:80]}") for n in names}, 0.0, time.time() - t0, ""
-    return case, check(case, out), cost_of(out), time.time() - t0, out["plan_messages"][-1].text
+        return case, {n: (False, f"CRASHED: {type(e).__name__}: {str(e)[:80]}") for n in NAMES}, 0.0, time.time() - t0, None
+    return case, check(case, out), cost_of(out), time.time() - t0, final_plan(out)
 
 
 if __name__ == "__main__":
@@ -108,5 +100,5 @@ if __name__ == "__main__":
     costs = [c for _, _, c, _, _ in results]
     print(f"[{label}] all 5 checks: {sum(all(ok for ok, _ in r.values()) for _, r, *_ in results)}/{len(results)} | "
           f"${sum(costs) / len(costs):.4f} per answer, ${sum(costs):.3f} total")
-    json.dump([{"case": c[0], "answer": a, "checks": {k: v[0] for k, v in r.items()}, "cost": cost}
+    json.dump([{"case": c[0], "plan": a, "checks": {k: v[0] for k, v in r.items()}, "cost": cost}
                for c, r, cost, _, a in results], open(HERE / f"results_{label}.json", "w"), indent=1)

@@ -26,7 +26,8 @@ KEYS = {"208": "calories", "203": "protein_g", "205": "carbs_g", "291": "fiber_g
 
 FRACTIONS = {"½": .5, "¼": .25, "¾": .75, "⅓": 1 / 3, "⅔": 2 / 3, "⅛": .125}
 WORDS = {"one": 1, "two": 2, "three": 3, "four": 4, "five": 5, "six": 6, "seven": 7, "eight": 8, "nine": 9, "ten": 10,
-         "eleven": 11, "twelve": 12, "sixteen": 16, "twenty-four": 24, "sixty": 60}
+         "eleven": 11, "twelve": 12, "fourteen": 14, "sixteen": 16, "twenty": 20, "twenty-four": 24, "thirty": 30,
+         "forty": 40, "sixty": 60, "seventy-two": 72}
 UNITS = {"cup": "cup", "cups": "cup", "tbsp": "tbsp", "tablespoon": "tbsp", "tablespoons": "tbsp", "tsp": "tsp",
          "teaspoon": "tsp", "teaspoons": "tsp", "lb": "lb", "lbs": "lb", "pound": "lb", "pounds": "lb", "oz": "oz",
          "ounce": "oz", "ounces": "oz", "g": "g", "can": "can", "cans": "can", "clove": "clove", "cloves": "clove",
@@ -105,9 +106,20 @@ def grams(amount, unit, food):
 
 
 def servings(makes):
-    """'for four' -> 4, 'for two, or four as a side' -> 2, 'for four to six' -> 4. Unknown -> None."""
-    m = re.search(r"\bfor (\w+)", makes or "")
-    return WORDS.get(m.group(1)) if m else None
+    """How much a recipe makes, as (count, unit), read from the book's own words. Unknown -> (None, None).
+    'for four' / 'serves four to six' -> (4, 'serving'); 'twenty-four small muffins' -> (24, 'muffin');
+    'makes four pizzas' -> (4, 'pizza'); 'twelve' -> (12, 'piece'); 'three and a half cups' -> (3.5, 'cup')."""
+    text = (makes or "").lower().strip()
+    m = re.search(r"\b(?:for|serves) ([\w-]+)", text)            # people: the lower number of a range
+    if m and m.group(1) in WORDS:
+        return WORDS[m.group(1)], "serving"
+    m = re.match(r"(?:makes |about )?([\w-]+)( and a half)?(?: to [\w-]+)?\s*(.*)", text)
+    if not m or m.group(1) not in WORDS:
+        return None, None
+    count = WORDS[m.group(1)] + (0.5 if m.group(2) else 0)
+    words = [w for w in m.group(3).split() if w not in ("small", "individual", "of")]
+    unit = " ".join(words).rstrip("s") or "piece"                  # "half eggs" -> "half egg", "" -> "piece"
+    return count, unit
 
 
 def recipe_nutrition(card, cache):
@@ -127,8 +139,8 @@ def recipe_nutrition(card, cache):
         for k, v in food["per100"].items():
             total[k] += g / 100 * v
         counted.append(f"{line} -> {food['name']} {g:.0f} g")
-    n = servings(card["makes"])
-    out = {"total": {k: round(v) for k, v in total.items()}, "servings": n,
+    n, unit = servings(card["makes"])
+    out = {"total": {k: round(v) for k, v in total.items()}, "servings": n, "serving_unit": unit,
            "per_serving": {k: round(v / n) for k, v in total.items()} if n else None,
            "counted": counted, "skipped": skipped, "missed": missed}
     return out

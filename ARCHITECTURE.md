@@ -842,3 +842,72 @@ Added 12 more (39 total, ~10 s, still 0 API calls): recipe totals / servings, Kr
 Kroger response, search_kroger protein-per-$ + error result, recipe_details on duplicate titles, find_recipes cookable-only.
 Coverage before -> after: tools.py 66% -> 95%, browse.py 34% -> 67%, nutrition.py 57% -> 74%.
 What's left uncovered is network code (token, nearest store, USDA/Kroger fetch) and the __main__ scripts.
+
+### M12 design: Ask tab at a glance (2026-11-19)
+
+```mermaid
+flowchart TB
+    O["agent output"] -->|"last check_budget ToolMessage (code numbers)"| T["tiles: total of budget | protein/day vs goal | recipes | items"]
+    O -->|"cited_recipes()"| C["recipe cards + View recipe pop-up"]
+    O -->|"check_budget lines"| L["shopping table: product, qty, price, line total, protein"]
+    O -->|"Sonnet's text, collapsed<br/>WHY: numbers already shown by code; text keeps notes (unpriced items)<br/>rejected: shorter prompt (eval check 2 reads prices in the text)"| W["Full write-up (expander)"]
+```
+
+### M12 built: Ask tab at a glance + Kroger token fix (2026-11-19)
+Tiles (from the last check_budget, code numbers): Total $24.40 (+$0.60 left) | Protein/day 39 g (goal 80, -41 g) | 2 recipes | 7,395 kcal.
+Then recipe cards, a shopping table (product, qty, price, line total, protein), the AI's text folded in "Full write-up".
+Bug found while testing: HTTP 401 on every Kroger call after the app ran > 30 min. tools.kroger_headers() fetched a token once
+and kept it forever; Kroger tokens die at 30 min. Fix: renew after 25 min (+ unit test with a fake clock; 40 tests pass).
+The agent handled the 401 honestly: no prices invented, no budget check, said so.
+Open: Kroger has 2 sizes named "Kroger Pinto Beans"; _labels is keyed by name, so check_budget can read the wrong size's label (91 g vs 182 g).
+
+### Servings from pieces and cups (2026-11-19)
+servings() now returns (count, unit) from the book's own "makes" words: "twenty-four small muffins" -> (24, muffin),
+"makes four pizzas" -> (4, pizza), "three and a half cups" -> (3.5, cup), "serves four to six" -> (4, serving).
+Recipes with a usable count: 55 -> 77 of 95. The 18 with no "makes" text stay "whole recipe" (Andy: leave them out, no guessing).
+Example: Chocolate Zucchini Muffins p.21 = 132 kcal, 3 g protein per muffin (makes 24). 46 unit tests pass.
+Diagnosed, not fixed yet: check_budget trusts the name + price Claude types; same-name products (3 pinto bean sizes, 4 egg sizes;
+7 of 77 products) read the wrong label. Planned fix: product IDs from search_kroger; code looks up price + label.
+Idea from Andy, not built yet: protein per day from recipe servings eaten, not from groceries bought.
+
+### Product IDs: code owns every price (2026-11-19)
+
+Before: Claude types name + price; code trusts both.
+```mermaid
+flowchart LR
+    S1["search_kroger"] -->|"name, size, price"| C1["Claude"]
+    C1 -->|"check_budget(name='Kroger Pinto Beans', price=2.29)<br/>typed by Claude, never checked"| B1["check_budget: label by NAME<br/>3 sizes share it -> wrong label (91 vs 182 g)"]
+```
+After: Claude passes only IDs + quantities; code looks everything up.
+```mermaid
+flowchart LR
+    S2["search_kroger"] -->|"id = Kroger productId (unique per size)<br/>saved in _products: name, size, price, label"| C2["Claude"]
+    C2 -->|"check_budget(id='0001111087613', qty=2)<br/>WHY: a typo = 'unknown id' error, never a wrong price;<br/>rejected: name + size key (Claude still types prices)"| B2["check_budget: price + label by ID from _products"]
+```
+
+### M16 design: the final answer is a JSON plan, checked by code (2026-11-19)
+
+Before: the plan lived in prose; eval + app guessed it ("last check_budget call", regex for $ and pages) -> 8/10.
+```mermaid
+flowchart LR
+    P["planner (Sonnet)"] -->|"check_budget(ids, qty): what-ifs, as often as it likes"| B["code: prices + totals"]
+    B --> P
+    P -->|"submit_plan(Plan JSON)<br/>recipes: title, page, batches | items: id, qty | avoid, vegetarian | note<br/>WHY: one decided object, schema-enforced;<br/>rejected: 'last check_budget is final' prompt rule (still a guess)"| V{"code validates:<br/>ids known? pages real + cookable?<br/>total <= budget? no avoided allergens?"}
+    V -->|"problems -> back to planner"| P
+    V -->|"accepted -> END"| F["final plan JSON"]
+    F --> A["app: tiles, cards, table, note"]
+    F --> E["eval: reads fields, no regex"]
+```
+
+### M16 built: JSON plan via submit_plan (2026-11-19)
+tools.py: Plan(recipes[title, page, batches], items[id, qty], avoid, vegetarian, note) + submit_plan: code rejects unknown ids,
+fake/menu-card pages, over-budget totals, avoided allergens / meat for vegetarians, and sends the problems back to Claude.
+graph.py: planner tools = check_budget (what-ifs) + submit_plan; the graph ENDS on an accepted plan; final_plan(out) is the one reader.
+Eval reads plan fields (no regex over prose). App renders tiles, cards, table from the plan; note = Claude's only words.
+
+| run | all 5 checks | $ / answer | why it failed |
+|---|---|---|---|
+| m15_ids (prose answer) | 8/10 | $0.035 | eval + tiles read the LAST check_budget, which was a dropped what-if |
+| m16_json_plan | 10/10 | $0.030 | - |
+57 unit tests pass (8 new submit_plan cases). Browser: "sweet breakfast, I hate oatmeal" -> $22.98 of $25, 41 g/day, 2 recipes.
+Tiles moved to 2 x 2: 4 in a row cut off the numbers in a narrow window.

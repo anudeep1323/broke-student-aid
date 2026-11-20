@@ -20,7 +20,7 @@ from langgraph.prebuilt import ToolNode
 
 load_dotenv(Path(__file__).resolve().parent.parent / ".env")
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from tools import check_budget, find_recipes, kroger_headers, recipe_details, search_kroger   # noqa: E402
+from tools import check_budget, find_recipes, kroger_headers, recipe_details, search_kroger, submit_plan   # noqa: E402
 
 GATHER_MODEL = "claude-haiku-5-5"
 PLAN_MODEL = os.environ.get("PLAN_MODEL", "claude-sonnet-5-5")   # M7: Sonnet passed 10/10 at half of Opus cost
@@ -31,7 +31,7 @@ PRICES = {  # $ per million tokens: input, output, cache read
 }
 CACHE = {"type": "ephemeral"}   # top-level auto-caching: repeat calls re-read earlier turns from cache
 GATHER_TOOLS = [find_recipes, recipe_details, search_kroger]
-PLAN_TOOLS = [check_budget]
+PLAN_TOOLS = [check_budget, submit_plan]
 
 GATHER_SYSTEM = """You collect facts for a meal planner; you do NOT give advice. For the student's request:
 1. find_recipes for 2-3 cheap recipes that fit (pass allergies as avoid, vegetarian if asked).
@@ -42,21 +42,16 @@ Then reply with just DONE."""
 PLAN_SYSTEM = """You plan a week of cheap meals for a broke college student from the facts below
 (their request, cookbook recipes, and real prices at their nearest Kroger).
 - Choose 2-3 recipes and, for each ingredient to buy, ONE Kroger product (cheapest per unit that fits).
-- Price your list with check_budget: one item per product with its quantity (2 cans = quantity 2). Never multiply
-  or add yourself; if over budget, drop or swap items and check again. Any total you mention, even a "what if",
-  must come from a check_budget call.
-- Respect allergies and diet. Every price, product and page must come from the facts.
-- Mention ONLY the recipes you chose. Don't list recipes you skipped or couldn't use.
-- Then write the answer, under 150 words: recipes (title + page), what to buy (product, size, price),
-  each line total, the total and what's left exactly as check_budget returned them, and anything left unpriced.
-  When quantity is more than 1, write the line as 'unit price x quantity = line total' (e.g. '$1.09 x 2 = $2.18').
-- For each recipe give its nutrition exactly as the recipe tools returned it (kcal, protein, carbs, fiber, sugar,
-  per serving; say "whole recipe" when servings are unknown). Never estimate nutrition yourself.
-- Also give the week's protein and protein per day exactly as check_budget returned them (say which items had no label)."""
+- Try lists with check_budget (product ids from search_kroger + quantities; 2 cans = quantity 2) as often as you like.
+  Code prices them; never multiply or add yourself. If over budget, drop or swap items and check again.
+- Respect allergies and diet. Only use recipes, pages and product ids from the facts.
+- FINISH by calling submit_plan once with the final recipes (title, page, batches), items (id, quantity), the
+  allergens to avoid and vegetarian as the student asked, and a short note (2-4 sentences: why these recipes, a tip,
+  what's left unpriced like salt or spices). The note has NO prices or nutrition numbers: code shows those.
+  If submit_plan returns problems, fix them and submit again."""
 PROTEIN_GOAL = ("\nThe student set a PROTEIN GOAL of {goal} g per day. Prefer products with high protein_per_dollar "
                 "(e.g. dry beans, lentils, eggs, tofu) and recipes with the most protein per serving. If check_budget says "
-                "goal_met is false and money is left, add or swap toward high protein_per_dollar items and check again. "
-                "Report protein per day against the goal exactly as check_budget returned it (e.g. '62 of 80 g a day').")
+                "goal_met is false and money is left, add or swap toward high protein_per_dollar items and check again.")
 
 
 class State(TypedDict):
@@ -110,6 +105,16 @@ def run_plan_tools(state: State):
     return {"plan_messages": out["plan_messages"]}
 
 
+def final_plan(out):
+    """The accepted submit_plan result: the one decided plan (dict), or None. App, eval and CLI all read this."""
+    for m in reversed(out.get("plan_messages", [])):
+        if isinstance(m, ToolMessage) and m.name == "submit_plan":
+            data = json.loads(m.content)
+            if data.get("accepted"):
+                return data
+    return None
+
+
 graph = StateGraph(State)
 graph.add_node("gatherer", gatherer)
 graph.add_node("gather_tools", ToolNode(GATHER_TOOLS))
@@ -121,7 +126,7 @@ graph.add_conditional_edges("gatherer", lambda s: "gather_tools" if s["messages"
 graph.add_edge("gather_tools", "gatherer")
 graph.add_conditional_edges("planner", lambda s: "plan_tools" if s["plan_messages"][-1].tool_calls else END,
                             ["plan_tools", END])
-graph.add_edge("plan_tools", "planner")
+graph.add_conditional_edges("plan_tools", lambda s: END if final_plan(s) else "planner", ["planner", END])
 app = graph.compile()
 
 
@@ -139,7 +144,7 @@ def trace(out):
         cost = ((u["input_tokens"] - read) * p_in + read * p_read + u["output_tokens"] * p_out) / 1e6
         total += cost
         job = ("TOOLS: " + ", ".join(c["name"] for c in m.tool_calls)) if m.tool_calls else (
-            "said: " + m.text[:30].replace("\n", " ") if model.startswith(GATHER_MODEL) else "WROTE THE ANSWER")
+            "said: " + m.text[:30].replace("\n", " ") if model.startswith(GATHER_MODEL) else "replied")
         print(f"  {n}. {model[7:]:9} in {u['input_tokens']:>6,} (cache {read:>6,})  out {u['output_tokens']:>5,}  ${cost:.4f}  {job}")
     print(f"  TOTAL ${total:.4f}")
 
@@ -155,5 +160,8 @@ if __name__ == "__main__":
     secs = time.time() - t0
     for i, c in enumerate(out["tool_calls"], 1):
         print(f"tool call {i}: {c[:150]}")
-    print(f"\n--- answer (Opus) ---\n{out['plan_messages'][-1].text}\n\n{secs:.1f}s\n--- every Claude call ---")
+    plan = final_plan(out)
+    print("\n--- final plan (JSON, checked by code) ---")
+    print(json.dumps({k: v for k, v in plan.items() if k not in ("lines",)}, indent=1)[:2500] if plan else "NO ACCEPTED PLAN")
+    print(f"\n{secs:.1f}s\n--- every Claude call ---")
     trace(out)

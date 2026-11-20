@@ -33,7 +33,8 @@ def load_cards():
         c["title"] = TITLE_FIXES.get((c["book_page"], c["title"]), c["title"])   # fix first: every file sees one title
         n = facts.get(f"{c['book_page']}|{c['title']}")
         c["nutrition"] = None if n is None else (
-            {"per_serving": n["per_serving"], "servings": n["servings"]} if n["per_serving"]
+            {"per_serving": n["per_serving"], "servings": n["servings"], "per": n.get("serving_unit") or "serving"}
+            if n["per_serving"]
             else {"whole_recipe": n["total"], "servings": "unknown"}) | {"lines_not_counted": len(n["missed"])}
     return cards
 
